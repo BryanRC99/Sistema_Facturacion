@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Factura {{ factura.numero }}{% endblock %}
+
+{% block content %}
+
+<!-- ENCABEZADO -->
+<div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
+
+    <h1 class="text-3xl font-bold text-gray-800">
+        Factura {{ factura.numero }}
+    </h1>
+
+    <div class="flex gap-3">
+
+        {% if factura.estado == "ACTIVA" %}
+        <a href="{% url 'imprimir_factura' factura.id %}" target="_blank" rel="noopener noreferrer"
+            class="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-lg shadow hover:bg-indigo-700 transition transform hover:scale-[1.03]">
+            🖨️ <span>Imprimir</span>
+        </a>
+        {% endif %}
+
+
+        <!-- Botón volver -->
+        <a href="{% url 'factura_lista' %}"
+            class="flex items-center gap-2 bg-gray-600 text-white px-5 py-2.5 rounded-lg shadow hover:bg-gray-700 transition transform hover:scale-[1.03]">
+            ⬅️ <span>Volver</span>
+        </a>
+    </div>
+
+</div>
+
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="bg-white p-6 rounded-xl shadow-xl">
+
+    <!-- Información general -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+
+        <div>
+            <h2 class="text-xl font-semibold text-gray-700 mb-3 border-b pb-1">Datos del Cliente</h2>
+            <p><strong>Nombre / Razón Social:</strong> {{ factura.cliente.nombre_razon_social }}</p>
+            <p><strong>Cédula / RUC:</strong> {{ factura.cliente.identificacion }}</p>
+            <p><strong>Dirección:</strong> {{ factura.cliente.direccion }}</p>
+        </div>
+
+        <div>
+            <h2 class="text-xl font-semibold text-gray-700 mb-3 border-b pb-1">Detalles de Factura</h2>
+            <p><strong>Número:</strong> {{ factura.numero }}</p>
+            <p><strong>Fecha:</strong> {{ factura.fecha|date:"d/m/Y H:i" }}</p>
+            <p><strong>Forma de Pago:</strong> {{ factura.forma_pago }}</p>
+
+            <p class="mt-2">
+                <strong>Estado:</strong>
+                {% if factura.estado == "ACTIVA" %}
+                <span class="px-3 py-1 bg-green-200 text-green-700 rounded-lg font-semibold">
+                    ✔ Activa
+                </span>
+                {% else %}
+                <span class="px-3 py-1 bg-red-200 text-red-700 rounded-lg font-semibold">
+                    ✖ Anulada
+                </span>
+                {% endif %}
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Tabla de productos -->
+    <h2 class="text-xl font-semibold text-gray-700 mb-4 border-b pb-1">Detalle de Productos</h2>
+
+    <div class="overflow-x-auto">
+        <table class="w-full table-auto border-collapse">
+            <thead>
+                <tr class="bg-gray-100 text-left text-gray-600 uppercase text-sm tracking-wide">
+                    <th class="py-3 px-6">Producto</th>
+                    <th class="py-3 px-6">Cantidad</th>
+                    <th class="py-3 px-6">Precio</th>
+                    <th class="py-3 px-6">Subtotal</th>
+                </tr>
+            </thead>
+
+            <tbody class="text-gray-700 text-sm">
+
+                {% for d in detalles %}
+                <tr class="border-b hover:bg-gray-50 transition">
+                    <td class="py-2 px-6">{{ d.producto.nombre }}</td>
+                    <td class="py-2 px-6">{{ d.cantidad }}</td>
+                    <td class="py-2 px-6">$ {{ d.precio_unitario }}</td>
+                    <td class="py-2 px-6 font-semibold">$ {{ d.subtotal }}</td>
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Totales -->
+    <div class="mt-8 flex justify-end">
+        <div class="bg-gray-100 p-5 rounded-lg shadow-lg w-72 border">
+            <p class="flex justify-between mb-2">
+                <span>Subtotal:</span>
+                <span>$ {{ factura.subtotal }}</span>
+            </p>
+
+            <p class="flex justify-between mb-2">
+                <span>IVA (15%):</span>
+                <span>$ {{ factura.iva_total }}</span>
+            </p>
+
+            <p class="flex justify-between text-xl font-bold border-t pt-3">
+                <span>Total:</span>
+                <span>$ {{ factura.total }}</span>
+            </p>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

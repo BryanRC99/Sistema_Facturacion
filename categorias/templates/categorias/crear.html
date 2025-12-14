@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Nueva Categoría{% endblock %}
+
+{% block content %}
+
+<h1 class="text-3xl font-bold text-gray-800 mb-6">Nueva Categoría</h1>
+
+<div class="bg-white p-6 rounded-xl shadow-xl w-full max-w-md">
+    <form method="POST">
+        {% csrf_token %}
+
+        <label class="block text-gray-700 font-semibold mb-1">Nombre de la Categoría</label>
+        <input type="text" name="nombre"
+               class="w-full border border-gray-300 px-3 py-2 rounded-lg focus:ring-2 focus:ring-indigo-400 mb-4"
+               required>
+
+        <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition">
+            Guardar
+        </button>
+    </form>
+</div>
+
+{% endblock %}

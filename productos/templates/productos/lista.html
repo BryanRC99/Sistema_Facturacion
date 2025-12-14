@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+
+{% block title %}Productos{% endblock %}
+
+{% block content %}
+
+<div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+    <h1 class="text-3xl font-bold text-gray-800">Productos</h1>
+
+    <a href="{% url 'crear_producto' %}"
+       class="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition">
+        Nuevo Producto
+    </a>
+</div>
+
+<div class="bg-white p-6 rounded-xl shadow-xl space-y-4">
+
+    <!-- Barra de búsqueda -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <input type="text" id="busquedaProducto" placeholder="Buscar por código o nombre..."
+               class="w-full md:w-1/3 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
+        <span id="paginaActual" class="text-gray-700 font-medium md:ml-4"></span>
+    </div>
+
+    <!-- Tabla -->
+    <div class="overflow-x-auto">
+        <table class="w-full table-auto border-collapse">
+            <thead>
+                <tr class="bg-gray-100 text-left text-gray-600 uppercase text-sm leading-normal">
+                    <th class="py-3 px-6">Código</th>
+                    <th class="py-3 px-6">Nombre</th>
+                    <th class="py-3 px-6">Categoría</th>
+                    <th class="py-3 px-6">Precio</th>
+                    <th class="py-3 px-6">Stock</th>
+                    <th class="py-3 px-6">IVA</th>
+                    <th class="py-3 px-6">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700 text-sm" id="tbodyProductos">
+                {% for p in productos %}
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="py-2 px-6">{{ p.codigo }}</td>
+                    <td class="py-2 px-6">{{ p.nombre }}</td>
+                    <td class="py-2 px-6">{{ p.categoria.nombre }}</td>
+                    <td class="py-2 px-6">$ {{ p.precio }}</td>
+                    <td class="py-2 px-6">{{ p.stock }}</td>
+                    <td class="py-2 px-6">
+                        {% if p.iva %}
+                        <span class="text-green-600 font-semibold">✔</span>
+                        {% else %}
+                        <span class="text-gray-400">✘</span>
+                        {% endif %}
+                    </td>
+                    <td class="py-2 px-6 flex flex-wrap gap-2">
+                        <!-- Ver -->
+                        <button type="button" class="text-green-600 hover:text-green-800 font-semibold"
+                                onclick="mostrarProducto(this)"
+                                data-codigo="{{ p.codigo }}" data-nombre="{{ p.nombre }}"
+                                data-categoria="{{ p.categoria.nombre }}" data-precio="{{ p.precio }}"
+                                data-proveedor="{{ p.proveedor.nombre_razon_social }}" data-precio="{{ p.precio }}"
+                                data-costo="{{ p.costo }}" data-stock="{{ p.stock }}" data-iva="{{ p.iva }}"
+                                data-estado="{{ p.estado }}" data-descripcion="{{ p.descripcion|default:'-' }}">
+                                <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                        </button>
+                        <!-- Editar -->
+                        <a href="{% url 'editar_producto' p.id %}" class="text-blue-600 hover:text-blue-800 font-semibold">
+                            <i data-lucide="pencil" class="w-4 h-4 mr-1"></i>
+                        </a>
+                        <!-- Eliminar -->
+                        <button type="button" class="text-red-600 hover:text-red-800 font-semibold"
+                                onclick="abrirModalEliminar('{{ p.id }}')">
+                                <i data-lucide="trash" class="w-4 h-4 mr-1"></i>
+                        </button>
+                    </td>
+                </tr>
+
+                <!-- Modal Eliminar -->
+                <div id="modalEliminar{{ p.id }}"
+                     class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                    <div class="relative w-full max-w-md px-4 animate-fadeIn">
+                        <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+                            <div class="flex justify-between items-center px-6 py-4 bg-gray-50 border-b border-gray-200">
+                                <h3 class="text-lg font-semibold text-gray-700 flex items-center gap-2">
+                                    ⚠ Confirmación
+                                </h3>
+                                <button type="button" class="text-gray-500 hover:bg-gray-200 rounded-full p-2"
+                                        onclick="cerrarModal('modalEliminar{{ p.id }}')">&times;</button>
+                            </div>
+                            <div class="px-6 py-5 space-y-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    ¿Seguro que deseas <span class="font-semibold text-red-500">eliminar</span> el
+                                    producto <strong>{{ p.nombre }}</strong>?
+                                </p>
+                            </div>
+                            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end gap-3">
+                                <button type="button" onclick="cerrarModal('modalEliminar{{ p.id }}')"
+                                        class="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition">
+                                    Cancelar
+                                </button>
+                                <a href="{% url 'eliminar_producto' p.id %}"
+                                   class="px-4 py-2 rounded-lg bg-red-300 text-red-900 hover:bg-red-400 transition font-semibold">
+                                    Sí, eliminar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center py-4 text-gray-500">
+                        No hay productos registrados.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="flex justify-end items-center mt-4 gap-2">
+        <button id="prevPage" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Anterior</button>
+        <button id="nextPage" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Siguiente</button>
+    </div>
+
+</div>
+
+<!-- Modal Producto (Ver) -->
+<div id="modalProducto" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+    <div class="relative w-full max-w-md px-4 animate-fadeIn">
+        <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+            <div class="flex justify-between items-center px-6 py-4 bg-gray-50 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-700 flex items-center gap-2">📄 Detalle del Producto</h3>
+                <button type="button" class="text-gray-500 hover:bg-gray-200 rounded-full p-2"
+                        onclick="cerrarModal('modalProducto')">&times;</button>
+            </div>
+            <div class="px-6 py-5 space-y-2 text-gray-700 overflow-y-auto max-h-96">
+                <p><strong>Código:</strong> <span id="modalCodigo"></span></p>
+                <p><strong>Nombre:</strong> <span id="modalNombre"></span></p>
+                <p><strong>Categoría:</strong> <span id="modalCategoria"></span></p>
+                <p><strong>Proveedor:</strong> <span id="modalProveedor"></span></p>
+                <p><strong>Precio:</strong> $ <span id="modalPrecio"></span></p>
+                <p><strong>Costo:</strong> $ <span id="modalCosto"></span></p>
+                <p><strong>Stock:</strong> <span id="modalStock"></span></p>
+                <p><strong>IVA:</strong> <span id="modalIVA"></span></p>
+                <p><strong>Estado:</strong> <span id="modalEstado"></span></p>
+                <p><strong>Descripción:</strong> <span id="modalDescripcion"></span></p>
+            </div>
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end gap-3">
+                <button type="button" onclick="cerrarModal('modalProducto')"
+                        class="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS Modal + Búsqueda + Paginación -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tbody = document.getElementById('tbodyProductos');
+    const inputBusqueda = document.getElementById('busquedaProducto');
+
+    let pagina = 1;
+    const filasPorPagina = 10;
+
+    // Guardamos todas las filas originales
+    const filasOriginales = Array.from(tbody.querySelectorAll('tr'));
+
+    let filasFiltradas = [...filasOriginales];
+
+    function renderizarTabla() {
+        tbody.innerHTML = '';
+        const inicio = (pagina - 1) * filasPorPagina;
+        const fin = inicio + filasPorPagina;
+        filasFiltradas.slice(inicio, fin).forEach(f => tbody.appendChild(f));
+
+        document.getElementById('paginaActual').textContent =
+            `Página ${pagina} de ${Math.max(Math.ceil(filasFiltradas.length / filasPorPagina), 1)}`;
+    }
+
+    function filtrar() {
+        const texto = inputBusqueda.value.toLowerCase().trim();
+        filasFiltradas = filasOriginales.filter(fila => {
+            const celdas = fila.querySelectorAll('td');
+            if (!celdas.length) return false;
+            return Array.from(celdas).some(td =>
+                td.textContent.toLowerCase().includes(texto)
+            );
+        });
+        pagina = 1;
+        renderizarTabla();
+    }
+
+    inputBusqueda.addEventListener('input', filtrar);
+
+    document.getElementById('prevPage').addEventListener('click', () => {
+        if (pagina > 1) { pagina--; renderizarTabla(); }
+    });
+    document.getElementById('nextPage').addEventListener('click', () => {
+        if (pagina < Math.ceil(filasFiltradas.length / filasPorPagina)) { pagina++; renderizarTabla(); }
+    });
+
+    renderizarTabla();
+});
+
+// Modal functions
+function mostrarProducto(button) {
+    document.getElementById('modalCodigo').textContent = button.dataset.codigo;
+    document.getElementById('modalNombre').textContent = button.dataset.nombre;
+    document.getElementById('modalCategoria').textContent = button.dataset.categoria;
+    document.getElementById('modalProveedor').textContent = button.dataset.proveedor;
+    document.getElementById('modalPrecio').textContent = button.dataset.precio;
+    document.getElementById('modalCosto').textContent = button.dataset.costo;
+    document.getElementById('modalStock').textContent = button.dataset.stock;
+    document.getElementById('modalIVA').textContent = button.dataset.iva === 'True' ? 'Sí' : 'No';
+    document.getElementById('modalEstado').textContent = button.dataset.estado === 'True' ? 'Activo' : 'Inactivo';
+    document.getElementById('modalDescripcion').textContent = button.dataset.descripcion;
+
+    const modal = document.getElementById('modalProducto');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function cerrarModal(id) {
+    const modal = document.getElementById(id);
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+function abrirModalEliminar(id) {
+    const modal = document.getElementById('modalEliminar' + id);
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+</script>
+
+<!-- Animación entrada suave -->
+<style>
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+}
+.animate-fadeIn { animation: fadeIn 0.25s ease-out; }
+</style>
+
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}Categorías{% endblock %}
+
+{% block content %}
+
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Categorías</h1>
+
+    <div class="flex gap-4">
+        <a href="{% url 'crear_categoria' %}"
+            class="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition">
+            Nueva Categoría
+        </a>
+    </div>
+</div>
+
+<div class="bg-white p-7 rounded-xl shadow-xl inline-block">
+    <div class="overflow-x-auto">
+
+        <table class="table-auto border-collapse text-gray-700">
+            <thead>
+                <tr class="bg-gray-100 text-left text-gray-600 uppercase text-sm leading-normal">
+                    <th class="py-2 px-4">Nombre</th>
+                    <th class="py-2 px-4">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody class="text-gray-700 text-sm">
+                {% for c in categorias %}
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="py-2 px-4">{{ c.nombre }}</td>
+
+                    <td class="py-2 px-4 flex gap-2">
+                        <a href="{% url 'editar_categoria' c.id %}"
+                            class="text-blue-600 hover:text-blue-800 font-semibold">
+                            <i data-lucide="pencil" class="w-4 h-4 mr-1"></i>
+                        </a>
+
+                        <button type="button" onclick="abrirModalEliminar('modalEliminar{{ c.id }}')"
+                            class="text-red-600 hover:text-red-800 font-semibold">
+                            <i data-lucide="trash" class="w-4 h-4 mr-1"></i>
+                        </button>
+
+                        <!-- Modal Eliminar -->
+                        <div id="modalEliminar{{ c.id }}"
+                            class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                            <div class="relative w-full max-w-md px-4 animate-fadeIn">
+                                <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+                                    <div
+                                        class="flex justify-between items-center px-6 py-4 bg-gray-50 border-b border-gray-200">
+                                        <h3 class="text-lg font-semibold text-gray-700 flex items-center gap-2">⚠
+                                            Confirmación</h3>
+                                        <button type="button" class="text-gray-500 hover:bg-gray-200 rounded-full p-2"
+                                            onclick="cerrarModal('modalEliminar{{ c.id }}')">&times;</button>
+                                    </div>
+                                    <div class="px-6 py-5 space-y-4">
+                                        <p class="text-gray-700 leading-relaxed">
+                                            ¿Seguro que deseas <span class="font-semibold text-red-500">eliminar</span>
+                                            la categoría
+                                            <strong>{{ c.nombre }}</strong>?
+                                        </p>
+                                    </div>
+                                    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end gap-3">
+                                        <button type="button" onclick="cerrarModal('modalEliminar{{ c.id }}')"
+                                            class="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition">
+                                            Cancelar
+                                        </button>
+                                        <a href="{% url 'eliminar_categoria' c.id %}"
+                                            class="px-4 py-2 rounded-lg bg-red-300 text-red-900 hover:bg-red-400 transition font-semibold">
+                                            Sí, eliminar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Fin Modal Eliminar -->
+                    </td>
+
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2" class="text-center py-4 text-gray-500">
+                        No hay categorías registradas.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<!-- JS Modal -->
+<script>
+    function abrirModalEliminar(id) {
+        const modal = document.getElementById(id);
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function cerrarModal(id) {
+        const modal = document.getElementById(id);
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+</script>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.97);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .animate-fadeIn {
+        animation: fadeIn 0.25s ease-out;
+    }
+</style>
+
+
+{% endblock %}

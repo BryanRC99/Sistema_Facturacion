@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear Cliente{% endblock %}
+
+{% block content %}
+
+<div class="max-w-3xl mx-auto bg-white shadow-xl rounded-2xl p-10 border border-gray-100">
+
+    <!-- Error global -->
+    {% if error %}
+    <div class="bg-red-100 text-red-700 px-4 py-3 rounded-lg border border-red-300 mb-6 text-center">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <!-- Título -->
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-gray-800">Registrar Cliente</h1>
+        <p class="text-gray-500 mt-2">Complete la siguiente información para agregar un nuevo cliente</p>
+        <div class="mt-4 h-[3px] w-24 bg-indigo-600 mx-auto rounded-full"></div>
+    </div>
+
+    <form method="POST" class="space-y-10">
+        {% csrf_token %}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <!-- Tipo de Identificación -->
+            <div class="floating-label-group">
+                <select id="tipo_identificacion" name="tipo_identificacion" required class="floating-input peer">
+                    <option value="" disabled {% if not form_data %}selected{% endif %}>Seleccione una opción</option>
+                    <option value="CED" {% if form_data.tipo_identificacion == "CED" %}selected{% endif %}>Cédula</option>
+                    <option value="RUC" {% if form_data.tipo_identificacion == "RUC" %}selected{% endif %}>RUC</option>
+                    <option value="PAS" {% if form_data.tipo_identificacion == "PAS" %}selected{% endif %}>Pasaporte</option>
+                </select>
+                <label class="floating-label">Tipo de Identificación</label>
+            </div>
+
+            <!-- Identificación -->
+            <div class="floating-label-group">
+                <input type="text" id="identificacion" name="identificacion"
+                       value="{{ form_data.identificacion|default:'' }}"
+                       required class="floating-input peer">
+                <label class="floating-label">Identificación</label>
+            </div>
+
+            <!-- Nombre / Razón Social -->
+            <div class="floating-label-group md:col-span-2">
+                <input type="text" name="nombre_razon_social"
+                    value="{{ form_data.nombre_razon_social|default:'' }}"
+                    required minlength="3"
+                    pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 .,-]{3,100}$"
+                    title="Ingrese un nombre o razón social válido"
+                    class="floating-input peer">
+                <label class="floating-label">Nombre / Razón Social</label>
+            </div>
+
+            <!-- Teléfono -->
+            <div class="floating-label-group">
+                <input type="text" name="telefono"
+                    value="{{ form_data.telefono|default:'' }}"
+                    required pattern="^[0-9]{7,10}$"
+                    title="Ingrese un teléfono válido"
+                    class="floating-input peer">
+                <label class="floating-label">Teléfono</label>
+            </div>
+
+            <!-- Celular -->
+            <div class="floating-label-group">
+                <input type="text" name="celular"
+                    value="{{ form_data.celular|default:'' }}"
+                    required pattern="^(09)[0-9]{8}$"
+                    title="Debe ser un número celular ecuatoriano válido (09XXXXXXXX)"
+                    class="floating-input peer">
+                <label class="floating-label">Celular</label>
+            </div>
+
+            <!-- Dirección -->
+            <div class="floating-label-group md:col-span-2">
+                <input type="text" name="direccion"
+                    value="{{ form_data.direccion|default:'' }}"
+                    required minlength="5" class="floating-input peer">
+                <label class="floating-label">Dirección</label>
+            </div>
+
+            <!-- Correo -->
+            <div class="floating-label-group md:col-span-2">
+                <input type="email" name="correo"
+                    value="{{ form_data.correo|default:'' }}"
+                    required class="floating-input peer">
+                <label class="floating-label">Correo Electrónico</label>
+            </div>
+
+        </div>
+
+        <!-- BOTÓN -->
+        <div class="flex justify-end">
+            <button type="submit"
+                class="px-10 py-3 bg-indigo-600 text-white rounded-xl text-lg font-semibold 
+                       shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                Guardar Cliente
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<!-- Floating Label Styles -->
+<style>
+    .floating-label-group {
+        position: relative;
+    }
+
+    .floating-input {
+        width: 100%;
+        padding: 14px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 12px;
+        background: #f9fafb;
+        outline: none;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .floating-input:focus {
+        border-color: #6366f1;
+        background: white;
+        box-shadow: 0 0 0 3px #6366f130;
+    }
+
+    .floating-label {
+        position: absolute;
+        left: 14px;
+        top: 14px;
+        padding: 0 6px;
+        background: white;
+        color: #6b7280;
+        font-size: 0.95rem;
+        pointer-events: none;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .peer:focus ~ .floating-label,
+    .peer:not(:placeholder-shown) ~ .floating-label {
+        top: -8px;
+        left: 10px;
+        font-size: 0.75rem;
+        color: #4f46e5;
+        background: white;
+    }
+</style>
+
+<!-- Validación dinámica -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const tipo = document.getElementById("tipo_identificacion");
+    const identificacion = document.getElementById("identificacion");
+
+    function aplicarValidacion() {
+        const t = tipo.value;
+
+        identificacion.value = "";  
+        identificacion.removeAttribute("pattern");
+        identificacion.removeAttribute("maxlength");
+        identificacion.removeAttribute("title");
+
+        if (t === "CED") {
+            identificacion.setAttribute("pattern", "^[0-9]{10}$");
+            identificacion.setAttribute("maxlength", "10");
+            identificacion.setAttribute("title", "La cédula ecuatoriana debe tener 10 números.");
+        }
+
+        if (t === "RUC") {
+            identificacion.setAttribute("pattern", "^[0-9]{13}$");
+            identificacion.setAttribute("maxlength", "13");
+            identificacion.setAttribute("title", "El RUC debe tener 13 números.");
+        }
+
+        if (t === "PAS") {
+            identificacion.setAttribute("pattern", "^[A-Za-z0-9]{6,20}$");
+            identificacion.setAttribute("maxlength", "20");
+            identificacion.setAttribute("title", "El pasaporte debe tener entre 6 y 20 caracteres alfanuméricos.");
+        }
+    }
+
+    tipo.addEventListener("change", aplicarValidacion);
+});
+</script>
+
+
+{% endblock %}

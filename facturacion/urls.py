@@ -1,0 +1,16 @@
+from django.contrib import admin
+from django.urls import path, include
+from productos.views import lista_productos
+from .views import acceso_no_autorizado
+
+urlpatterns = [
+    path('no-autorizado/', acceso_no_autorizado, name='acceso_no_autorizado'),
+    path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('', lista_productos, name='inicio'),
+    path('clientes/', include('clientes.urls')),
+    path('productos/', include('productos.urls')),
+    path('categorias/', include('categorias.urls')),
+    path('proveedores/', include('proveedores.urls')),
+    path('', include('facturacion_app.urls')),
+]

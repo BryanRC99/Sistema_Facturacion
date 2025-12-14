@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block title %}Facturas{% endblock %}
+
+{% block content %}
+
+<div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+    <h1 class="text-3xl font-bold text-gray-800">Facturas</h1>
+
+    <a href="{% url 'factura_crear' %}"
+       class="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition">
+        Nueva Factura
+    </a>
+</div>
+
+<div class="bg-white p-6 rounded-xl shadow-xl space-y-4">
+
+    <!-- Búsqueda -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <input type="text" id="busquedaFactura"
+               placeholder="Buscar número de factura o cliente..."
+               class="w-full md:w-1/3 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500">
+        <span id="paginaActual" class="text-gray-700 font-medium"></span>
+    </div>
+
+    <!-- Tabla -->
+    <div class="overflow-x-auto">
+        <table class="w-full table-auto border-collapse">
+            <thead>
+                <tr class="bg-gray-100 text-left text-gray-600 uppercase text-sm">
+                    <th class="py-3 px-6">Número</th>
+                    <th class="py-3 px-6">Cliente</th>
+                    <th class="py-3 px-6">Fecha</th>
+                    <th class="py-3 px-6">Forma Pago</th>
+                    <th class="py-3 px-6">Total</th>
+                    <th class="py-3 px-6">Estado</th>
+                    <th class="py-3 px-6">Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody id="tbodyFacturas" class="text-gray-700 text-sm">
+                {% for f in facturas %}
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="py-2 px-6">{{ f.numero }}</td>
+                    <td class="py-2 px-6">{{ f.cliente.nombre_razon_social }}</td>
+                    <td class="py-2 px-6">{{ f.fecha|date:"d/m/Y H:i" }}</td>
+                    <td class="py-2 px-6">{{ f.forma_pago }}</td>
+                    <td class="py-2 px-6 font-bold">$ {{ f.total }}</td>
+                    <td class="py-2 px-6">
+                        {% if f.estado == "ACTIVA" %}
+                        <span class="px-3 py-1 bg-green-200 text-green-700 rounded-lg">Activa</span>
+                        {% else %}
+                        <span class="px-3 py-1 bg-red-200 text-red-700 rounded-lg">Anulada</span>
+                        {% endif %}
+                    </td>
+                    <td class="py-2 px-6 flex gap-4">
+                        <a href="{% url 'factura_detalle' f.id %}"
+                           class="text-blue-600 hover:text-blue-800 font-semibold">
+                           <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                        </a>
+
+                        {% if f.estado == "ACTIVA" %}
+                        <button onclick="abrirModal('modalAnular{{ f.id }}')"
+                                class="text-red-600 hover:text-red-800 font-semibold">
+                            <i data-lucide="ban" class="w-4 h-4 mr-1"></i>
+                        </button>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <!-- MODAL -->
+                <div id="modalAnular{{ f.id }}"
+                     class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+                     onclick="cerrarModal('modalAnular{{ f.id }}')">
+
+                    <div class="relative w-full max-w-md px-4 animate-fadeIn"
+                         onclick="event.stopPropagation()">
+
+                        <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+
+                            <div class="flex justify-between items-center px-6 py-4 bg-gray-50 border-b">
+                                <h3 class="text-lg font-semibold text-gray-700 flex items-center gap-2">
+                                    ⚠ Confirmación
+                                </h3>
+                                <button onclick="cerrarModal('modalAnular{{ f.id }}')"
+                                        class="p-2 rounded-full hover:bg-gray-200">
+                                    ✕
+                                </button>
+                            </div>
+
+                            <div class="px-6 py-5 space-y-4">
+                                <p>
+                                    ¿Deseas <strong class="text-red-600">anular</strong> la factura
+                                    <strong>{{ f.numero }}</strong> del cliente
+                                    <strong>{{ f.cliente.nombre_razon_social }}</strong>?
+                                </p>
+
+                                <div class="p-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
+                                    El stock de los productos será restaurado automáticamente.
+                                </div>
+                            </div>
+
+                            <div class="px-6 py-4 bg-gray-50 flex justify-end gap-3">
+                                <button onclick="cerrarModal('modalAnular{{ f.id }}')"
+                                        class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+                                    Cancelar
+                                </button>
+
+                                <a href="{% url 'factura_anular' f.id %}"
+                                   class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-semibold">
+                                    Sí, anular
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="flex justify-end gap-2 mt-4">
+        <button id="prevPage" class="px-4 py-2 bg-gray-200 rounded-lg">Anterior</button>
+        <button id="nextPage" class="px-4 py-2 bg-gray-200 rounded-lg">Siguiente</button>
+    </div>
+</div>
+
+<!-- JS MODALES -->
+<script>
+function abrirModal(id) {
+    document.getElementById(id).classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+}
+
+function cerrarModal(id) {
+    document.getElementById(id).classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+}
+</script>
+
+<!-- JS BÚSQUEDA + PAGINACIÓN -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const tbody = document.getElementById('tbodyFacturas');
+    const input = document.getElementById('busquedaFactura');
+    const filas = Array.from(tbody.querySelectorAll('tr'));
+    let pagina = 1;
+    const porPagina = 10;
+    let filtradas = [...filas];
+
+    function render() {
+        tbody.innerHTML = '';
+        const ini = (pagina - 1) * porPagina;
+        const fin = ini + porPagina;
+        filtradas.slice(ini, fin).forEach(f => tbody.appendChild(f));
+        document.getElementById('paginaActual').textContent =
+            `Página ${pagina} de ${Math.max(Math.ceil(filtradas.length / porPagina), 1)}`;
+    }
+
+    input.addEventListener('input', () => {
+        const txt = input.value.toLowerCase();
+        filtradas = filas.filter(f => f.textContent.toLowerCase().includes(txt));
+        pagina = 1;
+        render();
+    });
+
+    document.getElementById('prevPage').onclick = () => { if (pagina > 1) pagina--, render(); };
+    document.getElementById('nextPage').onclick = () => {
+        if (pagina < Math.ceil(filtradas.length / porPagina)) pagina++, render();
+    };
+
+    render();
+});
+</script>
+
+<style>
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(.96); }
+    to { opacity: 1; transform: scale(1); }
+}
+.animate-fadeIn { animation: fadeIn .25s ease-out; }
+</style>
+
+{% endblock %}

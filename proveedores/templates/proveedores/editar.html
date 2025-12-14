@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Proveedor{% endblock %}
+
+{% block content %}
+
+<div class="max-w-3xl mx-auto bg-white shadow-xl rounded-2xl p-10 border border-gray-100">
+
+    {% if error %}
+    <div class="bg-red-100 text-red-700 px-4 py-3 rounded-lg border border-red-300 mb-6 text-center">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <!-- Título -->
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-gray-800">Editar Proveedor</h1>
+        <p class="text-gray-500 mt-2">Modifique los datos del proveedor</p>
+        <div class="mt-4 h-[3px] w-24 bg-indigo-600 mx-auto rounded-full"></div>
+    </div>
+
+    <form method="POST" class="space-y-10">
+        {% csrf_token %}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <!-- Tipo de Identificación -->
+            <div class="floating-label-group">
+                <select id="tipo_identificacion" name="tipo_identificacion" required class="floating-input peer">
+                    <option value="CED" {% if proveedor.tipo_identificacion == "CED" %}selected{% endif %}>Cédula</option>
+                    <option value="RUC" {% if proveedor.tipo_identificacion == "RUC" %}selected{% endif %}>RUC</option>
+                    <option value="PAS" {% if proveedor.tipo_identificacion == "PAS" %}selected{% endif %}>Pasaporte</option>
+                </select>
+                <label class="floating-label">Tipo de Identificación</label>
+            </div>
+
+            <!-- Identificación -->
+            <div class="floating-label-group">
+                <input type="text" id="identificacion" name="identificacion"
+                       value="{{ proveedor.identificacion }}"
+                       required class="floating-input peer">
+                <label class="floating-label">Identificación</label>
+            </div>
+
+            <!-- Nombre / Razón Social -->
+            <div class="floating-label-group md:col-span-2">
+                <input type="text" name="nombre_razon_social"
+                       value="{{ proveedor.nombre_razon_social }}"
+                       required minlength="3"
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 .,-]{3,100}$"
+                       class="floating-input peer">
+                <label class="floating-label">Nombre / Razón Social</label>
+            </div>
+
+            <!-- Teléfono -->
+            <div class="floating-label-group">
+                <input type="text" name="telefono"
+                       value="{{ proveedor.telefono }}"
+                       pattern="^[0-9]{7,10}$"
+                       class="floating-input peer">
+                <label class="floating-label">Teléfono</label>
+            </div>
+
+            <!-- Celular -->
+            <div class="floating-label-group">
+                <input type="text" name="celular"
+                       value="{{ proveedor.celular }}"
+                       pattern="^(09)[0-9]{8}$"
+                       class="floating-input peer">
+                <label class="floating-label">Celular</label>
+            </div>
+
+            <!-- Dirección -->
+            <div class="floating-label-group md:col-span-2">
+                <input type="text" name="direccion"
+                       value="{{ proveedor.direccion }}"
+                       required minlength="5"
+                       class="floating-input peer">
+                <label class="floating-label">Dirección</label>
+            </div>
+
+            <!-- Ciudad -->
+            <div class="floating-label-group">
+                <input type="text" name="ciudad"
+                       value="{{ proveedor.ciudad }}"
+                       class="floating-input peer">
+                <label class="floating-label">Ciudad</label>
+            </div>
+
+            <!-- Correo -->
+            <div class="floating-label-group">
+                <input type="email" name="correo"
+                       value="{{ proveedor.correo }}"
+                       class="floating-input peer">
+                <label class="floating-label">Correo Electrónico</label>
+            </div>
+
+            <!-- Contacto -->
+            <div class="floating-label-group">
+                <input type="text" name="contacto"
+                       value="{{ proveedor.contacto_nombre }}"
+                       class="floating-input peer">
+                <label class="floating-label">Persona de Contacto</label>
+            </div>
+
+            <!-- Teléfono Contacto -->
+            <div class="floating-label-group">
+                <input type="text" name="contacto_telefono"
+                       value="{{ proveedor.contacto_telefono }}"
+                       class="floating-input peer">
+                <label class="floating-label">Tel. Contacto</label>
+            </div>
+
+            <!-- Observaciones -->
+            <div class="floating-label-group md:col-span-2">
+                <textarea name="observaciones"
+                          class="floating-input peer h-24">{{ proveedor.observaciones }}</textarea>
+                <label class="floating-label">Observaciones</label>
+            </div>
+
+        </div>
+
+        <div class="flex justify-end">
+            <button type="submit"
+                class="px-10 py-3 bg-indigo-600 text-white rounded-xl text-lg font-semibold 
+                       shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                Actualizar Proveedor
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<!-- Estilos Floating Label -->
+<style>
+    .floating-label-group { position: relative; }
+    .floating-input {
+        width: 100%;
+        padding: 14px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 12px;
+        background: #f9fafb;
+        outline: none;
+        transition: all 0.2s ease-in-out;
+    }
+    .floating-input:focus {
+        border-color: #6366f1;
+        background: white;
+        box-shadow: 0 0 0 3px #6366f130;
+    }
+    .floating-label {
+        position: absolute;
+        left: 14px;
+        top: 14px;
+        padding: 0 6px;
+        background: white;
+        color: #6b7280;
+        font-size: 0.95rem;
+        pointer-events: none;
+        transition: all 0.2s ease-in-out;
+    }
+    .peer:focus ~ .floating-label,
+    .peer:not(:placeholder-shown) ~ .floating-label {
+        top: -8px;
+        left: 10px;
+        font-size: 0.75rem;
+        color: #4f46e5;
+        background: white;
+    }
+</style>
+
+<!-- JS Validación Identificación -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const tipo = document.getElementById("tipo_identificacion");
+    const identificacion = document.getElementById("identificacion");
+
+    function aplicarValidacion() {
+        const t = tipo.value;
+
+        identificacion.removeAttribute("pattern");
+        identificacion.removeAttribute("maxlength");
+        identificacion.removeAttribute("title");
+
+        if (t === "CED") {
+            identificacion.pattern = "^[0-9]{10}$";
+            identificacion.maxLength = 10;
+        }
+        if (t === "RUC") {
+            identificacion.pattern = "^[0-9]{13}$";
+            identificacion.maxLength = 13;
+        }
+        if (t === "PAS") {
+            identificacion.pattern = "^[A-Za-z0-9]{6,20}$";
+            identificacion.maxLength = 20;
+        }
+    }
+
+    aplicarValidacion();
+    tipo.addEventListener("change", aplicarValidacion);
+});
+</script>
+
+{% endblock %}

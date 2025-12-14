@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Producto{% endblock %}
+
+{% block content %}
+
+<div class="max-w-3xl mx-auto bg-white shadow-xl rounded-2xl p-10 border border-gray-100">
+
+    {% if error %}
+    <div class="bg-red-100 text-red-700 px-4 py-3 rounded-lg border border-red-300 mb-6 text-center">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-gray-800">Editar Producto</h1>
+        <p class="text-gray-500 mt-2">Actualice los datos necesarios</p>
+        <div class="mt-4 h-[3px] w-24 bg-indigo-600 mx-auto rounded-full"></div>
+    </div>
+
+    <form method="POST" class="space-y-10" id="formEditarProducto">
+        {% csrf_token %}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <!-- Código -->
+            <div class="floating-label-group md:col-span-2">
+                <input type="text" id="codigo" name="codigo"
+                       value="{{ producto.codigo }}"
+                       required minlength="3"
+                       pattern="^[A-Za-z0-9-_.]+$"
+                       class="floating-input peer"
+                       placeholder=" ">
+                <label class="floating-label">Código del Producto</label>
+            </div>
+
+            <!-- Nombre -->
+            <div class="floating-label-group md:col-span-2">
+                <input type="text" name="nombre"
+                       value="{{ producto.nombre }}"
+                       required minlength="3"
+                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 .,-]{3,100}$"
+                       class="floating-input peer"
+                       placeholder=" ">
+                <label class="floating-label">Nombre del Producto</label>
+            </div>
+
+            <!-- Categoría -->
+            <div class="floating-label-group md:col-span-2">
+                <select name="categoria" class="floating-input peer" required>
+                    <option value=""></option>
+                    {% for c in categorias %}
+                    <option value="{{ c.id }}" {% if producto.categoria.id == c.id %}selected{% endif %}>
+                        {{ c.nombre }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <label class="floating-label">Categoría</label>
+            </div>
+            
+            <!-- Proveedor -->
+            <div class="floating-label-group md:col-span-2">
+                <select name="proveedor" class="floating-input peer" required>
+                    <option value=""></option>
+                    {% for p in proveedores %}
+                    <option value="{{ p.id }}" {% if producto.proveedor.id == p.id %}selected{% endif %}>
+                        {{ p.nombre_razon_social }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <label class="floating-label">Proveedor</label>
+            </div>
+
+            <!-- Precio -->
+            <div class="floating-label-group">
+                <input type="number" step="0.01" name="precio"
+                       value="{{ producto.precio }}"
+                       required class="floating-input peer"
+                       placeholder=" ">
+                <label class="floating-label">Precio Venta</label>
+            </div>
+
+            <!-- Costo -->
+            <div class="floating-label-group">
+                <input type="number" step="0.01" name="costo"
+                       value="{{ producto.costo }}"
+                       required class="floating-input peer"
+                       placeholder=" ">
+                <label class="floating-label">Costo</label>
+            </div>
+
+            <!-- Stock -->
+            <div class="floating-label-group">
+                <input type="number" name="stock"
+                       value="{{ producto.stock }}"
+                       required class="floating-input peer"
+                       placeholder=" ">
+                <label class="floating-label">Stock</label>
+            </div>
+
+            <!-- IVA -->
+            <div class="flex items-center gap-3">
+                <input type="checkbox" name="iva"
+                       {% if producto.iva %}checked{% endif %}
+                       class="w-5 h-5">
+                <label class="text-gray-700 font-medium">Aplicar IVA (12%)</label>
+            </div>
+
+            <!-- Estado -->
+            <div class="flex items-center gap-3">
+                <input type="checkbox" name="estado"
+                       {% if producto.estado %}checked{% endif %}
+                       class="w-5 h-5">
+                <label class="text-gray-700 font-medium">Activo</label>
+            </div>
+
+            <!-- Descripción -->
+            <div class="floating-label-group md:col-span-2">
+                <textarea name="descripcion" rows="4"
+                          class="floating-input peer"
+                          placeholder=" ">{{ producto.descripcion }}</textarea>
+                <label class="floating-label">Descripción</label>
+            </div>
+
+        </div>
+
+        <div class="flex justify-end">
+            <button type="submit"
+                class="px-10 py-3 bg-indigo-600 text-white rounded-xl text-lg font-semibold 
+                       shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                Guardar Cambios
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<!-- Validación de código -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const inputCodigo = document.getElementById("codigo");
+    const form = document.querySelector("form");
+
+    const originalCodigo = "{{ producto.codigo|default:''|escapejs }}".toLowerCase();
+
+    form.addEventListener("submit", async (e) => {
+        const codigoIngresado = inputCodigo.value.trim().toLowerCase();
+
+        // Si NO se cambió el código, permitir guardar
+        if (codigoIngresado === originalCodigo && originalCodigo !== "") {
+            return;
+        }
+
+        // Verificar en backend si existe
+        const respuesta = await fetch(
+            `/productos/verificar-codigo/?codigo=${encodeURIComponent(codigoIngresado)}`
+        );
+        const data = await respuesta.json();
+
+        if (data.existe) {
+            e.preventDefault();
+            alert("El código ingresado ya existe. Debe ser único.");
+            inputCodigo.focus();
+        }
+    });
+
+});
+</script>
+
+<!-- Reutilizamos exactamente los mismos estilos floating-label -->
+<style>
+    .floating-label-group {
+        position: relative;
+    }
+
+    .floating-input {
+        width: 100%;
+        padding: 14px 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 12px;
+        background: #f9fafb;
+        outline: none;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .floating-input:focus {
+        border-color: #6366f1;
+        background: white;
+        box-shadow: 0 0 0 3px #6366f130;
+    }
+
+    .floating-label {
+        position: absolute;
+        left: 14px;
+        top: 14px;
+        padding: 0 6px;
+        background: white;
+        color: #6b7280;
+        font-size: 0.95rem;
+        pointer-events: none;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .peer:focus ~ .floating-label,
+    .peer:not(:placeholder-shown) ~ .floating-label {
+        top: -8px;
+        left: 10px;
+        font-size: 0.75rem;
+        color: #4f46e5;
+        background: white;
+    }
+</style>
+
+{% endblock %}

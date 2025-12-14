@@ -1,0 +1,84 @@
+{% extends "base_auth.html" %}
+{% load static %}
+
+{% block title %}Acceso no autorizado{% endblock %}
+
+{% block content %}
+<div class="relative min-h-screen flex items-center justify-center overflow-hidden">
+
+    <!-- FONDO -->
+    <div class="absolute inset-0">
+        <img src="{% static 'img/login-bg.jpg' %}"
+             class="w-full h-full object-cover blur-md scale-110"
+             alt="Fondo">
+        <div class="absolute inset-0 bg-black/50"></div>
+    </div>
+
+    <!-- CARD -->
+    <div class="relative z-10 w-full max-w-md
+                bg-gray-900/70 backdrop-blur-2xl
+                rounded-3xl shadow-2xl
+                border border-white/10
+                p-10 text-center text-white
+                animate-fade-in">
+
+        <!-- Ícono -->
+        <div class="mx-auto mb-6 flex items-center justify-center
+                    w-20 h-20 rounded-full bg-red-500/20">
+            <svg class="w-10 h-10 text-red-400" fill="none" stroke="currentColor" stroke-width="2"
+                 viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M12 9v2m0 4h.01M5.07 19a10 10 0 1113.86 0H5.07z" />
+            </svg>
+        </div>
+
+        <!-- Título -->
+        <h1 class="text-3xl font-extrabold mb-3">
+            Acceso restringido
+        </h1>
+
+        <p class="text-gray-300 mb-8 leading-relaxed">
+            Por favor, inicia sesión para continuar.
+        </p>
+
+        <!-- Botón -->
+        <a href="{% url 'login' %}"
+           class="inline-flex items-center justify-center gap-2
+                  px-8 py-3 bg-indigo-600 text-white rounded-xl
+                  font-semibold shadow-lg
+                  hover:bg-indigo-700 hover:scale-105
+                  transition-transform duration-200">
+
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
+                 viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M5 12h14m-7-7l7 7-7 7" />
+            </svg>
+            Iniciar sesión
+        </a>
+
+        <!-- Nota -->
+        <p class="mt-6 text-sm text-gray-400">
+            Sistema protegido · Acceso solo para usuarios autorizados
+        </p>
+    </div>
+</div>
+
+<!-- Animación -->
+<style>
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.6s ease-out;
+}
+</style>
+{% endblock %}
