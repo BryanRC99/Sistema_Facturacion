@@ -11,22 +11,37 @@
         Factura {{ factura.numero }}
     </h1>
 
-    <div class="flex gap-3">
+    <div class="flex gap-2">
 
         {% if factura.estado == "ACTIVA" %}
-        <a href="{% url 'imprimir_factura' factura.id %}" target="_blank" rel="noopener noreferrer"
-            class="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-lg shadow hover:bg-indigo-700 transition transform hover:scale-[1.03]">
-            🖨️ <span>Imprimir</span>
+        <a href="{% url 'imprimir_factura' factura.id %}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2
+              bg-indigo-600 text-white
+              px-4 py-2 rounded-md
+              text-sm font-medium
+              shadow-sm
+              hover:bg-indigo-700
+              transition">
+
+            <i data-lucide="printer" class="w-4 h-4"></i>
+            Imprimir
         </a>
         {% endif %}
 
-
         <!-- Botón volver -->
-        <a href="{% url 'factura_lista' %}"
-            class="flex items-center gap-2 bg-gray-600 text-white px-5 py-2.5 rounded-lg shadow hover:bg-gray-700 transition transform hover:scale-[1.03]">
-            ⬅️ <span>Volver</span>
+        <a href="{% url 'factura_lista' %}" class="inline-flex items-center gap-2
+              border border-gray-300 text-gray-700
+              px-4 py-2 rounded-md
+              text-sm font-medium
+              hover:bg-gray-100
+              transition">
+
+            <i data-lucide="circle-arrow-left" class="w-4 h-4"></i>
+            Volver
         </a>
+
     </div>
+
+
 
 </div>
 

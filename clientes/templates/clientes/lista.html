@@ -10,7 +10,16 @@
 
     <!-- Botón Nuevo Cliente -->
     <a href="{% url 'crear_cliente' %}"
-       class="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition">
+       class="inline-flex items-center gap-2
+              bg-indigo-600 text-white
+              px-4 py-2
+              text-sm font-medium
+              rounded-md
+              shadow-sm
+              hover:bg-indigo-700
+              transition">
+
+        <i data-lucide="circle-user" class="w-4 h-4"></i>
         Nuevo Cliente
     </a>
 </div>

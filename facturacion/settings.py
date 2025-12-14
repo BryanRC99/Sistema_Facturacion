@@ -29,7 +29,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     ".ngrok-free.dev",
-    "192.168.0.108"
+    "*"
 ]
 
 LOGIN_URL = '/accounts/login/'
