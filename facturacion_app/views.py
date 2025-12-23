@@ -10,7 +10,9 @@ from weasyprint import HTML
 from django.conf import settings
 from django.templatetags.static import static
 import os
+import random
 from django.shortcuts import get_object_or_404
+from datetime import datetime
 import json
 
 from clientes.models import Cliente
@@ -18,8 +20,54 @@ from productos.models import Producto
 from .models import Factura, DetalleFactura
 
 # ============================
-# IMPRIMIR FACTURA
+# GENERAR CLAVE ACCESO SRI
 # ============================
+
+def generar_clave_acceso_sri(
+    fecha_emision,
+    ruc,
+    establecimiento,
+    punto_emision,
+    secuencial,
+    ambiente="1",          # 1 = PRUEBAS
+    tipo_comprobante="01"  # 01 = FACTURA
+):
+    fecha = fecha_emision.strftime("%d%m%Y")
+    serie = f"{establecimiento}{punto_emision}"
+    secuencial = str(secuencial).zfill(9)
+    codigo_numerico = str(random.randint(10000000, 99999999))
+    tipo_emision = "1"
+
+    clave = (
+        fecha +
+        tipo_comprobante +
+        ruc +
+        ambiente +
+        serie +
+        secuencial +
+        codigo_numerico +
+        tipo_emision
+    )
+
+    # ===== MÓDULO 11 =====
+    factores = [2, 3, 4, 5, 6, 7]
+    suma = 0
+    factor = 0
+
+    for digito in reversed(clave):
+        suma += int(digito) * factores[factor]
+        factor = (factor + 1) % len(factores)
+
+    mod = 11 - (suma % 11)
+
+    if mod == 11:
+        verificador = "0"
+    elif mod == 10:
+        verificador = "1"
+    else:
+        verificador = str(mod)
+
+    return clave + verificador
 
 # ============================
 # IMPRIMIR FACTURA
@@ -44,7 +92,7 @@ def imprimir_factura(request, id):
 
     # Empresa
     empresa = {
-        "nombre": "SuperMarket",
+        "nombre": "Super",
         "ruc": "99999999999999",
         "direccion": "Quito, Av Reinoso Rueda y Calle 8",
         "telefono": "0993395049",
@@ -165,6 +213,16 @@ def crear_factura(request):
         factura.descuento_total = descuento_total
         factura.iva_total = iva_total
         factura.total = total
+        # ===== GENERAR CLAVE DE ACCESO SRI (PRUEBAS) =====
+        factura.clave_acceso = generar_clave_acceso_sri(
+           fecha_emision=factura.fecha,
+           ruc="99999999999999",          # RUC EMPRESA (PRUEBAS)
+           establecimiento="001",
+           punto_emision="001",
+           secuencial=ultimo,             # usa el mismo secuencial
+           ambiente="1"                   # PRUEBAS
+        )
+
         factura.save()
 
         return redirect('factura_lista')
