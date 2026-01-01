@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="space-y-10">
+
+    <!-- ========================= -->
+    <!-- HEADER -->
+    <!-- ========================= -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800">
+                Dashboard de Ventas
+            </h1>
+            <p class="text-gray-500 mt-1">
+                Resumen general del día {{ resumen.fecha|date:"d/m/Y" }}
+            </p>
+        </div>
+    </div>
+
+    <!-- ========================= -->
+    <!-- CARDS KPI -->
+    <!-- ========================= -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <!-- Total Vendido -->
+        <div class="bg-white rounded-2xl shadow p-6 flex items-center gap-4">
+            <div class="bg-green-100 text-green-600 p-3 rounded-xl">
+                <i data-lucide="dollar-sign" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Total vendido hoy</p>
+                <p class="text-2xl font-bold text-gray-800">
+                    $ {{ resumen.total_vendido|floatformat:2 }}
+                </p>
+            </div>
+        </div>
+
+        <!-- IVA -->
+        <div class="bg-white rounded-2xl shadow p-6 flex items-center gap-4">
+            <div class="bg-blue-100 text-blue-600 p-3 rounded-xl">
+                <i data-lucide="receipt" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">IVA generado</p>
+                <p class="text-2xl font-bold text-gray-800">
+                    $ {{ resumen.total_iva|floatformat:2 }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Facturas -->
+        <div class="bg-white rounded-2xl shadow p-6 flex items-center gap-4">
+            <div class="bg-purple-100 text-purple-600 p-3 rounded-xl">
+                <i data-lucide="file-text" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Facturas hoy</p>
+                <p class="text-2xl font-bold text-gray-800">
+                    {{ resumen.cantidad_facturas }}
+                </p>
+            </div>
+        </div>
+
+        <!-- Comparación -->
+        <div class="bg-white rounded-2xl shadow p-6 flex items-center gap-4">
+            <div class="bg-gray-100 text-gray-700 p-3 rounded-xl">
+                <i data-lucide="trending-up" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Vs ayer</p>
+
+                {% if comparacion.diferencia >= 0 %}
+                    <p class="text-xl font-bold text-green-600">
+                        + $ {{ comparacion.diferencia|floatformat:2 }}
+                    </p>
+                {% else %}
+                    <p class="text-xl font-bold text-red-600">
+                        - $ {{ comparacion.diferencia|floatformat:2 }}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- GRÁFICO -->
+    <!-- ========================= -->
+    <div class="bg-white rounded-2xl shadow p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-gray-700 flex items-center gap-2">
+                <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                Ventas por día
+            </h2>
+        </div>
+        <canvas id="ventasChart" height="110"></canvas>
+    </div>
+
+    <!-- ========================= -->
+    <!-- TABLA FACTURAS -->
+    <!-- ========================= -->
+    <div class="bg-white rounded-2xl shadow p-6">
+        <h2 class="text-lg font-semibold text-gray-700 flex items-center gap-2 mb-4">
+            <i data-lucide="list" class="w-5 h-5"></i>
+            Facturas del día
+        </h2>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+                <thead>
+                    <tr class="border-b text-gray-500">
+                        <th class="py-3 text-left">#</th>
+                        <th class="py-3 text-left">Cliente</th>
+                        <th class="py-3 text-left">Fecha</th>
+                        <th class="py-3 text-right">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for f in facturas_hoy %}
+                        <tr class="border-b hover:bg-gray-50 transition">
+                            <td class="py-3">{{ f.numero }}</td>
+                            <td class="py-3 font-medium text-gray-700">
+                                {{ f.cliente }}
+                            </td>
+                            <td class="py-3 text-gray-500">
+                                {{ f.fecha|date:"d/m/Y H:i" }}
+                            </td>
+                            <td class="py-3 text-right font-semibold text-gray-800">
+                                $ {{ f.total|floatformat:2 }}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-6 text-gray-500">
+                                No hay facturas registradas hoy
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- CHART.JS -->
+<!-- ========================= -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const labels = [
+        {% for v in ventas_grafico %}
+            "{{ v.dia|date:'d/m' }}",
+        {% endfor %}
+    ];
+
+    const data = [
+        {% for v in ventas_grafico %}
+            {{ v.total_vendido }},
+        {% endfor %}
+    ];
+
+    const ctx = document.getElementById('ventasChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Ventas ($)',
+                data: data,
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+<!-- ========================= -->
+<!-- LUCIDE ICONS -->
+<!-- ========================= -->
+<script>
+    lucide.createIcons();
+</script>
+
+{% endblock %}

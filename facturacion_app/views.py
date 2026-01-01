@@ -192,6 +192,8 @@ def crear_factura(request):
 
             # ACTUALIZAR STOCK
             prod.stock -= cantidad
+            prod._current_user = request.user
+            prod._ip_address = request.META.get('REMOTE_ADDR')
             prod.save()
 
             # CÁLCULOS TOTALES
@@ -223,6 +225,9 @@ def crear_factura(request):
            ambiente="1"                   # PRUEBAS
         )
 
+        # ======== REGISTRAR USUARIO E IP PARA AUDITORÍA ========
+        factura._current_user = request.user       # <--- NUEVO
+        factura._ip_address = request.META.get('REMOTE_ADDR')  # <--- NUEVO
         factura.save()
 
         return redirect('factura_lista')

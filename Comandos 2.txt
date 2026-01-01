@@ -1,0 +1,9 @@
+//Crea la app, Ejemplo de reportes
+
+python manage.py startapp reportes
+
+
+
+//Corre migraciones de modelos
+python manage.py makemigrations usuarios
+python manage.py migrate

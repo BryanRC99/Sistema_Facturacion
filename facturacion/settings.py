@@ -58,7 +58,10 @@ INSTALLED_APPS = [
     'usuarios',
     'categorias',
     'proveedores',
+    'reportes',
+    'auditoria.apps.AuditoriaConfig',
     'rest_framework',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +74,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'facturacion.middleware.LoginRequiredMiddleware',
+    'auditoria.middleware.AuditoriaMiddleware',
 ]
 
 ROOT_URLCONF = 'facturacion.urls'

@@ -3,6 +3,7 @@ from django.urls import path, include
 from productos.views import lista_productos
 from .views import acceso_no_autorizado
 
+
 urlpatterns = [
     path('no-autorizado/', acceso_no_autorizado, name='acceso_no_autorizado'),
     path('admin/', admin.site.urls),
@@ -12,5 +13,8 @@ urlpatterns = [
     path('productos/', include('productos.urls')),
     path('categorias/', include('categorias.urls')),
     path('proveedores/', include('proveedores.urls')),
+    path('reportes/', include('reportes.urls')),
+    path('usuarios/', include('usuarios.urls')),
+    path('auditoria/', include('auditoria.urls', namespace='auditoria')),
     path('', include('facturacion_app.urls')),
 ]

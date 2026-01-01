@@ -60,6 +60,7 @@ def editar_cliente(request, id):
         cliente.celular = request.POST['celular']
         cliente.direccion = request.POST['direccion']
         cliente.correo = request.POST['correo']
+        cliente._auditoria_user = request.user
         cliente.save()
 
         return redirect('lista_clientes')

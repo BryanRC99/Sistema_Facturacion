@@ -85,6 +85,28 @@
                         Facturas
                     </a>
 
+                    <!-- REPORTES -->
+                    <a href="{% url 'reportes:dashboard' %}"
+                        class="nav-item {% if '/reportes/' in request.path %}active{% endif %}">
+                        <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                        Reportes
+                    </a>
+
+                    <!-- AUDITORÍA -->
+                    <a href="{% url 'auditoria:dashboard' %}"
+                        class="nav-item {% if '/auditoria/' in request.path %}active{% endif %}">
+                        <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                        Auditoría
+                    </a>
+
+                    <!-- USUARIOS -->
+                    <a href="{% url 'usuarios:lista' %}"
+                        class="nav-item {% if '/usuarios/' in request.path %}active{% endif %}">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                        Usuarios
+                    </a>
+
+
                     <!-- SALIR -->
                     <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
@@ -199,6 +221,7 @@
     </script>
 
 </body>
+
 </html>
 
 </body>

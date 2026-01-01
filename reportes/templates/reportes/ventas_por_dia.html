@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Reporte de Ventas por Día</h2>
+
+<!-- Filtros -->
+<form method="get" style="margin-bottom: 20px;">
+    <label>
+        Fecha inicio:
+        <input type="date" name="fecha_inicio" value="{{ fecha_inicio }}">
+    </label>
+
+    <label style="margin-left: 10px;">
+        Fecha fin:
+        <input type="date" name="fecha_fin" value="{{ fecha_fin }}">
+    </label>
+
+    <button type="submit">Filtrar</button>
+</form>
+
+<!-- Tabla de resultados -->
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Día</th>
+            <th>Total vendido</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for v in ventas %}
+            <tr>
+                <td>{{ v.dia }}</td>
+                <td>$ {{ v.total_vendido }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="2">No hay ventas en este rango de fechas</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

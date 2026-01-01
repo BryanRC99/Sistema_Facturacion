@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto mt-10 bg-white shadow-lg rounded-2xl p-10">
+    <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">
+        Editar usuario: {{ usuario.username }}
+    </h2>
+
+    <form method="post" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% csrf_token %}
+
+        <!-- Nombre de usuario -->
+        <div>
+            <label class="mb-1 text-gray-700 font-medium">Nombre de usuario</label>
+            {{ form.username|add_class:"border rounded-lg px-3 py-2 shadow-sm w-full" }}
+        </div>
+
+        <!-- Email -->
+        <div>
+            <label class="mb-1 text-gray-700 font-medium">Correo electrónico</label>
+            {{ form.email|add_class:"border rounded-lg px-3 py-2 shadow-sm w-full" }}
+        </div>
+
+        <!-- Nombre -->
+        <div>
+            <label class="mb-1 text-gray-700 font-medium">Nombre</label>
+            {{ form.first_name|add_class:"border rounded-lg px-3 py-2 shadow-sm w-full" }}
+        </div>
+
+        <!-- Apellidos -->
+        <div>
+            <label class="mb-1 text-gray-700 font-medium">Apellidos</label>
+            {{ form.last_name|add_class:"border rounded-lg px-3 py-2 shadow-sm w-full" }}
+        </div>
+
+        <!-- Cambiar contraseña (opcional) -->
+        <div class="md:col-span-2">
+            <label class="mb-1 text-gray-700 font-medium">¿Nueva contraseña? (Opcional)</label>
+            {{ form.password1|add_class:"border rounded-lg px-3 py-2 shadow-sm w-full" }}
+
+            {% if form.password1.errors %}
+            <p class="text-red-600 text-sm mt-1">
+                {{ form.password1.errors.0 }}
+            </p>
+            {% endif %}
+        </div>
+
+        <div class="md:col-span-2">
+            <label class="mb-1 text-gray-700 font-medium">Confirmar nueva contraseña</label>
+            {{ form.password2|add_class:"border rounded-lg px-3 py-2 shadow-sm w-full" }}
+
+            {% if form.password2.errors %}
+            <p class="text-red-600 text-sm mt-1">
+                {{ form.password2.errors.0 }}
+            </p>
+            {% endif %}
+        </div>
+
+        <!-- Botón guardar -->
+        <div class="md:col-span-2 mt-4">
+            <button type="submit"
+                class="w-full md:w-1/3 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 shadow">
+                Guardar cambios
+            </button>
+        </div>
+
+    </form>
+
+    <div class="text-center mt-6">
+        <a href="{% url 'usuarios:lista' %}" class="text-blue-600 hover:text-blue-800 font-medium">
+            ← Volver a la lista
+        </a>
+    </div>
+</div>
+
+{% endblock %}

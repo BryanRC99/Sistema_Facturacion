@@ -7,3 +7,7 @@ python manage.py runserver 0.0.0.0:8000
 
 //Ngrok
 ngrok http 8000
+
+//Consulta base de datos
+python manage.py inspectdb
+

@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
     # Facturas
     path('facturas/', views.lista_facturas, name='factura_lista'),
