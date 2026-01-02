@@ -13,7 +13,7 @@ def obtener_usuario(instance):
     sino devuelve None.
     """
     return getattr(instance, "_current_user", None)
-
+    
 
 # ======================================================================
 # 📌 AUDITORÍA GUARDAR (CREACIÓN / MODIFICACIÓN)

@@ -67,16 +67,21 @@
 
             <p class="mt-2">
                 <strong>Estado:</strong>
+
                 {% if factura.estado == "ACTIVA" %}
-                <span class="px-3 py-1 bg-green-200 text-green-700 rounded-lg font-semibold">
-                    ✔ Activa
+                <span
+                    class="inline-flex items-center gap-1 px-3 py-1 bg-green-200 text-green-700 rounded-lg font-semibold">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                    Activa
                 </span>
                 {% else %}
-                <span class="px-3 py-1 bg-red-200 text-red-700 rounded-lg font-semibold">
-                    ✖ Anulada
+                <span class="inline-flex items-center gap-1 px-3 py-1 bg-red-200 text-red-700 rounded-lg font-semibold">
+                    <i data-lucide="x-circle" class="w-4 h-4"></i>
+                    Anulada
                 </span>
                 {% endif %}
             </p>
+
         </div>
 
     </div>
