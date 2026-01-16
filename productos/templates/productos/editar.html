@@ -35,7 +35,8 @@
         <div class="mt-4 h-[3px] w-24 bg-indigo-600 mx-auto rounded-full"></div>
     </div>
 
-    <form method="POST" class="space-y-10" id="formEditarProducto">
+    <!-- 🔴 IMPORTANTE: enctype -->
+    <form method="POST" enctype="multipart/form-data" class="space-y-10" id="formEditarProducto">
         {% csrf_token %}
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -139,6 +140,35 @@
                 <label class="floating-label">Descripción</label>
             </div>
 
+            <!-- 🖼️ IMAGEN (NUEVO) -->
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Imagen del producto (opcional)</label>
+
+                {% if producto.imagen %}
+                <div class="flex justify-center">
+                    <img src="{{ producto.imagen.url }}"
+                         class="max-h-48 object-contain">
+                </div>
+                {% endif %}
+
+                <input type="file"
+                       name="imagen"
+                       accept="image/jpeg,image/png,image/webp"
+                       class="block w-full text-sm text-gray-600
+                              file:mr-4 file:py-2 file:px-4
+                              file:rounded-lg file:border-0
+                              file:text-sm file:font-semibold
+                              file:bg-indigo-50 file:text-indigo-700
+                              hover:file:bg-indigo-100">
+
+                <p class="text-xs text-gray-500 mt-1">
+                    Formatos permitidos: JPG, PNG, WEBP · Máx. recomendado: 2MB
+                </p>
+
+                <img id="previewImagen"
+                     class="hidden max-h-48 mx-auto object-contain">
+            </div>
+
         </div>
 
         <div class="flex justify-end">
@@ -158,18 +188,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const inputCodigo = document.getElementById("codigo");
     const form = document.querySelector("form");
-
-    const originalCodigo = "{{ producto.codigo|default:''|escapejs }}".toLowerCase();
+    const originalCodigo = "{{ producto.codigo|escapejs }}".toLowerCase();
 
     form.addEventListener("submit", async (e) => {
         const codigoIngresado = inputCodigo.value.trim().toLowerCase();
 
-        // Si NO se cambió el código, permitir guardar
-        if (codigoIngresado === originalCodigo && originalCodigo !== "") {
-            return;
-        }
+        if (codigoIngresado === originalCodigo) return;
 
-        // Verificar en backend si existe
         const respuesta = await fetch(
             `/productos/verificar-codigo/?codigo=${encodeURIComponent(codigoIngresado)}`
         );
@@ -182,14 +207,24 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // Preview imagen nueva
+    const inputImagen = document.querySelector('input[name="imagen"]');
+    const preview = document.getElementById('previewImagen');
+
+    inputImagen.addEventListener('change', () => {
+        const file = inputImagen.files[0];
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.classList.remove('hidden');
+        }
+    });
+
 });
 </script>
 
-<!-- Reutilizamos exactamente los mismos estilos floating-label -->
+<!-- Floating Label Styles -->
 <style>
-    .floating-label-group {
-        position: relative;
-    }
+    .floating-label-group { position: relative; }
 
     .floating-input {
         width: 100%;

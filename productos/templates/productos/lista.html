@@ -7,8 +7,7 @@
 <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
     <h1 class="text-3xl font-bold text-gray-800">Productos</h1>
 
-    <a href="{% url 'crear_producto' %}"
-       class="inline-flex items-center gap-2
+    <a href="{% url 'crear_producto' %}" class="inline-flex items-center gap-2
               bg-indigo-600 text-white
               px-4 py-2
               text-sm font-medium
@@ -16,7 +15,6 @@
               shadow-sm
               hover:bg-indigo-700
               transition">
-
         <i data-lucide="badge-plus" class="w-4 h-4"></i>
         Nuevo Producto
     </a>
@@ -27,8 +25,7 @@
     <!-- Barra de búsqueda -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <input type="text" id="busquedaProducto" placeholder="Buscar por código o nombre..."
-               class="w-full md:w-1/3 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        >
+            class="w-full md:w-1/3 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
         <span id="paginaActual" class="text-gray-700 font-medium md:ml-4"></span>
     </div>
 
@@ -62,55 +59,51 @@
                         {% endif %}
                     </td>
                     <td class="py-2 px-6 flex flex-wrap gap-2">
+
                         <!-- Ver -->
                         <button type="button" class="text-green-600 hover:text-green-800 font-semibold"
-                                onclick="mostrarProducto(this)"
-                                data-codigo="{{ p.codigo }}" data-nombre="{{ p.nombre }}"
-                                data-categoria="{{ p.categoria.nombre }}" data-precio="{{ p.precio }}"
-                                data-proveedor="{{ p.proveedor.nombre_razon_social }}" data-precio="{{ p.precio }}"
-                                data-costo="{{ p.costo }}" data-stock="{{ p.stock }}" data-iva="{{ p.iva }}"
-                                data-estado="{{ p.estado }}" data-descripcion="{{ p.descripcion|default:'-' }}">
-                                <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                            onclick="mostrarProducto(this)" data-codigo="{{ p.codigo }}" data-nombre="{{ p.nombre }}"
+                            data-categoria="{{ p.categoria.nombre }}"
+                            data-proveedor="{{ p.proveedor.nombre_razon_social }}" data-precio="{{ p.precio }}"
+                            data-costo="{{ p.costo }}" data-stock="{{ p.stock }}" data-iva="{{ p.iva }}"
+                            data-estado="{{ p.estado }}" data-descripcion="{{ p.descripcion|default:'-' }}"
+                            data-imagen="{% if p.imagen %}{{ p.imagen.url }}{% endif %}">
+                            <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
                         </button>
+
                         <!-- Editar -->
-                        <a href="{% url 'editar_producto' p.id %}" class="text-blue-600 hover:text-blue-800 font-semibold">
+                        <a href="{% url 'editar_producto' p.id %}"
+                            class="text-blue-600 hover:text-blue-800 font-semibold">
                             <i data-lucide="pencil" class="w-4 h-4 mr-1"></i>
                         </a>
+
                         <!-- Eliminar -->
                         <button type="button" class="text-red-600 hover:text-red-800 font-semibold"
-                                onclick="abrirModalEliminar('{{ p.id }}')">
-                                <i data-lucide="trash" class="w-4 h-4 mr-1"></i>
+                            onclick="abrirModalEliminar('{{ p.id }}')">
+                            <i data-lucide="trash" class="w-4 h-4 mr-1"></i>
                         </button>
                     </td>
                 </tr>
 
                 <!-- Modal Eliminar -->
                 <div id="modalEliminar{{ p.id }}"
-                     class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
                     <div class="relative w-full max-w-md px-4 animate-fadeIn">
                         <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
-                            <div class="flex justify-between items-center px-6 py-4 bg-gray-50 border-b border-gray-200">
-                                <h3 class="text-lg font-semibold text-gray-700 flex items-center gap-2">
-                                    ⚠ Confirmación
-                                </h3>
+                            <div
+                                class="flex justify-between items-center px-6 py-4 bg-gray-50 border-b border-gray-200">
+                                <h3 class="text-lg font-semibold text-gray-700">⚠ Confirmación</h3>
                                 <button type="button" class="text-gray-500 hover:bg-gray-200 rounded-full p-2"
-                                        onclick="cerrarModal('modalEliminar{{ p.id }}')">&times;</button>
+                                    onclick="cerrarModal('modalEliminar{{ p.id }}')">&times;</button>
                             </div>
-                            <div class="px-6 py-5 space-y-4">
-                                <p class="text-gray-700 leading-relaxed">
-                                    ¿Seguro que deseas <span class="font-semibold text-red-500">eliminar</span> el
-                                    producto <strong>{{ p.nombre }}</strong>?
-                                </p>
+                            <div class="px-6 py-5">
+                                ¿Seguro que deseas eliminar el producto <strong>{{ p.nombre }}</strong>?
                             </div>
-                            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end gap-3">
-                                <button type="button" onclick="cerrarModal('modalEliminar{{ p.id }}')"
-                                        class="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition">
-                                    Cancelar
-                                </button>
+                            <div class="px-6 py-4 bg-gray-50 border-t flex justify-end gap-3">
+                                <button onclick="cerrarModal('modalEliminar{{ p.id }}')"
+                                    class="px-4 py-2 bg-gray-100 rounded-lg">Cancelar</button>
                                 <a href="{% url 'eliminar_producto' p.id %}"
-                                   class="px-4 py-2 rounded-lg bg-red-300 text-red-900 hover:bg-red-400 transition font-semibold">
-                                    Sí, eliminar
-                                </a>
+                                    class="px-4 py-2 bg-red-300 rounded-lg font-semibold">Sí, eliminar</a>
                             </div>
                         </div>
                     </div>
@@ -129,22 +122,33 @@
 
     <!-- Paginación -->
     <div class="flex justify-end items-center mt-4 gap-2">
-        <button id="prevPage" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Anterior</button>
-        <button id="nextPage" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Siguiente</button>
+        <button id="prevPage" class="px-4 py-2 bg-gray-200 rounded-lg">Anterior</button>
+        <button id="nextPage" class="px-4 py-2 bg-gray-200 rounded-lg">Siguiente</button>
     </div>
 
 </div>
 
-<!-- Modal Producto (Ver) -->
+<!-- Modal Producto -->
 <div id="modalProducto" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
     <div class="relative w-full max-w-md px-4 animate-fadeIn">
-        <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
-            <div class="flex justify-between items-center px-6 py-4 bg-gray-50 border-b border-gray-200">
-                <h3 class="text-lg font-semibold text-gray-700 flex items-center gap-2">📄 Detalle del Producto</h3>
-                <button type="button" class="text-gray-500 hover:bg-gray-200 rounded-full p-2"
-                        onclick="cerrarModal('modalProducto')">&times;</button>
+        <div class="bg-white rounded-3xl shadow-xl border overflow-hidden">
+            <div class="flex justify-between items-center px-6 py-4 bg-gray-50 border-b">
+                <h3 class="text-lg font-semibold">📄 Detalle del Producto</h3>
+                <button onclick="cerrarModal('modalProducto')" class="p-2 text-2xl">&times;</button>
             </div>
-            <div class="px-6 py-5 space-y-2 text-gray-700 overflow-y-auto max-h-96">
+
+            <div class="px-6 py-5 space-y-2 max-h-96 overflow-y-auto">
+
+                <!-- Imagen -->
+                <div class="flex justify-center mb-4">
+                    <div class="max-h-64 w-full flex justify-center overflow-hidden">
+                        <img id="modalImagen"
+                            class="max-h-64 object-contain cursor-zoom-in hidden transition-transform hover:scale-105"
+                            alt="Imagen del producto" onclick="openImage(this.src)">
+                    </div>
+                </div>
+
+
                 <p><strong>Código:</strong> <span id="modalCodigo"></span></p>
                 <p><strong>Nombre:</strong> <span id="modalNombre"></span></p>
                 <p><strong>Categoría:</strong> <span id="modalCategoria"></span></p>
@@ -156,9 +160,10 @@
                 <p><strong>Estado:</strong> <span id="modalEstado"></span></p>
                 <p><strong>Descripción:</strong> <span id="modalDescripcion"></span></p>
             </div>
-            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end gap-3">
-                <button type="button" onclick="cerrarModal('modalProducto')"
-                        class="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition">
+
+            <div class="px-6 py-4 bg-gray-50 border-t flex justify-end">
+                <button onclick="cerrarModal('modalProducto')"
+                    class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200">
                     Cerrar
                 </button>
             </div>
@@ -166,93 +171,91 @@
     </div>
 </div>
 
-<!-- JS Modal + Búsqueda + Paginación -->
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const tbody = document.getElementById('tbodyProductos');
-    const inputBusqueda = document.getElementById('busquedaProducto');
+    function mostrarProducto(button) {
+        modalCodigo.textContent = button.dataset.codigo;
+        modalNombre.textContent = button.dataset.nombre;
+        modalCategoria.textContent = button.dataset.categoria;
+        modalProveedor.textContent = button.dataset.proveedor;
+        modalPrecio.textContent = button.dataset.precio;
+        modalCosto.textContent = button.dataset.costo;
+        modalStock.textContent = button.dataset.stock;
+        modalIVA.textContent = button.dataset.iva === 'True' ? 'Sí' : 'No';
+        modalEstado.textContent = button.dataset.estado === 'True' ? 'Activo' : 'Inactivo';
+        modalDescripcion.textContent = button.dataset.descripcion;
 
-    let pagina = 1;
-    const filasPorPagina = 10;
+        const img = document.getElementById('modalImagen');
+        if (button.dataset.imagen) {
+            img.src = button.dataset.imagen;
+            img.classList.remove('hidden');
+        } else {
+            img.src = '';
+            img.classList.add('hidden');
+        }
 
-    // Guardamos todas las filas originales
-    const filasOriginales = Array.from(tbody.querySelectorAll('tr'));
-
-    let filasFiltradas = [...filasOriginales];
-
-    function renderizarTabla() {
-        tbody.innerHTML = '';
-        const inicio = (pagina - 1) * filasPorPagina;
-        const fin = inicio + filasPorPagina;
-        filasFiltradas.slice(inicio, fin).forEach(f => tbody.appendChild(f));
-
-        document.getElementById('paginaActual').textContent =
-            `Página ${pagina} de ${Math.max(Math.ceil(filasFiltradas.length / filasPorPagina), 1)}`;
+        modalProducto.classList.remove('hidden');
+        modalProducto.classList.add('flex');
     }
 
-    function filtrar() {
-        const texto = inputBusqueda.value.toLowerCase().trim();
-        filasFiltradas = filasOriginales.filter(fila => {
-            const celdas = fila.querySelectorAll('td');
-            if (!celdas.length) return false;
-            return Array.from(celdas).some(td =>
-                td.textContent.toLowerCase().includes(texto)
-            );
-        });
-        pagina = 1;
-        renderizarTabla();
+    function cerrarModal(id) {
+        const modal = document.getElementById(id);
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
     }
 
-    inputBusqueda.addEventListener('input', filtrar);
+    function abrirModalEliminar(id) {
+        const modal = document.getElementById('modalEliminar' + id);
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
 
-    document.getElementById('prevPage').addEventListener('click', () => {
-        if (pagina > 1) { pagina--; renderizarTabla(); }
-    });
-    document.getElementById('nextPage').addEventListener('click', () => {
-        if (pagina < Math.ceil(filasFiltradas.length / filasPorPagina)) { pagina++; renderizarTabla(); }
-    });
+    /* ===== VISOR DE IMAGEN ===== */
+    function openImage(src) {
+        const viewer = document.getElementById('imageViewer');
+        const img = document.getElementById('imageViewerImg');
 
-    renderizarTabla();
-});
+        img.src = src;
+        viewer.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
 
-// Modal functions
-function mostrarProducto(button) {
-    document.getElementById('modalCodigo').textContent = button.dataset.codigo;
-    document.getElementById('modalNombre').textContent = button.dataset.nombre;
-    document.getElementById('modalCategoria').textContent = button.dataset.categoria;
-    document.getElementById('modalProveedor').textContent = button.dataset.proveedor;
-    document.getElementById('modalPrecio').textContent = button.dataset.precio;
-    document.getElementById('modalCosto').textContent = button.dataset.costo;
-    document.getElementById('modalStock').textContent = button.dataset.stock;
-    document.getElementById('modalIVA').textContent = button.dataset.iva === 'True' ? 'Sí' : 'No';
-    document.getElementById('modalEstado').textContent = button.dataset.estado === 'True' ? 'Activo' : 'Inactivo';
-    document.getElementById('modalDescripcion').textContent = button.dataset.descripcion;
-
-    const modal = document.getElementById('modalProducto');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
-
-function cerrarModal(id) {
-    const modal = document.getElementById(id);
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-}
-
-function abrirModalEliminar(id) {
-    const modal = document.getElementById('modalEliminar' + id);
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
+    function closeImage(event) {
+        if (event) event.stopPropagation();
+        const viewer = document.getElementById('imageViewer');
+        viewer.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
 </script>
 
 <!-- Animación entrada suave -->
 <style>
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.97); }
-    to { opacity: 1; transform: scale(1); }
-}
-.animate-fadeIn { animation: fadeIn 0.25s ease-out; }
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.97);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .animate-fadeIn {
+        animation: fadeIn 0.25s ease-out;
+    }
 </style>
+
+<div id="imageViewer" class="fixed inset-0 bg-black/90 hidden z-[999] flex items-center justify-center"
+    onclick="closeImage()">
+
+    <button class="absolute top-5 right-6 text-white text-4xl font-bold" onclick="closeImage(event)">
+        &times;
+    </button>
+
+    <img id="imageViewerImg" class="max-w-[90%] max-h-[90%] object-contain rounded-xl shadow-2xl">
+</div>
+
 
 {% endblock %}

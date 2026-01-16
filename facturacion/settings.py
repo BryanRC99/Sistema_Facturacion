@@ -1,3 +1,5 @@
+import cloudinary
+
 """
 Django settings for facturacion project.
 
@@ -41,6 +43,11 @@ CSRF_TRUSTED_ORIGINS = [
     "https://*.ngrok-free.dev",
 ]
 
+#Media
+
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+
 
 # Application definition
 
@@ -62,7 +69,23 @@ INSTALLED_APPS = [
     'auditoria.apps.AuditoriaConfig',
     'rest_framework',
     'widget_tweaks',
+    'cloudinary',
+    'cloudinary_storage',
 ]
+
+cloudinary.config(
+    cloud_name='dmhed5kxh',
+    api_key='587526623936574',
+    api_secret='u0bUezYGE0eG4GsUg5CjkFZIXSQ'
+)
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dmhed5kxh',
+    'API_KEY': '587526623936574',
+    'API_SECRET': 'u0bUezYGE0eG4GsUg5CjkFZIXSQ',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

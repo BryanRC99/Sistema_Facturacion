@@ -1,5 +1,9 @@
+import os
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
+import cloudinary.uploader
+from django.core.exceptions import ValidationError
 from .models import Producto, Categoria
 from proveedores.models import Proveedor
 
@@ -16,14 +20,16 @@ def lista_productos(request):
 def crear_producto(request):
     categorias = Categoria.objects.all()
     proveedores = Proveedor.objects.filter(estado=True)
-    productos = Producto.objects.all()  # Necesario para JS (validación en frontend)
+    productos = Producto.objects.all()
 
     error = None
-    form_data = {}  # ← Para mantener los valores ingresados
+    form_data = {}
 
     if request.method == 'POST':
 
-        # Guardamos TODOS los valores ingresados por si hay error
+        # =========================
+        # DATOS DEL FORMULARIO
+        # =========================
         form_data = {
             'codigo': request.POST.get('codigo', '').strip(),
             'nombre': request.POST.get('nombre', '').strip(),
@@ -37,12 +43,31 @@ def crear_producto(request):
             'descripcion': request.POST.get('descripcion', '').strip(),
         }
 
-        # 🔥 Validación: código repetido
+        imagen = request.FILES.get('imagen')  # 👈 IMAGEN OPCIONAL
+
+        # =========================
+        # VALIDACIONES
+        # =========================
+
+        # Código único
         if Producto.objects.filter(codigo=form_data['codigo']).exists():
             error = "El código ingresado ya existe. Por favor ingrese uno diferente."
 
-        else:
-            # Crear el producto
+        # Validaciones de imagen
+        elif imagen:
+            formatos_permitidos = ('image/jpeg', 'image/png', 'image/webp')
+            max_size = 2 * 1024 * 1024  # 2MB
+
+            if imagen.content_type not in formatos_permitidos:
+                error = "Formato de imagen no permitido. Use JPG, PNG o WEBP."
+
+            elif imagen.size > max_size:
+                error = "La imagen no debe superar los 2MB."
+
+        # =========================
+        # GUARDAR PRODUCTO
+        # =========================
+        if not error:
             Producto.objects.create(
                 codigo=form_data['codigo'],
                 nombre=form_data['nombre'],
@@ -54,6 +79,7 @@ def crear_producto(request):
                 iva=form_data['iva'],
                 descripcion=form_data['descripcion'],
                 estado=form_data['estado'],
+                imagen=imagen if imagen else None  # 👈 Cloudinary
             )
             return redirect('lista_productos')
 
@@ -62,15 +88,13 @@ def crear_producto(request):
         'proveedores': proveedores,
         'productos': productos,
         'error': error,
-        'form_data': form_data,  # ← Muy importante
+        'form_data': form_data,
     })
-
 
 
 def editar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
     categorias = Categoria.objects.all()
-    productos = Producto.objects.all()
     proveedores = Proveedor.objects.all()
 
     if request.method == 'POST':
@@ -81,9 +105,26 @@ def editar_producto(request, id):
         producto.precio = float(request.POST.get('precio', 0))
         producto.costo = float(request.POST.get('costo', 0))
         producto.stock = int(request.POST.get('stock', 0))
-        producto.iva = True if request.POST.get('iva') == 'on' else False
+        producto.iva = request.POST.get('iva') == 'on'
         producto.descripcion = request.POST.get('descripcion', '').strip()
-        producto.estado = True if request.POST.get('estado') == 'on' else False
+        producto.estado = request.POST.get('estado') == 'on'
+
+        # ===============================
+        # MANEJO DE IMAGEN CLOUDINARY
+        # ===============================
+        imagen_nueva = request.FILES.get('imagen')
+
+        if imagen_nueva:
+            # 🔥 BORRAR IMAGEN ANTERIOR DE CLOUDINARY
+            if producto.imagen:
+                try:
+                    cloudinary.uploader.destroy(producto.imagen.public_id)
+                except Exception as e:
+                    print(f"Error borrando imagen Cloudinary: {e}")
+
+            # Asignar nueva imagen
+            producto.imagen = imagen_nueva
+
         producto.save()
         return redirect('lista_productos')
 
@@ -91,12 +132,18 @@ def editar_producto(request, id):
         'producto': producto,
         'categorias': categorias,
         'proveedores': proveedores,
-        'productos': productos,
-        
     })
+
 
 
 def eliminar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
+
+    if producto.imagen:
+        try:
+            cloudinary.uploader.destroy(producto.imagen.public_id)
+        except Exception as e:
+            print(f"Error borrando imagen Cloudinary: {e}")
+
     producto.delete()
     return redirect('lista_productos')

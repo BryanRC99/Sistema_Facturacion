@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.urls import path, include
 from productos.views import lista_productos
 from .views import acceso_no_autorizado
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -18,3 +20,9 @@ urlpatterns = [
     path('auditoria/', include('auditoria.urls', namespace='auditoria')),
     path('', include('facturacion_app.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )

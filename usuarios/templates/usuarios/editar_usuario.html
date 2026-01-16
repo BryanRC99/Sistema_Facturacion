@@ -4,76 +4,64 @@
 
 {% block content %}
 
-<div class="max-w-4xl mx-auto mt-10 bg-white shadow-lg rounded-2xl p-10">
-    <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">
-        Editar usuario: {{ usuario.username }}
-    </h2>
+<div class="max-w-4xl mx-auto mt-12">
+    <div class="bg-white shadow-xl rounded-2xl p-10 border border-gray-100">
 
-    <form method="post" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {% csrf_token %}
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-10">
+            <h2 class="text-3xl font-bold text-gray-800 flex items-center gap-2">
+                <i data-lucide="user-cog" class="w-8 h-8 text-blue-600"></i>
+                Editar usuario
+            </h2>
 
-        <!-- Nombre de usuario -->
-        <div>
-            <label class="mb-1 text-gray-700 font-medium">Nombre de usuario</label>
-            {{ form.username|add_class:"border rounded-lg px-3 py-2 shadow-sm w-full" }}
+            <a href="{% url 'usuarios:lista' %}"
+               class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold transition">
+                <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                Regresar
+            </a>
         </div>
 
-        <!-- Email -->
-        <div>
-            <label class="mb-1 text-gray-700 font-medium">Correo electrónico</label>
-            {{ form.email|add_class:"border rounded-lg px-3 py-2 shadow-sm w-full" }}
-        </div>
+        <p class="text-lg text-gray-600 mb-6">
+            Estás editando al usuario:
+            <span class="font-semibold text-gray-800">{{ usuario.username }}</span>
+        </p>
 
-        <!-- Nombre -->
-        <div>
-            <label class="mb-1 text-gray-700 font-medium">Nombre</label>
-            {{ form.first_name|add_class:"border rounded-lg px-3 py-2 shadow-sm w-full" }}
-        </div>
+        <!-- FORM -->
+        <form method="post" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% csrf_token %}
 
-        <!-- Apellidos -->
-        <div>
-            <label class="mb-1 text-gray-700 font-medium">Apellidos</label>
-            {{ form.last_name|add_class:"border rounded-lg px-3 py-2 shadow-sm w-full" }}
-        </div>
+            {% for field in form %}
+                <div class="{% if field.name == 'password2' or field.name == 'password1' %}md:col-span-2{% endif %}">
+                    <label class="block mb-2 text-gray-700 font-semibold">
+                        {{ field.label }}
+                    </label>
 
-        <!-- Cambiar contraseña (opcional) -->
-        <div class="md:col-span-2">
-            <label class="mb-1 text-gray-700 font-medium">¿Nueva contraseña? (Opcional)</label>
-            {{ form.password1|add_class:"border rounded-lg px-3 py-2 shadow-sm w-full" }}
+                    {{ field|add_class:"border rounded-lg px-3 py-2 w-full shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" }}
 
-            {% if form.password1.errors %}
-            <p class="text-red-600 text-sm mt-1">
-                {{ form.password1.errors.0 }}
-            </p>
-            {% endif %}
-        </div>
+                    {% if field.errors %}
+                        <p class="mt-1 text-red-600 text-sm font-medium flex items-center gap-1">
+                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                            {{ field.errors.0 }}
+                        </p>
+                    {% endif %}
+                </div>
+            {% endfor %}
 
-        <div class="md:col-span-2">
-            <label class="mb-1 text-gray-700 font-medium">Confirmar nueva contraseña</label>
-            {{ form.password2|add_class:"border rounded-lg px-3 py-2 shadow-sm w-full" }}
-
-            {% if form.password2.errors %}
-            <p class="text-red-600 text-sm mt-1">
-                {{ form.password2.errors.0 }}
-            </p>
-            {% endif %}
-        </div>
-
-        <!-- Botón guardar -->
-        <div class="md:col-span-2 mt-4">
-            <button type="submit"
-                class="w-full md:w-1/3 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 shadow">
-                Guardar cambios
-            </button>
-        </div>
-
-    </form>
-
-    <div class="text-center mt-6">
-        <a href="{% url 'usuarios:lista' %}" class="text-blue-600 hover:text-blue-800 font-medium">
-            ← Volver a la lista
-        </a>
+            <!-- Botón Guardar -->
+            <div class="md:col-span-2 flex justify-center mt-6">
+                <button type="submit"
+                    class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition shadow-md">
+                    <i data-lucide="save" class="w-5 h-5"></i>
+                    Guardar cambios
+                </button>
+            </div>
+        </form>
     </div>
 </div>
+
+<!-- Activar íconos Lucide -->
+<script>
+    lucide.createIcons();
+</script>
 
 {% endblock %}
