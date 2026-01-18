@@ -6,38 +6,50 @@
 
 <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
     <!-- Título -->
-    <h1 class="text-3xl font-bold text-gray-800">Proveedores</h1>
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">
+        Proveedores
+    </h1>
 
     <!-- Botón Nuevo Proveedor -->
     <a href="{% url 'crear_proveedor' %}"
        class="inline-flex items-center gap-2
               bg-indigo-600 text-white
-              px-4 py-2
-              text-sm font-medium
-              rounded-md
-              shadow-sm
-              hover:bg-indigo-700
-              transition">
-
+              px-4 py-2 text-sm font-medium
+              rounded-md shadow-sm
+              hover:bg-indigo-700 transition">
         <i data-lucide="contact" class="w-4 h-4"></i>
         Nuevo Proveedor
     </a>
 </div>
 
-<div class="bg-white p-6 rounded-xl shadow-xl space-y-4">
+<div class="bg-white dark:bg-slate-900
+            p-6 rounded-xl shadow-xl
+            border border-gray-100 dark:border-slate-700
+            space-y-4">
 
     <!-- Barra de búsqueda -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <input type="text" id="busquedaProveedor" placeholder="Buscar por nombre o identificación..."
-               class="w-full md:w-1/3 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        <span id="paginaActual" class="text-gray-700 font-medium md:ml-4"></span>
+        <input type="text" id="busquedaProveedor"
+               placeholder="Buscar por nombre o identificación..."
+               class="w-full md:w-1/3
+                      border border-gray-300 dark:border-slate-600
+                      rounded-lg px-3 py-2
+                      bg-white dark:bg-slate-800
+                      text-gray-800 dark:text-gray-100
+                      placeholder-gray-400 dark:placeholder-gray-500
+                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <span id="paginaActual"
+              class="text-gray-700 dark:text-gray-300 font-medium md:ml-4">
+        </span>
     </div>
 
     <!-- Tabla -->
     <div class="overflow-x-auto">
         <table class="w-full table-auto border-collapse">
             <thead>
-                <tr class="bg-gray-100 text-left text-gray-600 uppercase text-sm leading-normal">
+                <tr class="bg-gray-100 dark:bg-slate-800
+                           text-left text-gray-600 dark:text-gray-300
+                           uppercase text-sm leading-normal">
                     <th class="py-3 px-6">Identificación</th>
                     <th class="py-3 px-6">Nombre / Razón Social</th>
                     <th class="py-3 px-6">Correo</th>
@@ -47,17 +59,22 @@
                 </tr>
             </thead>
 
-            <tbody class="text-gray-700 text-sm" id="tbodyProveedores">
+            <tbody class="text-gray-700 dark:text-gray-200 text-sm"
+                   id="tbodyProveedores">
                 {% for p in proveedores %}
-                <tr class="border-b hover:bg-gray-50">
+                <tr class="border-b border-gray-200 dark:border-slate-700
+                           hover:bg-gray-50 dark:hover:bg-slate-800 transition">
                     <td class="py-2 px-6">{{ p.identificacion }}</td>
                     <td class="py-2 px-6">{{ p.nombre_razon_social }}</td>
                     <td class="py-2 px-6">{{ p.correo }}</td>
                     <td class="py-2 px-6">{{ p.telefono|default:"-" }}</td>
                     <td class="py-2 px-6">{{ p.ciudad|default:"-" }}</td>
                     <td class="py-2 px-6 flex gap-3">
+
+                        <!-- Ver -->
                         <button type="button"
-                                class="text-green-600 hover:text-green-800 font-semibold"
+                                class="text-green-600 dark:text-green-400
+                                       hover:text-green-800 dark:hover:text-green-300 font-semibold"
                                 onclick="abrirModalVer(this)"
                                 data-tipo="{{ p.tipo_identificacion_display }}"
                                 data-identificacion="{{ p.identificacion }}"
@@ -71,24 +88,31 @@
                                 data-contacto-tel="{{ p.contacto_telefono|default:'-' }}"
                                 data-observaciones="{{ p.observaciones|default:'-' }}"
                                 data-estado="{{ p.estado }}">
-                                <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                            <i data-lucide="eye" class="w-4 h-4"></i>
                         </button>
 
+                        <!-- Editar -->
                         <a href="{% url 'editar_proveedor' p.id %}"
-                           class="text-blue-600 hover:text-blue-800 font-semibold">
-                           <i data-lucide="pencil" class="w-4 h-4 mr-1"></i>
+                           class="text-blue-600 dark:text-blue-400
+                                  hover:text-blue-800 dark:hover:text-blue-300 font-semibold">
+                            <i data-lucide="pencil" class="w-4 h-4"></i>
                         </a>
 
+                        <!-- Eliminar -->
                         <button type="button"
-                                class="text-red-600 hover:text-red-800 font-semibold"
-                                onclick="abrirModalEliminar('{{ p.id }}', '{{ p.nombre_razon_social }}', '{{ p.identificacion }}')">
-                            <i data-lucide="trash" class="w-4 h-4 mr-1"></i>
+                                class="text-red-600 dark:text-red-400
+                                       hover:text-red-800 dark:hover:text-red-300 font-semibold"
+                                onclick="abrirModalEliminar('{{ p.id }}',
+                                                          '{{ p.nombre_razon_social }}',
+                                                          '{{ p.identificacion }}')">
+                            <i data-lucide="trash" class="w-4 h-4"></i>
                         </button>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="5" class="text-center py-4 text-gray-500">
+                    <td colspan="6"
+                        class="text-center py-4 text-gray-500 dark:text-gray-400">
                         No hay proveedores registrados.
                     </td>
                 </tr>
@@ -99,20 +123,43 @@
 
     <!-- Paginación -->
     <div class="flex justify-end items-center mt-4 gap-2">
-        <button id="prevPage" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Anterior</button>
-        <button id="nextPage" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition">Siguiente</button>
+        <button id="prevPage"
+                class="px-4 py-2 rounded-lg
+                       bg-gray-200 dark:bg-slate-700
+                       text-gray-800 dark:text-gray-200
+                       hover:bg-gray-300 dark:hover:bg-slate-600 transition">
+            Anterior
+        </button>
+        <button id="nextPage"
+                class="px-4 py-2 rounded-lg
+                       bg-gray-200 dark:bg-slate-700
+                       text-gray-800 dark:text-gray-200
+                       hover:bg-gray-300 dark:hover:bg-slate-600 transition">
+            Siguiente
+        </button>
     </div>
 </div>
 
 <!-- MODAL VER PROVEEDOR -->
-<div id="modalVer" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-    <div class="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 relative animate-fadeIn">
-        <button class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold"
+<div id="modalVer"
+     class="hidden fixed inset-0 z-50 flex items-center justify-center
+            bg-black/40 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900
+                rounded-xl shadow-xl max-w-lg w-full p-6 relative animate-fadeIn
+                border border-gray-100 dark:border-slate-700">
+
+        <button class="absolute top-3 right-3
+                       text-gray-500 dark:text-gray-400
+                       hover:text-gray-800 dark:hover:text-gray-200
+                       text-2xl font-bold"
                 onclick="cerrarModal('modalVer')">&times;</button>
 
-        <h2 class="text-2xl font-bold mb-4">Detalle del Proveedor</h2>
+        <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">
+            Detalle del Proveedor
+        </h2>
 
-        <div class="space-y-2 text-gray-700 max-h-96 overflow-y-auto">
+        <div class="space-y-2 text-gray-700 dark:text-gray-300
+                    max-h-96 overflow-y-auto">
             <p><strong>Tipo Identificación:</strong> <span id="verTipo"></span></p>
             <p><strong>Identificación:</strong> <span id="verIdentificacion"></span></p>
             <p><strong>Nombre / Razón Social:</strong> <span id="verNombre"></span></p>
@@ -130,13 +177,24 @@
 </div>
 
 <!-- MODAL ELIMINAR -->
-<div id="modalEliminar" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-    <div class="bg-white rounded-xl shadow-xl max-w-md w-full p-6 relative animate-fadeIn">
-        <button class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold"
+<div id="modalEliminar"
+     class="hidden fixed inset-0 z-50 flex items-center justify-center
+            bg-black/40 backdrop-blur-sm">
+    <div class="bg-white dark:bg-slate-900
+                rounded-xl shadow-xl max-w-md w-full p-6 relative animate-fadeIn
+                border border-gray-100 dark:border-slate-700">
+
+        <button class="absolute top-3 right-3
+                       text-gray-500 dark:text-gray-400
+                       hover:text-gray-800 dark:hover:text-gray-200
+                       text-2xl font-bold"
                 onclick="cerrarModal('modalEliminar')">&times;</button>
 
-        <h2 class="text-xl font-bold mb-4 text-red-600">Confirmar Eliminación</h2>
-        <p class="text-gray-700 mb-4">
+        <h2 class="text-xl font-bold mb-4 text-red-600 dark:text-red-400">
+            Confirmar Eliminación
+        </h2>
+
+        <p class="text-gray-700 dark:text-gray-300 mb-4">
             ¿Seguro que deseas eliminar al proveedor
             <strong id="eliminarNombre"></strong>
             (<strong id="eliminarIdentificacion"></strong>)?
@@ -144,11 +202,16 @@
 
         <div class="flex justify-end gap-3">
             <button onclick="cerrarModal('modalEliminar')"
-                    class="px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200">
+                    class="px-4 py-2 rounded-lg
+                           bg-gray-100 dark:bg-slate-700
+                           hover:bg-gray-200 dark:hover:bg-slate-600">
                 Cancelar
             </button>
             <a href="#" id="eliminarLink"
-               class="px-4 py-2 rounded-lg bg-red-300 text-red-900 hover:bg-red-400 font-semibold">
+               class="px-4 py-2 rounded-lg
+                      bg-red-300 dark:bg-red-700
+                      text-red-900 dark:text-red-100
+                      hover:bg-red-400 dark:hover:bg-red-600 font-semibold">
                 Sí, eliminar
             </a>
         </div>

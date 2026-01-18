@@ -5,78 +5,82 @@
 
 <div class="space-y-10">
 
-    <!-- ========================= -->
     <!-- HEADER -->
-    <!-- ========================= -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-slate-100">
                 Dashboard de Ventas
             </h1>
-            <p class="text-gray-500 mt-1">
+            <p class="text-gray-500 dark:text-slate-400 mt-1">
                 Resumen general del día {{ resumen.fecha|date:"d/m/Y" }}
             </p>
         </div>
     </div>
 
-    <!-- ========================= -->
-    <!-- CARDS KPI -->
-    <!-- ========================= -->
+    <!-- KPI CARDS -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
         <!-- Total Vendido -->
-        <div class="bg-white rounded-2xl shadow p-6 flex items-center gap-4">
-            <div class="bg-green-100 text-green-600 p-3 rounded-xl">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6 flex items-center gap-4">
+            <div class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 p-3 rounded-xl">
                 <i data-lucide="dollar-sign" class="w-6 h-6"></i>
             </div>
             <div>
-                <p class="text-sm text-gray-500">Total vendido hoy</p>
-                <p class="text-2xl font-bold text-gray-800">
+                <p class="text-sm text-gray-500 dark:text-slate-400">
+                    Total vendido hoy
+                </p>
+                <p class="text-2xl font-bold text-gray-800 dark:text-slate-100">
                     $ {{ resumen.total_vendido|floatformat:2 }}
                 </p>
             </div>
         </div>
 
         <!-- IVA -->
-        <div class="bg-white rounded-2xl shadow p-6 flex items-center gap-4">
-            <div class="bg-blue-100 text-blue-600 p-3 rounded-xl">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6 flex items-center gap-4">
+            <div class="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 p-3 rounded-xl">
                 <i data-lucide="receipt" class="w-6 h-6"></i>
             </div>
             <div>
-                <p class="text-sm text-gray-500">IVA generado</p>
-                <p class="text-2xl font-bold text-gray-800">
+                <p class="text-sm text-gray-500 dark:text-slate-400">
+                    IVA generado
+                </p>
+                <p class="text-2xl font-bold text-gray-800 dark:text-slate-100">
                     $ {{ resumen.total_iva|floatformat:2 }}
                 </p>
             </div>
         </div>
 
         <!-- Facturas -->
-        <div class="bg-white rounded-2xl shadow p-6 flex items-center gap-4">
-            <div class="bg-purple-100 text-purple-600 p-3 rounded-xl">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6 flex items-center gap-4">
+            <div class="bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 p-3 rounded-xl">
                 <i data-lucide="file-text" class="w-6 h-6"></i>
             </div>
             <div>
-                <p class="text-sm text-gray-500">Facturas hoy</p>
-                <p class="text-2xl font-bold text-gray-800">
+                <p class="text-sm text-gray-500 dark:text-slate-400">
+                    Facturas hoy
+                </p>
+                <p class="text-2xl font-bold text-gray-800 dark:text-slate-100">
                     {{ resumen.cantidad_facturas }}
                 </p>
             </div>
         </div>
 
         <!-- Comparación -->
-        <div class="bg-white rounded-2xl shadow p-6 flex items-center gap-4">
-            <div class="bg-gray-100 text-gray-700 p-3 rounded-xl">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6 flex items-center gap-4">
+            <div class="bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 p-3 rounded-xl">
                 <i data-lucide="trending-up" class="w-6 h-6"></i>
             </div>
             <div>
-                <p class="text-sm text-gray-500">Vs ayer</p>
+                <p class="text-sm text-gray-500 dark:text-slate-400">
+                    Vs ayer
+                </p>
 
                 {% if comparacion.diferencia >= 0 %}
-                    <p class="text-xl font-bold text-green-600">
+                    <p class="text-xl font-bold text-green-600 dark:text-green-400">
                         + $ {{ comparacion.diferencia|floatformat:2 }}
                     </p>
                 {% else %}
-                    <p class="text-xl font-bold text-red-600">
+                    <p class="text-xl font-bold text-red-600 dark:text-red-400">
                         - $ {{ comparacion.diferencia|floatformat:2 }}
                     </p>
                 {% endif %}
@@ -85,24 +89,18 @@
 
     </div>
 
-    <!-- ========================= -->
     <!-- GRÁFICO -->
-    <!-- ========================= -->
-    <div class="bg-white rounded-2xl shadow p-6">
-        <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-semibold text-gray-700 flex items-center gap-2">
-                <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
-                Ventas por día
-            </h2>
-        </div>
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6">
+        <h2 class="text-lg font-semibold text-gray-700 dark:text-slate-200 flex items-center gap-2 mb-4">
+            <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+            Ventas por día
+        </h2>
         <canvas id="ventasChart" height="110"></canvas>
     </div>
 
-    <!-- ========================= -->
     <!-- TABLA FACTURAS -->
-    <!-- ========================= -->
-    <div class="bg-white rounded-2xl shadow p-6">
-        <h2 class="text-lg font-semibold text-gray-700 flex items-center gap-2 mb-4">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6">
+        <h2 class="text-lg font-semibold text-gray-700 dark:text-slate-200 flex items-center gap-2 mb-4">
             <i data-lucide="list" class="w-5 h-5"></i>
             Facturas del día
         </h2>
@@ -110,7 +108,7 @@
         <div class="overflow-x-auto">
             <table class="min-w-full text-sm">
                 <thead>
-                    <tr class="border-b text-gray-500">
+                    <tr class="border-b border-gray-200 dark:border-slate-700 text-gray-500 dark:text-slate-400">
                         <th class="py-3 text-left">#</th>
                         <th class="py-3 text-left">Cliente</th>
                         <th class="py-3 text-left">Fecha</th>
@@ -119,21 +117,24 @@
                 </thead>
                 <tbody>
                     {% for f in facturas_hoy %}
-                        <tr class="border-b hover:bg-gray-50 transition">
-                            <td class="py-3">{{ f.numero }}</td>
-                            <td class="py-3 font-medium text-gray-700">
+                        <tr class="border-b border-gray-200 dark:border-slate-700
+                                   hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                            <td class="py-3 text-gray-700 dark:text-slate-200">
+                                {{ f.numero }}
+                            </td>
+                            <td class="py-3 font-medium text-gray-800 dark:text-slate-100">
                                 {{ f.cliente }}
                             </td>
-                            <td class="py-3 text-gray-500">
+                            <td class="py-3 text-gray-500 dark:text-slate-400">
                                 {{ f.fecha|date:"d/m/Y H:i" }}
                             </td>
-                            <td class="py-3 text-right font-semibold text-gray-800">
+                            <td class="py-3 text-right font-semibold text-gray-800 dark:text-slate-100">
                                 $ {{ f.total|floatformat:2 }}
                             </td>
                         </tr>
                     {% empty %}
                         <tr>
-                            <td colspan="4" class="text-center py-6 text-gray-500">
+                            <td colspan="4" class="text-center py-6 text-gray-500 dark:text-slate-400">
                                 No hay facturas registradas hoy
                             </td>
                         </tr>
@@ -144,7 +145,6 @@
     </div>
 
 </div>
-
 <!-- ========================= -->
 <!-- CHART.JS -->
 <!-- ========================= -->

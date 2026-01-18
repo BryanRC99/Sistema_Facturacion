@@ -3,8 +3,8 @@
 
 {% block content %}
 
-<div class="max-w-4xl mx-auto mt-10 bg-white shadow-lg rounded-2xl p-10">
-    <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">
+<div class="max-w-4xl mx-auto mt-10 bg-white dark:bg-slate-900 shadow-lg rounded-2xl p-10 border border-gray-100 dark:border-slate-700">
+    <h2 class="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-slate-100">
         Crear nuevo usuario
     </h2>
 
@@ -13,49 +13,61 @@
 
         <!-- Username -->
         <div class="flex flex-col">
-            <label class="mb-1 text-gray-700 font-medium">Nombre de usuario</label>
+            <label class="mb-1 text-gray-700 dark:text-slate-300 font-medium">
+                Nombre de usuario
+            </label>
             <input name="username" type="text"
-                class="border rounded-lg px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                class="border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 placeholder="ej: bpineda" required>
         </div>
 
         <!-- Email -->
         <div class="flex flex-col">
-            <label class="mb-1 text-gray-700 font-medium">Correo electrónico</label>
+            <label class="mb-1 text-gray-700 dark:text-slate-300 font-medium">
+                Correo electrónico
+            </label>
             <input name="email" type="email"
-                class="border rounded-lg px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                class="border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 placeholder="ej: bpineda@mail.com" required>
         </div>
 
         <!-- Nombre -->
         <div class="flex flex-col">
-            <label class="mb-1 text-gray-700 font-medium">Nombre</label>
+            <label class="mb-1 text-gray-700 dark:text-slate-300 font-medium">
+                Nombre
+            </label>
             <input name="first_name" type="text"
-                class="border rounded-lg px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                class="border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 placeholder="ej: Bryan" required>
         </div>
 
         <!-- Apellidos -->
         <div class="flex flex-col">
-            <label class="mb-1 text-gray-700 font-medium">Apellidos</label>
+            <label class="mb-1 text-gray-700 dark:text-slate-300 font-medium">
+                Apellidos
+            </label>
             <input name="last_name" type="text"
-                class="border rounded-lg px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                class="border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 placeholder="ej: Pineda Romero" required>
         </div>
 
         <!-- Password -->
         <div class="flex flex-col">
-            <label class="mb-1 text-gray-700 font-medium">Contraseña</label>
+            <label class="mb-1 text-gray-700 dark:text-slate-300 font-medium">
+                Contraseña
+            </label>
             <input name="password1" type="password"
-                class="border rounded-lg px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                class="border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 placeholder="********" required>
         </div>
 
         <!-- Confirmar Password -->
         <div class="flex flex-col">
-            <label class="mb-1 text-gray-700 font-medium">Confirmar contraseña</label>
+            <label class="mb-1 text-gray-700 dark:text-slate-300 font-medium">
+                Confirmar contraseña
+            </label>
             <input name="password2" type="password"
-                class="border rounded-lg px-3 py-2 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                class="border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 shadow-sm bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 placeholder="********" required>
         </div>
 
@@ -70,7 +82,7 @@
 
     <div class="text-center mt-6">
         <a href="{% url 'usuarios:lista' %}"
-           class="text-blue-600 hover:text-blue-800 font-medium">
+           class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
             ← Volver a la lista
         </a>
     </div>

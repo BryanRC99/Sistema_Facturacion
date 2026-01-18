@@ -4,42 +4,51 @@
 
 {% block content %}
 
-<div class="max-w-3xl mx-auto bg-white shadow-xl rounded-2xl p-10 border border-gray-100">
+<div class="max-w-3xl mx-auto
+            bg-white dark:bg-slate-900
+            shadow-xl rounded-2xl p-10
+            border border-gray-100 dark:border-slate-700
+            transition-colors">
 
     <!-- Error global -->
     {% if error %}
-    <div class="bg-red-100 text-red-700 px-4 py-3 rounded-lg border border-red-300 mb-6 text-center">
+    <div class="bg-red-100 dark:bg-red-900/40
+                text-red-700 dark:text-red-300
+                px-4 py-3 rounded-lg
+                border border-red-300 dark:border-red-700
+                mb-6 text-center">
         {{ error }}
     </div>
     {% endif %}
 
+    <!-- Volver -->
     <div class="flex justify-end mb-8">
-
-    <a href="{% url 'lista_clientes' %}"
-       class="inline-flex items-center gap-2
-              text-gray-500
-              px-3 py-1.5
-              text-sm font-medium
-              rounded-md
-              hover:text-indigo-600
-              hover:bg-indigo-50
-              transition">
-
-        <i data-lucide="circle-arrow-left" class="w-4 h-4"></i>
-        Volver
-    </a>
-
-</div>
-
-
+        <a href="{% url 'lista_clientes' %}"
+           class="inline-flex items-center gap-2
+                  text-gray-500 dark:text-gray-400
+                  px-3 py-1.5
+                  text-sm font-medium
+                  rounded-md
+                  hover:text-indigo-600 dark:hover:text-indigo-400
+                  hover:bg-indigo-50 dark:hover:bg-indigo-500/10
+                  transition">
+            <i data-lucide="circle-arrow-left" class="w-4 h-4"></i>
+            Volver
+        </a>
+    </div>
 
     <!-- Título -->
     <div class="text-center mb-10">
-        <h1 class="text-4xl font-bold text-gray-800">Registrar Cliente</h1>
-        <p class="text-gray-500 mt-2">Complete la siguiente información para agregar un nuevo cliente</p>
+        <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-100">
+            Registrar Cliente
+        </h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-2">
+            Complete la siguiente información para agregar un nuevo cliente
+        </p>
         <div class="mt-4 h-[3px] w-24 bg-indigo-600 mx-auto rounded-full"></div>
     </div>
 
+    <!-- FORM -->
     <form method="POST" class="space-y-10">
         {% csrf_token %}
 
@@ -47,8 +56,13 @@
 
             <!-- Tipo de Identificación -->
             <div class="floating-label-group">
-                <select id="tipo_identificacion" name="tipo_identificacion" required class="floating-input peer">
-                    <option value="" disabled {% if not form_data %}selected{% endif %}>Seleccione una opción</option>
+                <select name="tipo_identificacion" required
+                        class="floating-input peer
+                               bg-transparent
+                               text-gray-800 dark:text-gray-100">
+                    <option value="" disabled {% if not form_data %}selected{% endif %}>
+                        Seleccione una opción
+                    </option>
                     <option value="CED" {% if form_data.tipo_identificacion == "CED" %}selected{% endif %}>Cédula</option>
                     <option value="RUC" {% if form_data.tipo_identificacion == "RUC" %}selected{% endif %}>RUC</option>
                     <option value="PAS" {% if form_data.tipo_identificacion == "PAS" %}selected{% endif %}>Pasaporte</option>
@@ -58,56 +72,67 @@
 
             <!-- Identificación -->
             <div class="floating-label-group">
-                <input type="text" id="identificacion" name="identificacion"
+                <input type="text" name="identificacion"
                        value="{{ form_data.identificacion|default:'' }}"
-                       required class="floating-input peer">
+                       required
+                       class="floating-input peer
+                              bg-transparent
+                              text-gray-800 dark:text-gray-100">
                 <label class="floating-label">Identificación</label>
             </div>
 
-            <!-- Nombre / Razón Social -->
+            <!-- Nombre -->
             <div class="floating-label-group md:col-span-2">
                 <input type="text" name="nombre_razon_social"
-                    value="{{ form_data.nombre_razon_social|default:'' }}"
-                    required minlength="3"
-                    pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 .,-]{3,100}$"
-                    title="Ingrese un nombre o razón social válido"
-                    class="floating-input peer">
+                       value="{{ form_data.nombre_razon_social|default:'' }}"
+                       required minlength="3"
+                       class="floating-input peer
+                              bg-transparent
+                              text-gray-800 dark:text-gray-100">
                 <label class="floating-label">Nombre / Razón Social</label>
             </div>
 
             <!-- Teléfono -->
             <div class="floating-label-group">
                 <input type="text" name="telefono"
-                    value="{{ form_data.telefono|default:'' }}"
-                    required pattern="^[0-9]{7,10}$"
-                    title="Ingrese un teléfono válido"
-                    class="floating-input peer">
+                       value="{{ form_data.telefono|default:'' }}"
+                       required
+                       class="floating-input peer
+                              bg-transparent
+                              text-gray-800 dark:text-gray-100">
                 <label class="floating-label">Teléfono</label>
             </div>
 
             <!-- Celular -->
             <div class="floating-label-group">
                 <input type="text" name="celular"
-                    value="{{ form_data.celular|default:'' }}"
-                    required pattern="^(09)[0-9]{8}$"
-                    title="Debe ser un número celular ecuatoriano válido (09XXXXXXXX)"
-                    class="floating-input peer">
+                       value="{{ form_data.celular|default:'' }}"
+                       required
+                       class="floating-input peer
+                              bg-transparent
+                              text-gray-800 dark:text-gray-100">
                 <label class="floating-label">Celular</label>
             </div>
 
             <!-- Dirección -->
             <div class="floating-label-group md:col-span-2">
                 <input type="text" name="direccion"
-                    value="{{ form_data.direccion|default:'' }}"
-                    required minlength="5" class="floating-input peer">
+                       value="{{ form_data.direccion|default:'' }}"
+                       required
+                       class="floating-input peer
+                              bg-transparent
+                              text-gray-800 dark:text-gray-100">
                 <label class="floating-label">Dirección</label>
             </div>
 
             <!-- Correo -->
             <div class="floating-label-group md:col-span-2">
                 <input type="email" name="correo"
-                    value="{{ form_data.correo|default:'' }}"
-                    required class="floating-input peer">
+                       value="{{ form_data.correo|default:'' }}"
+                       required
+                       class="floating-input peer
+                              bg-transparent
+                              text-gray-800 dark:text-gray-100">
                 <label class="floating-label">Correo Electrónico</label>
             </div>
 
@@ -116,8 +141,12 @@
         <!-- BOTÓN -->
         <div class="flex justify-end">
             <button type="submit"
-                class="px-10 py-3 bg-indigo-600 text-white rounded-xl text-lg font-semibold 
-                       shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                class="px-10 py-3
+                       bg-indigo-600 hover:bg-indigo-700
+                       text-white
+                       rounded-xl text-lg font-semibold
+                       shadow-md hover:shadow-lg
+                       transition-all transform hover:-translate-y-0.5">
                 Guardar Cliente
             </button>
         </div>
@@ -125,7 +154,7 @@
     </form>
 </div>
 
-<!-- Floating Label Styles -->
+<!-- Floating Label Styles (Light / Dark) -->
 <style>
     .floating-label-group {
         position: relative;
@@ -134,17 +163,32 @@
     .floating-input {
         width: 100%;
         padding: 14px 12px;
-        border: 1px solid #d1d5db;
         border-radius: 12px;
-        background: #f9fafb;
         outline: none;
         transition: all 0.2s ease-in-out;
+
+        /* Light mode */
+        border: 1px solid #d1d5db;
+        background: #f9fafb;
+        color: #111827;
+    }
+
+    /* Dark mode */
+    .dark .floating-input {
+        border: 1px solid #475569;
+        background: #0f172a;
+        color: #f1f5f9;
     }
 
     .floating-input:focus {
         border-color: #6366f1;
-        background: white;
+        background: #ffffff;
         box-shadow: 0 0 0 3px #6366f130;
+    }
+
+    .dark .floating-input:focus {
+        background: #020617;
+        box-shadow: 0 0 0 3px #6366f140;
     }
 
     .floating-label {
@@ -152,11 +196,19 @@
         left: 14px;
         top: 14px;
         padding: 0 6px;
-        background: white;
-        color: #6b7280;
-        font-size: 0.95rem;
         pointer-events: none;
         transition: all 0.2s ease-in-out;
+
+        /* Light */
+        background: #ffffff;
+        color: #6b7280;
+        font-size: 0.95rem;
+    }
+
+    /* Dark */
+    .dark .floating-label {
+        background: #020617;
+        color: #94a3b8;
     }
 
     .peer:focus ~ .floating-label,
@@ -165,7 +217,13 @@
         left: 10px;
         font-size: 0.75rem;
         color: #4f46e5;
-        background: white;
+        background: #ffffff;
+    }
+
+    .dark .peer:focus ~ .floating-label,
+    .dark .peer:not(:placeholder-shown) ~ .floating-label {
+        background: #020617;
+        color: #818cf8;
     }
 </style>
 
