@@ -1,48 +1,44 @@
+# auditoria/middleware.py
+import threading
 from django.utils.deprecation import MiddlewareMixin
-from django.utils import timezone
-from auditoria.models import AuditoriaLog
+
+_thread_locals = threading.local()
+
+
+def get_current_request():
+    return getattr(_thread_locals, "request", None)
+
+
+def get_current_user():
+    req = get_current_request()
+    if req and hasattr(req, "user") and req.user.is_authenticated:
+        return req.user
+    return None
 
 
 class AuditoriaMiddleware(MiddlewareMixin):
     """
-    Middleware para registrar acceso y acciones
-    ejecutadas por los usuarios en el sistema.
+    ✅ SOLO guarda el request actual para que signals pueda leer:
+       - usuario autenticado
+       - IP
+       - user-agent
+
+    ❌ NO registra logs aquí (para evitar duplicados).
     """
 
     def process_view(self, request, view_func, view_args, view_kwargs):
-        # No registrar acceso a archivos estáticos
-        if request.path.startswith('/static/'):
-            return None
-
-        # Si el usuario no está autenticado, no registrar nada
-        usuario = request.user if request.user.is_authenticated else None
-        if not usuario:
-            return None
-
-        # Registrar solo acciones relevantes
-        metodo = request.method
-        es_modificacion = metodo in ['POST', 'PUT', 'PATCH', 'DELETE']
-        es_lectura_detalle = metodo == 'GET' and 'pk' in view_kwargs  # GET para objetos específicos
-
-        if not (es_modificacion or es_lectura_detalle):
-            return None
-
-        # Obtener IP real del cliente
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        ip = x_forwarded_for.split(',')[0] if x_forwarded_for else request.META.get('REMOTE_ADDR')
-
-        # Crear registro en la auditoria
-        AuditoriaLog.objects.create(
-            usuario=usuario,
-            accion=f"{metodo} {view_func.__name__}",
-            modelo_afectado=f"{view_func.__module__}.{view_func.__name__}",
-            registro_id=view_kwargs.get('pk'),
-            ip=ip,
-            user_agent=request.META.get('HTTP_USER_AGENT', 'Unknown'),
-            fecha=timezone.now()
-        )
-
+        # Guardar request cuando ya pasaron middlewares previos (auth incluido)
+        _thread_locals.request = request
         return None
 
+    def process_response(self, request, response):
+        if hasattr(_thread_locals, "request"):
+            delattr(_thread_locals, "request")
+        return response
+
+    def process_exception(self, request, exception):
+        if hasattr(_thread_locals, "request"):
+            delattr(_thread_locals, "request")
+        return None
 
 

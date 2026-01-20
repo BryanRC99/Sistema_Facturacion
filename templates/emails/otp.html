@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <body style="margin:0;padding:0;background:#f4f6f8;font-family:Arial, sans-serif;">
+    <div style="max-width:520px;margin:30px auto;background:#ffffff;border-radius:10px;overflow:hidden;border:1px solid #e6e6e6;">
+      <div style="padding:18px 22px;background:#0f172a;color:#fff;">
+        <div style="font-size:16px;font-weight:700;">Sistema de Facturación</div>
+        <div style="font-size:12px;opacity:.9;">Código de verificación</div>
+      </div>
+
+      <div style="padding:22px;">
+        <p style="margin:0 0 10px;">Hola {{ user.username }},</p>
+        <p style="margin:0 0 14px;color:#334155;">Tu código de verificación es:</p>
+
+        <div style="text-align:center;margin:18px 0;">
+          <div style="display:inline-block;padding:14px 18px;border:1px dashed #94a3b8;border-radius:10px;font-size:28px;letter-spacing:6px;font-weight:700;">
+            {{ code }}
+          </div>
+        </div>
+
+        <p style="margin:0;color:#334155;">
+          Este código expira en <b>{{ ttl }} minutos</b>.
+        </p>
+
+        <hr style="border:none;border-top:1px solid #e2e8f0;margin:18px 0;">
+        <p style="margin:0;font-size:12px;color:#64748b;">
+          Si tú no intentaste iniciar sesión, ignora este correo.
+        </p>
+      </div>
+
+      <div style="padding:12px 22px;background:#f8fafc;font-size:12px;color:#64748b;">
+        © {{ year }} Sistema de Facturación
+      </div>
+    </div>
+  </body>
+</html>

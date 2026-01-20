@@ -6,19 +6,25 @@ from .models import AuditoriaLog
 
 
 def dashboard(request):
-    logs = AuditoriaLog.objects.all().order_by('-fecha')
+    logs = AuditoriaLog.objects.select_related("usuario").all().order_by("-fecha")
 
-    q = request.GET.get('q', '')
-    fecha = request.GET.get('fecha', '')
-    usuario = request.GET.get('usuario', '')    
+    q = request.GET.get("q", "").strip()
+    fecha = request.GET.get("fecha", "").strip()
+    usuario = request.GET.get("usuario", "").strip()
 
     if q:
-        logs = logs.filter(
+        filtros = (
             Q(accion__icontains=q) |
             Q(modelo_afectado__icontains=q) |
             Q(usuario__username__icontains=q) |
-            Q(registro_id__icontains=q)             # <-- CAMBIO AQUÍ
+            Q(ip__icontains=q)
         )
+
+        # Si q es número, permitir buscar por registro_id exacto
+        if q.isdigit():
+            filtros |= Q(registro_id=int(q))
+
+        logs = logs.filter(filtros)
 
     if fecha:
         logs = logs.filter(fecha__date=fecha)
@@ -27,11 +33,11 @@ def dashboard(request):
         logs = logs.filter(usuario__username__icontains=usuario)
 
     paginator = Paginator(logs, 20)
-    page = request.GET.get('page')
+    page = request.GET.get("page")
     auditorias = paginator.get_page(page)
 
     params = request.GET.copy()
-    params.pop('page', None)
+    params.pop("page", None)
 
     return render(request, "auditoria/dashboard.html", {
         "auditorias": auditorias,

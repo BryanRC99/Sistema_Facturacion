@@ -1,94 +1,92 @@
+# auditoria/signals.py
 from django.db.models.signals import pre_save, post_save, post_delete
 from django.dispatch import receiver
-from django.apps import apps
 from auditoria.utils import obtener_cambios, registrar_auditoria
+from auditoria.middleware import get_current_request, get_current_user
 
-
-# ---------------------------------------------------
-# 📌 Modelos que queremos auditar
-# agrega más si deseas
-# ---------------------------------------------------
+# Modelos a auditar (ajusta a tus apps reales)
 MONITOREAR_MODELOS = [
     "facturacion_app.Factura",
     "clientes.Cliente",
     "productos.Producto",
 ]
 
+# Si quieres auditar detalles de factura, agrega:
+# "facturacion_app.DetalleFactura",
+
 
 def modelo_en_auditoria(instance):
-    """
-    Verifica si el modelo está en la lista de auditoría
-    """
     full_name = f"{instance._meta.app_label}.{instance.__class__.__name__}"
     return full_name in MONITOREAR_MODELOS
 
 
-# ---------------------------------------------------
-# 📝 Guardar estado anterior antes de actualizar
-# ---------------------------------------------------
 @receiver(pre_save)
 def pre_guardar_auditoria(sender, instance, **kwargs):
     if not modelo_en_auditoria(instance):
         return
 
     if not instance.pk:
-        # es una creación
         instance._auditoria_before = None
         return
 
     try:
-        antes = sender.objects.get(pk=instance.pk)
-        instance._auditoria_before = antes
+        instance._auditoria_before = sender.objects.get(pk=instance.pk)
     except sender.DoesNotExist:
         instance._auditoria_before = None
 
 
-# ---------------------------------------------------
-# 💾 Registrar auditoría después de guardar
-# ---------------------------------------------------
 @receiver(post_save)
 def post_guardar_auditoria(sender, instance, created, **kwargs):
     if not modelo_en_auditoria(instance):
         return
 
-    usuario = getattr(instance, "_auditoria_user", None)
-    before = getattr(instance, "_auditoria_before", None)
+    request = get_current_request()
+    usuario = get_current_user()
+
+    modelo = instance.__class__.__name__
 
     if created:
-        # Registro nuevo
         registrar_auditoria(
             usuario=usuario,
             accion="CREAR",
-            modelo_afectado=instance.__class__.__name__,
-            registro_id=instance.pk
+            modelo_afectado=modelo,
+            registro_id=instance.pk,
+            cambios_antes=None,
+            cambios_despues=None,
+            request=request
         )
-    else:
-        # Comparar cambios
-        antes, despues = obtener_cambios(before, instance)
-        if antes:
-            registrar_auditoria(
-                usuario=usuario,
-                accion="EDITAR",
-                modelo_afectado=instance.__class__.__name__,
-                registro_id=instance.pk,
-                cambios_antes=antes,
-                cambios_despues=despues
-            )
+        return
+
+    before = getattr(instance, "_auditoria_before", None)
+    antes, despues = obtener_cambios(before, instance)
+
+    # Solo registra si hubo cambios reales
+    if antes:
+        registrar_auditoria(
+            usuario=usuario,
+            accion="EDITAR",
+            modelo_afectado=modelo,
+            registro_id=instance.pk,
+            cambios_antes=antes,
+            cambios_despues=despues,
+            request=request
+        )
 
 
-# ---------------------------------------------------
-# ❌ Registrar eliminación
-# ---------------------------------------------------
 @receiver(post_delete)
 def eliminar_auditoria(sender, instance, **kwargs):
     if not modelo_en_auditoria(instance):
         return
 
-    usuario = getattr(instance, "_auditoria_user", None)
+    request = get_current_request()
+    usuario = get_current_user()
 
     registrar_auditoria(
         usuario=usuario,
         accion="ELIMINAR",
         modelo_afectado=instance.__class__.__name__,
         registro_id=instance.pk,
+        cambios_antes=None,
+        cambios_despues=None,
+        request=request
     )

@@ -7,4 +7,4 @@ class AuditoriaConfig(AppConfig):
 
     def ready(self):
         import auditoria.signals
-        import auditoria.receivers
+        import auditoria.auth_signals

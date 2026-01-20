@@ -1,0 +1,195 @@
+{% extends "base_auth.html" %}
+{% load static %}
+
+{% block title %}Verificación{% endblock %}
+
+{% block content %}
+<div class="relative min-h-screen flex items-center justify-center overflow-hidden">
+
+  <!-- FONDO -->
+  <div class="absolute inset-0">
+    <img src="{% static 'img/login-bg.jpg' %}" class="w-full h-full object-cover blur-md scale-110" alt="Fondo">
+    <div class="absolute inset-0 bg-black/40"></div>
+  </div>
+
+  <!-- CARD -->
+  <div class="relative z-10 w-full max-w-md
+                bg-gray-900/70 backdrop-blur-2xl
+                rounded-2xl shadow-2xl
+                border border-white/10
+                p-8 text-white">
+
+    <!-- LOGO -->
+    <div class="flex justify-center mb-4">
+      <img src="{% static 'img/logo.png' %}" alt="Logo" class="h-20 object-contain">
+    </div>
+
+    <h2 class="text-3xl font-bold text-center mb-2">
+      Verificación de acceso
+    </h2>
+
+    <p class="text-center text-gray-300 mb-6">
+      Te enviamos un código a
+      <span class="font-semibold text-white">{{ email_masked }}</span>
+    </p>
+
+    {% for message in messages %}
+    <div class="mb-4 text-center
+                    {% if message.tags == 'error' %}
+                        bg-red-500/20 text-red-300
+                    {% elif message.tags == 'success' %}
+                        bg-green-500/20 text-green-300
+                    {% else %}
+                        bg-white/10 text-gray-200
+                    {% endif %}
+                    p-3 rounded-lg">
+      {{ message }}
+    </div>
+    {% endfor %}
+
+    <!-- FORM VERIFICAR -->
+    <form method="post" class="space-y-6" onsubmit="document.getElementById('btnVerify').disabled=true;">
+      {% csrf_token %}
+
+      <input type="hidden" name="action" value="verify">
+      <input type="hidden" name="code" id="codeHidden" value="">
+
+      <div>
+        <label class="block text-gray-300 mb-2 text-center">Código (6 dígitos)</label>
+
+        <div class="flex justify-center gap-2">
+          {% for _ in "123456" %}
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-box w-12 h-12 text-center text-xl font-bold rounded-xl
+                               bg-white/10 text-white
+                               border border-white/20
+                               placeholder-gray-400
+                               focus:ring-2 focus:ring-indigo-500
+                               focus:border-indigo-500 outline-none" aria-label="Dígito {{ forloop.counter }}"
+            autocomplete="one-time-code" />
+          {% endfor %}
+        </div>
+
+        <p class="text-center text-gray-400 text-sm mt-3">
+          Puedes pegar el código completo y se llenará automático.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2 justify-center">
+        <input id="trust_device" name="trust_device" type="checkbox"
+          class="h-4 w-4 rounded border-white/20 bg-white/10">
+        <label for="trust_device" class="text-sm text-gray-300">
+          Confiar en este dispositivo por 30 días
+        </label>
+      </div>
+
+
+      <button id="btnVerify" type="submit" class="w-full py-3 bg-indigo-600 text-white rounded-xl font-semibold
+                       hover:bg-indigo-700 transition transform hover:-translate-y-0.5">
+        Verificar
+      </button>
+    </form>
+
+    <!-- REENVIAR -->
+    <form method="post" class="mt-4">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="resend">
+
+      <button id="btnResend" type="submit" class="w-full py-3 rounded-xl font-semibold
+                       border border-white/20 bg-white/10 text-white
+                       hover:bg-white/15 transition">
+        Reenviar código <span id="countdownText"></span>
+      </button>
+
+      <p class="text-center text-gray-400 text-sm mt-2">
+        Si no te llega, revisa “Spam/No deseado”.
+      </p>
+    </form>
+
+    <div class="text-center mt-6">
+      <a href="{% url 'login' %}" class="text-sm text-gray-300 hover:text-white underline">
+        Volver al inicio de sesión
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  (function () {
+    // ===== OTP BOXES =====
+    const boxes = Array.from(document.querySelectorAll('.otp-box'));
+    const hidden = document.getElementById('codeHidden');
+
+    function onlyDigit(v) { return (v || '').replace(/\D/g, ''); }
+    function syncHidden() { hidden.value = boxes.map(b => b.value || '').join(''); }
+
+    boxes.forEach((box, idx) => {
+      box.addEventListener('input', () => {
+        const v = onlyDigit(box.value);
+
+        // Si pegan más de 1 dígito en un solo input, repartir
+        if (v.length > 1) {
+          const chars = v.split('');
+          box.value = chars[0] || '';
+          let j = 1;
+          for (let k = idx + 1; k < boxes.length && j < chars.length; k++, j++) {
+            boxes[k].value = chars[j];
+          }
+          boxes[Math.min(idx + v.length, boxes.length - 1)].focus();
+          syncHidden();
+          return;
+        }
+
+        box.value = v;
+        if (v && idx < boxes.length - 1) boxes[idx + 1].focus();
+        syncHidden();
+      });
+
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !box.value && idx > 0) boxes[idx - 1].focus();
+        if (e.key === 'ArrowLeft' && idx > 0) boxes[idx - 1].focus();
+        if (e.key === 'ArrowRight' && idx < boxes.length - 1) boxes[idx + 1].focus();
+      });
+
+      box.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pasted = onlyDigit((e.clipboardData || window.clipboardData).getData('text'));
+        if (!pasted) return;
+        for (let i = 0; i < boxes.length; i++) boxes[i].value = pasted[i] || '';
+        boxes[Math.min(pasted.length, boxes.length) - 1].focus();
+        syncHidden();
+      });
+    });
+
+    if (boxes.length) boxes[0].focus();
+
+    // ===== RESEND COOLDOWN =====
+    const btnResend = document.getElementById('btnResend');
+    const countdownText = document.getElementById('countdownText');
+
+    let seconds = parseInt("{{ cooldown_seconds|default:0 }}", 10) || 0;
+
+    function renderCooldown() {
+      if (seconds > 0) {
+        btnResend.disabled = true;
+        btnResend.classList.add("opacity-60", "cursor-not-allowed");
+        countdownText.textContent = `( ${seconds}s )`;
+      } else {
+        btnResend.disabled = false;
+        btnResend.classList.remove("opacity-60", "cursor-not-allowed");
+        countdownText.textContent = "";
+      }
+    }
+
+    renderCooldown();
+
+    if (seconds > 0) {
+      const timer = setInterval(() => {
+        seconds -= 1;
+        renderCooldown();
+        if (seconds <= 0) clearInterval(timer);
+      }, 1000);
+    }
+  })();
+</script>
+{% endblock %}

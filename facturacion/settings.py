@@ -48,6 +48,25 @@ CSRF_TRUSTED_ORIGINS = [
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
+#Confiar en dispositivo
+
+TRUST_DEVICE_DAYS = 30
+
+#2FA
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp-relay.sendinblue.com"
+EMAIL_PORT = 465
+
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+
+EMAIL_HOST_USER = "a07eaa001@smtp-brevo.com"
+EMAIL_HOST_PASSWORD = "EcXgPThH5sNWdfqS"
+
+DEFAULT_FROM_EMAIL = "Sistema de Facturación <bryancr2004@gmail.com>"
+
 
 # Application definition
 
@@ -71,6 +90,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'cloudinary',
     'cloudinary_storage',
+    'twofa',
 ]
 
 cloudinary.config(

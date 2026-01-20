@@ -14,10 +14,10 @@
 
     <!-- CARD LOGIN -->
     <div class="relative z-10 w-full max-w-md
-            bg-gray-900/70 backdrop-blur-2xl
-            rounded-2xl shadow-2xl
-            border border-white/10
-            p-8 text-white">
+                bg-gray-900/70 backdrop-blur-2xl
+                rounded-2xl shadow-2xl
+                border border-white/10
+                p-8 text-white">
 
         <!-- LOGO -->
         <div class="flex justify-center mb-4">
@@ -37,33 +37,34 @@
         </div>
         {% endif %}
 
-        <form method="post" class="space-y-6">
+        <form method="post" class="space-y-6" onsubmit="document.getElementById('btnLogin').disabled=true;">
             {% csrf_token %}
 
             <div>
                 <label class="block text-gray-300 mb-1">Usuario</label>
                 <input type="text" name="username" autofocus required class="w-full px-4 py-3 rounded-xl
-                          bg-white/10 text-white
-                          border border-white/20
-                          placeholder-gray-400
-                          focus:ring-2 focus:ring-indigo-500
-                          focus:border-indigo-500 outline-none">
+                            bg-white/10 text-white
+                            border border-white/20
+                            placeholder-gray-400
+                            focus:ring-2 focus:ring-indigo-500
+                            focus:border-indigo-500 outline-none">
             </div>
 
             <div>
                 <label class="block text-gray-300 mb-1">Contraseña</label>
                 <input type="password" name="password" required class="w-full px-4 py-3 rounded-xl
-                          bg-white/10 text-white
-                          border border-white/20
-                          placeholder-gray-400
-                          focus:ring-2 focus:ring-indigo-500
-                          focus:border-indigo-500 outline-none">
+                            bg-white/10 text-white
+                            border border-white/20
+                            placeholder-gray-400
+                            focus:ring-2 focus:ring-indigo-500
+                            focus:border-indigo-500 outline-none">
             </div>
 
-            <button type="submit" class="w-full py-3 bg-indigo-600 text-white rounded-xl font-semibold
-                       hover:bg-indigo-700 transition transform hover:-translate-y-0.5">
+            <button id="btnLogin" type="submit"
+                class="w-full py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition transform hover:-translate-y-0.5">
                 Ingresar
             </button>
+
         </form>
     </div>
 
