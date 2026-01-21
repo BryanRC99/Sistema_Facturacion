@@ -33,15 +33,13 @@ def login_with_2fa(request):
         otp, code = create_otp(user)
         send_otp_email(request, user, code)
 
+        # ✅ Guardar datos en sesión y forzar creación de sessionid
         request.session["pending_2fa_user_id"] = user.id
         request.session["otp_last_sent_ts"] = int(timezone.now().timestamp())
-
-        # limpia mensajes viejos
-        list(messages.get_messages(request))
+        request.session.modified = True  # <-- CLAVE para que Render setee sessionid
 
         return redirect("/2fa/verificar/")
 
     return render(request, "registration/login.html")
-
 
 
