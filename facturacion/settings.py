@@ -23,6 +23,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     ".onrender.com",
+    "facturacion-ygt3.onrender.com",
     ".ngrok-free.dev",
 ]
 
@@ -37,7 +38,13 @@ LOGOUT_REDIRECT_URL = "/accounts/login/"
 CSRF_TRUSTED_ORIGINS = [
     "https://*.ngrok-free.dev",
     "https://*.onrender.com",
+    "https://facturacion-ygt3.onrender.com",
 ]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
 
 # =========================
 # MEDIA (Cloudinary)
