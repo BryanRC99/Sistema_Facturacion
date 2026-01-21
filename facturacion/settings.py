@@ -27,14 +27,6 @@ ALLOWED_HOSTS = [
     ".ngrok-free.dev",
 ]
 
-# Si quieres permitir todo mientras pruebas (no recomendado a largo plazo)
-# ALLOWED_HOSTS = ["*"]
-
-
-LOGIN_URL = "/accounts/login/"
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/accounts/login/"
-
 CSRF_TRUSTED_ORIGINS = [
     "https://*.ngrok-free.dev",
     "https://*.onrender.com",
@@ -42,8 +34,21 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = True
+
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+
+CSRF_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_SAMESITE = "Lax"
+
+# Si quieres permitir todo mientras pruebas (no recomendado a largo plazo)
+# ALLOWED_HOSTS = ["*"]
+
+
+LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/accounts/login/"
 
 
 # =========================
