@@ -1,0 +1,2562 @@
+[
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$2L3v9yTCsFNDnEwSPXmMcm$hjLzpGqoqSjOAIVOO4foj/kG5JGo3i4E8fm8eu/7sOk=",
+    "last_login": "2026-01-21T14:25:51.097Z",
+    "is_superuser": true,
+    "username": "bryan",
+    "first_name": "Bryan",
+    "last_name": "Pineda",
+    "email": "bryancr2004@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-11-15T01:33:00.210Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$6QHsQUiNvp7I3ciQzrAiNc$59zkuP7VraBOWy2xP/393bUzQMUFPHsSxn7Qbzp1Nxw=",
+    "last_login": "2026-01-20T23:49:35.538Z",
+    "is_superuser": true,
+    "username": "sebastian",
+    "first_name": "Sebastian",
+    "last_name": "Lluno",
+    "email": "bryan.cr202004@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-01-20T20:35:16Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$bcDXDyPPiioyzN1EseKLlX$hTwBLHNjHiyDyn1K8hfDm6EXhgjhjsGTMfo8hiRmm2c=",
+    "last_login": "2026-01-20T21:58:34.967Z",
+    "is_superuser": true,
+    "username": "jorge",
+    "first_name": "Jorge",
+    "last_name": "Lluno",
+    "email": "jorgesdq2083@gmail.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-01-20T21:49:52Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "04je4ciqzcmqsx41wu9c3uu2l0jl7gpn",
+  "fields": {
+    "session_data": ".eJxVjMsOgjAQAP9lz6aBvuHo3W9odrtbixpIKJyM_25IOOh1ZjJvSLhvNe1N1jQxjNDD5ZcR5qfMh-AHzvdF5WXe1onUkajTNnVbWF7Xs_0bVGwVRhg6GYJ0Nhs0xfhgpXc-R-SeojhtKJRgfaedMNvC3vqSKUbHmmz0GOHzBd2cN-g:1vUu0z:QvlCigGQ7v9Gerot6mm6JYCmYYrM20-wAvfKZdxjPdk",
+    "expire_date": "2025-12-28T21:52:29.998Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "0uo05gbvrvqdh6mw6l4qwbcyq65dq11a",
+  "fields": {
+    "session_data": ".eJxVjMsOgjAQAP9lz6aBvuHo3W9odrtbixpIKJyM_25IOOh1ZjJvSLhvNe1N1jQxjNDD5ZcR5qfMh-AHzvdF5WXe1onUkajTNnVbWF7Xs_0bVGwVRhg6GYJ0Nhs0xfhgpXc-R-SeojhtKJRgfaedMNvC3vqSKUbHmmz0GOHzBd2cN-g:1vZXdS:PjXjFK8tYCln1pPLEXYQJ3MAhoEJnVvmKMe9x7x0Kvc",
+    "expire_date": "2026-01-10T16:59:22.075Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "2im5xwnwnes8jpv5eomuc1ve2b3r4gkp",
+  "fields": {
+    "session_data": ".eJxVjMsOgjAQAP9lz6aBvuHo3W9odrtbixpIKJyM_25IOOh1ZjJvSLhvNe1N1jQxjNDD5ZcR5qfMh-AHzvdF5WXe1onUkajTNnVbWF7Xs_0bVGwVRhg6GYJ0Nhs0xfhgpXc-R-SeojhtKJRgfaedMNvC3vqSKUbHmmz0GOHzBd2cN-g:1vWFdS:cwi9mn2_xEm1yP-VKJUevZx4kxOoOBEOUwnCApy21uc",
+    "expire_date": "2026-01-01T15:09:46.736Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "2j7u2nc9c0pt51h6i2mt6adtpp6n8pph",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQAP9lz4YAK4_26L3f0MCySNVAUtqT8d9Nkx70OjOZN8xh38q8d17nJcEICi6_LAZ6cj1EeoR6b4Ja3dYliiMRp-1iaolft7P9G5TQC4ygkQivRBiD9ootofLsXJRoB6eJTULyckCTKVtvpPcy25y11RINRYbPF9zON6Y:1vTgt9:h5M617TIdudxIxdFiMcI-5JLVjEfcp0DOEK7Rl5UaxQ",
+    "expire_date": "2025-12-25T13:39:23.311Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "2qpcrunt36w9ygali2nyq6e1r8aq1s54",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQAP9lz4YAK4_26L3f0MCySNVAUtqT8d9Nkx70OjOZN8xh38q8d17nJcEICi6_LAZ6cj1EeoR6b4Ja3dYliiMRp-1iaolft7P9G5TQC4ygkQivRBiD9ootofLsXJRoB6eJTULyckCTKVtvpPcy25y11RINRYbPF9zON6Y:1vThWV:0VNX6T6Z9mT2jYoMfhxfTiK5MpaY-QIK53weJtpzccg",
+    "expire_date": "2025-12-25T14:20:03.909Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "548ankz2v0s2v8zroum67mx2mj89jbfp",
+  "fields": {
+    "session_data": ".eJxVjMsOgjAQAP9lz6aBvuHo3W9odrtbixpIKJyM_25IOOh1ZjJvSLhvNe1N1jQxjNDD5ZcR5qfMh-AHzvdF5WXe1onUkajTNnVbWF7Xs_0bVGwVRhg6GYJ0Nhs0xfhgpXc-R-SeojhtKJRgfaedMNvC3vqSKUbHmmz0GOHzBd2cN-g:1vYnnS:xLMqpHEeglFLk2ngBK77-Urz-kE7ww6k9-n38UKj9mc",
+    "expire_date": "2026-01-08T16:02:38.689Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "8r5dkbqko7hb6ea33z1c9aayqql0vxl7",
+  "fields": {
+    "session_data": ".eJxVjMsOgjAQAP9lz6aBvuHo3W9odrtbixpIKJyM_25IOOh1ZjJvSLhvNe1N1jQxjNDD5ZcR5qfMh-AHzvdF5WXe1onUkajTNnVbWF7Xs_0bVGwVRhg6GYJ0Nhs0xfhgpXc-R-SeojhtKJRgfaedMNvC3vqSKUbHmmz0GOHzBd2cN-g:1vZXdS:PjXjFK8tYCln1pPLEXYQJ3MAhoEJnVvmKMe9x7x0Kvc",
+    "expire_date": "2026-01-10T16:59:22.101Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "8v3lqc920wx7n5sg5z91dlrb7y89s0uj",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQAP9lz4YAK4_26L3f0MCySNVAUtqT8d9Nkx70OjOZN8xh38q8d17nJcEICi6_LAZ6cj1EeoR6b4Ja3dYliiMRp-1iaolft7P9G5TQC4ygkQivRBiD9ootofLsXJRoB6eJTULyckCTKVtvpPcy25y11RINRYbPF9zON6Y:1vUYuZ:mL12mxd2QTlYE-TdLbs-KFZjqxom70fDz92u7y9Z-zA",
+    "expire_date": "2025-12-27T23:20:27.873Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "9eqz3wteer37elgcfmaj6ddty7avmru1",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQAP9lz4YAK4_26L3f0MCySNVAUtqT8d9Nkx70OjOZN8xh38q8d17nJcEICi6_LAZ6cj1EeoR6b4Ja3dYliiMRp-1iaolft7P9G5TQC4ygkQivRBiD9ootofLsXJRoB6eJTULyckCTKVtvpPcy25y11RINRYbPF9zON6Y:1vUTHy:4s7tgv9xlZxI7QMVVL-BTy951CFvPPP68pwnUm5OpHo",
+    "expire_date": "2025-12-27T17:20:14.728Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "aj5d1d7koq99j7geuyb1gfwcmv77yjt3",
+  "fields": {
+    "session_data": ".eJxVjMsOgjAQAP9lz6aBvuHo3W9odrtbixpIKJyM_25IOOh1ZjJvSLhvNe1N1jQxjNDD5ZcR5qfMh-AHzvdF5WXe1onUkajTNnVbWF7Xs_0bVGwVRhg6GYJ0Nhs0xfhgpXc-R-SeojhtKJRgfaedMNvC3vqSKUbHmmz0GOHzBd2cN-g:1vYTA6:b4nXHHW8lg2xQcAbuqLeSNmqz-nTfYDZnC2yc8rJ1Yg",
+    "expire_date": "2026-01-07T18:00:38.934Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "bw3djedgu9220fdmwy5g89rpwr02o4hj",
+  "fields": {
+    "session_data": ".eJxVjDsOwyAQBe-ydYTA2Hxcps8ZELsswUmEJWNXUe4eIblImlfMjN4bQjz2Eo7GW1gSzKDg8ssw0pNrF-kR630VtNZ9W1D0RJy2idua-HU927-DEluBGQaLmSa2kzGE0ivJpFD3JeO0dTqTRspejYijts4OiY2XMumYWRkDny_rrTf_:1vaisr:AnZtbE4Jqm-5XDzDtyl7nBKBLYYJumemMmYzxnrrV58",
+    "expire_date": "2026-01-13T23:12:09.150Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "ceor3dof3ey1vfno4gx5g1fnali7mgmn",
+  "fields": {
+    "session_data": ".eJxVjDsOwyAQBe-ydYTA2Hxcps8ZELsswUmEJWNXUe4eIblImlfMjN4bQjz2Eo7GW1gSzKDg8ssw0pNrF-kR630VtNZ9W1D0RJy2idua-HU927-DEluBGQaLmSa2kzGE0ivJpFD3JeO0dTqTRspejYijts4OiY2XMumYWRkDny_rrTf_:1vaEhI:3BukCKg9fvJy_gowyuESS3oJ_N9mBuz1XmwZvv_7ETc",
+    "expire_date": "2026-01-12T14:58:12.773Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "gt7tznig7h4wbt4th0s64tla0s3o9l6o",
+  "fields": {
+    "session_data": ".eJxVjDkOwjAQAP-yNbLig3Wckp43RHuBAyiRclSIv6NIKaCdGc0betrW2m-Lzf2g0IGH0y9jkqeNu9AHjffJyTSu88BuT9xhF3ed1F6Xo_0bVFoqdNDmIDE2iVWRooaMZwwo3iKbYhMzCxJKm4JPkm-Fs5CPWlQLJxMPny_bZjgr:1vi1F2:CtDoOh8iisF1DVqRTV9NFNvOPl-0uV7SDLRNhZZjlm0",
+    "expire_date": "2026-02-03T02:13:12.610Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "gua6nzpkds28s0ndr1x3og3e49pqnfoo",
+  "fields": {
+    "session_data": ".eJxVjMsOgjAQAP9lz6aBvuHo3W9odrtbixpIKJyM_25IOOh1ZjJvSLhvNe1N1jQxjNDD5ZcR5qfMh-AHzvdF5WXe1onUkajTNnVbWF7Xs_0bVGwVRhg6GYJ0Nhs0xfhgpXc-R-SeojhtKJRgfaedMNvC3vqSKUbHmmz0GOHzBd2cN-g:1vZ9wJ:bSb29n1n-mzbNP3JGgfiMb-m4DHq8SmVcRIuyA_Gri4",
+    "expire_date": "2026-01-09T15:41:15.034Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "ic8m3d2svle8ntbbmae63mbcgo69e9n3",
+  "fields": {
+    "session_data": ".eJxVjDsOwyAQBe-ydYTA2Hxcps8ZELsswUmEJWNXUe4eIblImlfMjN4bQjz2Eo7GW1gSzKDg8ssw0pNrF-kR630VtNZ9W1D0RJy2idua-HU927-DEluBGQaLmSa2kzGE0ivJpFD3JeO0dTqTRspejYijts4OiY2XMumYWRkDny_rrTf_:1vhYZH:vkLKRaK9AYsmk4OKkaJqvnSDXDMD3EHfWhDLgWTqLBY",
+    "expire_date": "2026-02-01T19:36:11.304Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "k96zbn2yohd6ygtj6x6pxz7zf3138p0k",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQAP9lz4YAK4_26L3f0MCySNVAUtqT8d9Nkx70OjOZN8xh38q8d17nJcEICi6_LAZ6cj1EeoR6b4Ja3dYliiMRp-1iaolft7P9G5TQC4ygkQivRBiD9ootofLsXJRoB6eJTULyckCTKVtvpPcy25y11RINRYbPF9zON6Y:1vUaDR:ygn6gYZP6JFeN9p5kOitkHHJEVa_4PpdYIgMgjUiKR8",
+    "expire_date": "2025-12-28T00:44:01.746Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "kduazajsscflrecnh1lt821egk8cy2lw",
+  "fields": {
+    "session_data": ".eJxVjDsOwyAQBe-ydYTA2Hxcps8ZELsswUmEJWNXUe4eIblImlfMjN4bQjz2Eo7GW1gSzKDg8ssw0pNrF-kR630VtNZ9W1D0RJy2idua-HU927-DEluBGQaLmSa2kzGE0ivJpFD3JeO0dTqTRspejYijts4OiY2XMumYWRkDny_rrTf_:1vbS4x:DlBV78phGOzixSdL9QIcwg_6JYGO3J75XXJBpTKlsT0",
+    "expire_date": "2026-01-15T23:27:39.362Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "ky4118yo9o7us5aootj6e46lplt4wbqw",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQAP-yZ0OEAoUevfcNZGEXqRpISnsy_t006UGvM5N5Q8B9K2HvvIaFYAIJl18WMT25HoIeWO9NpFa3dYniSMRpu5gb8et2tn-Dgr3ABE4ZG1GjufrkJGeFUtqBB22dJjM6zdYrJG1dkmZUZNmbnGM0afCeJMPnC8ipN4o:1viLcm:aOGp80YOsLhfoGbKHD5wB7cAxQ4Bs43YtcrIHwRLsOI",
+    "expire_date": "2026-02-03T23:59:04.016Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "nz4jlzt34ngkma88uqioo0tobz1v0pbh",
+  "fields": {
+    "session_data": ".eJxVjDsOwyAQBe-ydYTA2Hxcps8ZELsswUmEJWNXUe4eIblImlfMjN4bQjz2Eo7GW1gSzKDg8ssw0pNrF-kR630VtNZ9W1D0RJy2idua-HU927-DEluBGQaLmSa2kzGE0ivJpFD3JeO0dTqTRspejYijts4OiY2XMumYWRkDny_rrTf_:1vhX3e:toguuPLMdRi4QUyDz3wscO9t7pyclND9ebmZto5et0E",
+    "expire_date": "2026-02-01T17:59:26.299Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "pqy7tpegr0jxx2ap1m21qzdgpr0rgrof",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQAP-yZ0OEAoUevfcNZGEXqRpISnsy_t006UGvM5N5Q8B9K2HvvIaFYAIJl18WMT25HoIeWO9NpFa3dYniSMRpu5gb8et2tn-Dgr3ABE4ZG1GjufrkJGeFUtqBB22dJjM6zdYrJG1dkmZUZNmbnGM0afCeJMPnC8ipN4o:1viZ9b:zY_rJQnQNq_0xHyuxbt7oSKBsk6BxXea25bfGu8_BNU",
+    "expire_date": "2026-02-04T14:25:51.109Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "r0ljnbwyenlq123c3zvj977lv9lveyku",
+  "fields": {
+    "session_data": ".eJxVjDsOwyAQBe-ydYTA2Hxcps8ZELsswUmEJWNXUe4eIblImlfMjN4bQjz2Eo7GW1gSzKDg8ssw0pNrF-kR630VtNZ9W1D0RJy2idua-HU927-DEluBGQaLmSa2kzGE0ivJpFD3JeO0dTqTRspejYijts4OiY2XMumYWRkDny_rrTf_:1vhHdO:cRfGKQA45xQfwFyOW-ph8v31yRHa1C1gSxtcfgkW1EQ",
+    "expire_date": "2026-02-01T01:31:18.319Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "tpndpm3pgt95n9seq3cuss5dtskm1fer",
+  "fields": {
+    "session_data": ".eJxVjMsOgjAQAP9lz6aBvuHo3W9odrtbixpIKJyM_25IOOh1ZjJvSLhvNe1N1jQxjNDD5ZcR5qfMh-AHzvdF5WXe1onUkajTNnVbWF7Xs_0bVGwVRhg6GYJ0Nhs0xfhgpXc-R-SeojhtKJRgfaedMNvC3vqSKUbHmmz0GOHzBd2cN-g:1vUoZF:ltwlDDOCKOQlks8aTEVoxjCZ20iYGcz68wdl6NnZVZk",
+    "expire_date": "2025-12-28T16:03:29.763Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "v1qbm1sw3k1eqfz13h6xeyw8d3tsao4r",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQAP9lz4YAK4_26L3f0MCySNVAUtqT8d9Nkx70OjOZN8xh38q8d17nJcEICi6_LAZ6cj1EeoR6b4Ja3dYliiMRp-1iaolft7P9G5TQC4ygkQivRBiD9ootofLsXJRoB6eJTULyckCTKVtvpPcy25y11RINRYbPF9zON6Y:1vK5B7:B768NjfAaVY_8z44jUpZWAhCgOYkITKbSsPEhzAULE8",
+    "expire_date": "2025-11-29T01:34:13.828Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "vi90ze69l271ck7o8pge9hd4x0fw1a4q",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQAP9lz4YAK4_26L3f0MCySNVAUtqT8d9Nkx70OjOZN8xh38q8d17nJcEICi6_LAZ6cj1EeoR6b4Ja3dYliiMRp-1iaolft7P9G5TQC4ygkQivRBiD9ootofLsXJRoB6eJTULyckCTKVtvpPcy25y11RINRYbPF9zON6Y:1vUncm:eIILE-RJs2c3ozrQ84xhCcmTOTjJS-gCZcPgj9gNDrQ",
+    "expire_date": "2025-12-28T15:03:04.763Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "w6hpjnigu4b38vadszaigqtm7dyke8u5",
+  "fields": {
+    "session_data": ".eJxVjDsOwyAQBe-ydYTA2Hxcps8ZELsswUmEJWNXUe4eIblImlfMjN4bQjz2Eo7GW1gSzKDg8ssw0pNrF-kR630VtNZ9W1D0RJy2idua-HU927-DEluBGQaLmSa2kzGE0ivJpFD3JeO0dTqTRspejYijts4OiY2XMumYWRkDny_rrTf_:1vhXmA:j10sOHz62aRMQgkgzy608lLOZWYctbErFCpXrev6lho",
+    "expire_date": "2026-02-01T18:45:26.843Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "xcakfc1x335jod8e2xf3diclcb4mk40j",
+  "fields": {
+    "session_data": ".eJxVjDkOwjAQAP-yNbJ8EDtOSZ83ROv1Lg4gW8pRIf6OIqWAdmY0b5hw38q0r7xMc4YBLFx-WUJ6cj1EfmC9N0Wtbsuc1JGo065qbJlft7P9GxRcCwxALnhizVFz0IljIts5MZ2woGBvxAZrxOXoQuevPRvxlI0EQseBncDnCwGpONE:1vZYAM:R_45vui0yn2Y1f-fg8SGdeWzqUdw1w8Pvzqm19qX74c",
+    "expire_date": "2026-01-10T17:33:22.238Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "xztk1d5wur9jc0sa7qqo5k8jhl1osyr1",
+  "fields": {
+    "session_data": ".eJxVjDsOwyAQBe-ydYTA2Hxcps8ZELsswUmEJWNXUe4eIblImlfMjN4bQjz2Eo7GW1gSzKDg8ssw0pNrF-kR630VtNZ9W1D0RJy2idua-HU927-DEluBGQaLmSa2kzGE0ivJpFD3JeO0dTqTRspejYijts4OiY2XMumYWRkDny_rrTf_:1vhbvh:ya2mdLFEbywjyL-y8tnaOz4SUETHLdxbyDn3g4MezJ4",
+    "expire_date": "2026-02-01T23:11:33.641Z"
+  }
+},
+{
+  "model": "clientes.cliente",
+  "pk": 2,
+  "fields": {
+    "tipo_identificacion": "CED",
+    "identificacion": "1726344177",
+    "nombre_razon_social": "Bryan Pineda",
+    "telefono": "4510953",
+    "celular": "0993395048",
+    "direccion": "Quitumbe calle 5 y amauta OE1Q",
+    "correo": "bryancr2004@gmail.com",
+    "estado": true
+  }
+},
+{
+  "model": "clientes.cliente",
+  "pk": 3,
+  "fields": {
+    "tipo_identificacion": "CED",
+    "identificacion": "1726783611",
+    "nombre_razon_social": "Rodrigo Perez",
+    "telefono": "4309673",
+    "celular": "0999973823",
+    "direccion": "Av Teniente Hugo Ortiz y Calle 6",
+    "correo": "rodriperez00@gmail.com",
+    "estado": true
+  }
+},
+{
+  "model": "clientes.cliente",
+  "pk": 4,
+  "fields": {
+    "tipo_identificacion": "CED",
+    "identificacion": "1728783267",
+    "nombre_razon_social": "Carlos Pe?a",
+    "telefono": "4578325",
+    "celular": "0983672312",
+    "direccion": "Av Ma?osca y Cuarta Transversal ",
+    "correo": "carlos_raul001@gmail.com",
+    "estado": true
+  }
+},
+{
+  "model": "clientes.cliente",
+  "pk": 7,
+  "fields": {
+    "tipo_identificacion": "CED",
+    "identificacion": "1756782362",
+    "nombre_razon_social": "Andres Torres",
+    "telefono": "2450934",
+    "celular": "0986734123",
+    "direccion": "Nueva Aurora y Calle Armando Paredes #PY8",
+    "correo": "andres_torres25@gmail.com",
+    "estado": true
+  }
+},
+{
+  "model": "clientes.cliente",
+  "pk": 8,
+  "fields": {
+    "tipo_identificacion": "CED",
+    "identificacion": "1778039232",
+    "nombre_razon_social": "Fernando Gonzalez",
+    "telefono": "2783972",
+    "celular": "0993478543",
+    "direccion": "Av. Moran Valverde OE5-185 y, Quito",
+    "correo": "fernando_go881@hotmail.com",
+    "estado": true
+  }
+},
+{
+  "model": "clientes.cliente",
+  "pk": 10,
+  "fields": {
+    "tipo_identificacion": "CED",
+    "identificacion": "1789345623",
+    "nombre_razon_social": "Carlos Paredes",
+    "telefono": "024310763",
+    "celular": "0986923412",
+    "direccion": "Jos? Padilla E3-20, Quito 170135",
+    "correo": "carlitos_par099@gmail.com",
+    "estado": true
+  }
+},
+{
+  "model": "clientes.cliente",
+  "pk": 11,
+  "fields": {
+    "tipo_identificacion": "CED",
+    "identificacion": "1789378232",
+    "nombre_razon_social": "Jorge Rodriguez",
+    "telefono": "4378902",
+    "celular": "0987652398",
+    "direccion": "Saraguro &, Quito 170605",
+    "correo": "rodriguez_jor88@gmail.com",
+    "estado": true
+  }
+},
+{
+  "model": "clientes.cliente",
+  "pk": 12,
+  "fields": {
+    "tipo_identificacion": "CED",
+    "identificacion": "1789327763",
+    "nombre_razon_social": "Luis Morales",
+    "telefono": "0278932",
+    "celular": "0993367832",
+    "direccion": "Antonio de Prado 0236, Quito 170111",
+    "correo": "luis_moralescr99@gmail.com",
+    "estado": true
+  }
+},
+{
+  "model": "clientes.cliente",
+  "pk": 13,
+  "fields": {
+    "tipo_identificacion": "CED",
+    "identificacion": "0278382933",
+    "nombre_razon_social": "Nixon Saltos",
+    "telefono": "02476782",
+    "celular": "0993356723",
+    "direccion": "Husares OE6120, Quito 170608",
+    "correo": "saltos_nixon267@gmail.com",
+    "estado": true
+  }
+},
+{
+  "model": "clientes.cliente",
+  "pk": 14,
+  "fields": {
+    "tipo_identificacion": "CED",
+    "identificacion": "1767986721",
+    "nombre_razon_social": "Carolina Gomez",
+    "telefono": "4510783",
+    "celular": "0989762832",
+    "direccion": "Calle Razurazu S10-151 y Ruparupa, Quito 170608",
+    "correo": "carolina.gomez1998@hotmail.com",
+    "estado": true
+  }
+},
+{
+  "model": "clientes.cliente",
+  "pk": 15,
+  "fields": {
+    "tipo_identificacion": "CED",
+    "identificacion": "1789023451",
+    "nombre_razon_social": "Gabriela Garcia",
+    "telefono": "4589321",
+    "celular": "0986753271",
+    "direccion": "Jorge Washington 141y, Quito 170143",
+    "correo": "gabi1992garcia@outlook.com",
+    "estado": true
+  }
+},
+{
+  "model": "clientes.cliente",
+  "pk": 18,
+  "fields": {
+    "tipo_identificacion": "CED",
+    "identificacion": "1789203488",
+    "nombre_razon_social": "Hernesto Gonzalez Paredes",
+    "telefono": "2093873",
+    "celular": "0983902363",
+    "direccion": "Lauro Guerrero, Quito 170111",
+    "correo": "hernesto_gon001@gmail.com",
+    "estado": true
+  }
+},
+{
+  "model": "productos.producto",
+  "pk": 1,
+  "fields": {
+    "codigo": "087855",
+    "nombre": "Cable HDMI 10M",
+    "categoria": 5,
+    "proveedor": 2,
+    "precio": "4.50",
+    "costo": "5.00",
+    "stock": 9,
+    "iva": true,
+    "descripcion": "Cable HDMI 3.0 10 Metros",
+    "estado": true,
+    "imagen": "image/upload/v1768582815/Proyecto_Facturacion/productos/ymq1tqcdijgrx3iiwy08.webp"
+  }
+},
+{
+  "model": "productos.producto",
+  "pk": 2,
+  "fields": {
+    "codigo": "087856",
+    "nombre": "Cargador Tipo C 33W",
+    "categoria": 3,
+    "proveedor": 2,
+    "precio": "35.00",
+    "costo": "32.50",
+    "stock": 8,
+    "iva": true,
+    "descripcion": "Cargador Tipo C, Velocidad de Carga de 33W",
+    "estado": true,
+    "imagen": "image/upload/v1768582825/Proyecto_Facturacion/productos/lopup5kfluoht3kwxs4s.webp"
+  }
+},
+{
+  "model": "productos.producto",
+  "pk": 4,
+  "fields": {
+    "codigo": "087857",
+    "nombre": "Mando PS4",
+    "categoria": 4,
+    "proveedor": 3,
+    "precio": "40.00",
+    "costo": "36.50",
+    "stock": 19,
+    "iva": true,
+    "descripcion": "Mando PS4 JETBLACK",
+    "estado": true,
+    "imagen": "image/upload/v1768582832/Proyecto_Facturacion/productos/britgpvxqli8x5hstvfn.png"
+  }
+},
+{
+  "model": "productos.producto",
+  "pk": 5,
+  "fields": {
+    "codigo": "087858",
+    "nombre": "Horizon Zero Dawn PS4",
+    "categoria": 4,
+    "proveedor": 4,
+    "precio": "60.00",
+    "costo": "58.00",
+    "stock": 8,
+    "iva": true,
+    "descripcion": "Juego f?sico Horizon Zero Dawn para PS4",
+    "estado": true,
+    "imagen": "image/upload/v1768582840/Proyecto_Facturacion/productos/crj6rcy2drvc8a9hq4sa.webp"
+  }
+},
+{
+  "model": "productos.producto",
+  "pk": 8,
+  "fields": {
+    "codigo": "087859",
+    "nombre": "ASUS Portatil Rog Strix G16 (2025)",
+    "categoria": 6,
+    "proveedor": 3,
+    "precio": "1400.00",
+    "costo": "1350.00",
+    "stock": 2,
+    "iva": true,
+    "descripcion": "ASUS Port?til para juegos ROG Strix G16 (2025), pantalla FHD+ 16:10 165Hz/3ms, GPU NVIDIA GeForce RTX 5060, procesador Intel Core i7 14650HX, DDR5 de 16 GB, SSD de 1 TB Gen 4, Wi-Fi 7, Windows 11 Home",
+    "estado": true,
+    "imagen": "image/upload/v1768582849/Proyecto_Facturacion/productos/f4sntszwfbsyjrrtz9t6.png"
+  }
+},
+{
+  "model": "productos.producto",
+  "pk": 9,
+  "fields": {
+    "codigo": "087860",
+    "nombre": "Spiderman Miles Morales PS4",
+    "categoria": 4,
+    "proveedor": 4,
+    "precio": "50.00",
+    "costo": "45.00",
+    "stock": 10,
+    "iva": true,
+    "descripcion": "Spiderman Miles Morales F?sico PS4",
+    "estado": true,
+    "imagen": "image/upload/v1768582856/Proyecto_Facturacion/productos/ltgldrt2op3bcg3x6nzh.webp"
+  }
+},
+{
+  "model": "productos.producto",
+  "pk": 12,
+  "fields": {
+    "codigo": "087861",
+    "nombre": "EA FC 26 PS5",
+    "categoria": 4,
+    "proveedor": 4,
+    "precio": "75.00",
+    "costo": "70.00",
+    "stock": 10,
+    "iva": true,
+    "descripcion": "EA FC 26 PS5",
+    "estado": true,
+    "imagen": "image/upload/v1768582778/Proyecto_Facturacion/productos/y7utl6cepm1fvw6q5ikx.webp"
+  }
+},
+{
+  "model": "productos.producto",
+  "pk": 13,
+  "fields": {
+    "codigo": "087862",
+    "nombre": "Mouse Logitech G21",
+    "categoria": 7,
+    "proveedor": 2,
+    "precio": "47.50",
+    "costo": "42.00",
+    "stock": 10,
+    "iva": true,
+    "descripcion": "Mouse alambrico Logitech G21 Gamer 3 Botones",
+    "estado": true,
+    "imagen": "image/upload/v1768953310/Proyecto_Facturacion/productos/eyc9fpu8zrawf3esjpvz.webp"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 1,
+  "fields": {
+    "cliente": 2,
+    "fecha": "2025-12-10T01:05:41.665Z",
+    "numero": "001-001-000000001",
+    "forma_pago": "TRANSFERENCIA",
+    "subtotal": "9.00",
+    "subtotal_iva": "9.00",
+    "subtotal_cero": "0.00",
+    "descuento_total": "0.00",
+    "iva_total": "1.08",
+    "clave_acceso": null,
+    "total": "10.08",
+    "estado": "ANULADA"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 2,
+  "fields": {
+    "cliente": 2,
+    "fecha": "2025-12-10T01:08:29.396Z",
+    "numero": "001-001-000000002",
+    "forma_pago": "TRANSFERENCIA",
+    "subtotal": "9.00",
+    "subtotal_iva": "9.00",
+    "subtotal_cero": "0.00",
+    "descuento_total": "0.00",
+    "iva_total": "1.08",
+    "clave_acceso": null,
+    "total": "10.08",
+    "estado": "ANULADA"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 3,
+  "fields": {
+    "cliente": 3,
+    "fecha": "2025-12-10T01:09:56.228Z",
+    "numero": "001-001-000000003",
+    "forma_pago": "EFECTIVO",
+    "subtotal": "22.50",
+    "subtotal_iva": "22.50",
+    "subtotal_cero": "0.00",
+    "descuento_total": "0.00",
+    "iva_total": "2.70",
+    "clave_acceso": null,
+    "total": "25.20",
+    "estado": "ANULADA"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 4,
+  "fields": {
+    "cliente": 3,
+    "fecha": "2025-12-10T01:42:41.508Z",
+    "numero": "001-001-000000004",
+    "forma_pago": "OTROS",
+    "subtotal": "22.50",
+    "subtotal_iva": "22.50",
+    "subtotal_cero": "0.00",
+    "descuento_total": "0.00",
+    "iva_total": "2.70",
+    "clave_acceso": null,
+    "total": "25.20",
+    "estado": "ACTIVA"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 5,
+  "fields": {
+    "cliente": 2,
+    "fecha": "2025-12-10T14:04:30.088Z",
+    "numero": "001-001-000000005",
+    "forma_pago": "EFECTIVO",
+    "subtotal": "37.50",
+    "subtotal_iva": "37.50",
+    "subtotal_cero": "0.00",
+    "descuento_total": "2.00",
+    "iva_total": "4.50",
+    "clave_acceso": null,
+    "total": "42.00",
+    "estado": "ANULADA"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 6,
+  "fields": {
+    "cliente": 2,
+    "fecha": "2025-12-10T14:58:44.367Z",
+    "numero": "001-001-000000006",
+    "forma_pago": "TRANSFERENCIA",
+    "subtotal": "48.50",
+    "subtotal_iva": "48.50",
+    "subtotal_cero": "0.00",
+    "descuento_total": "0.00",
+    "iva_total": "5.82",
+    "clave_acceso": null,
+    "total": "54.32",
+    "estado": "ACTIVA"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 7,
+  "fields": {
+    "cliente": 7,
+    "fecha": "2025-12-10T18:55:31.242Z",
+    "numero": "001-001-000000007",
+    "forma_pago": "TARJETA",
+    "subtotal": "80.00",
+    "subtotal_iva": "80.00",
+    "subtotal_cero": "0.00",
+    "descuento_total": "0.00",
+    "iva_total": "9.60",
+    "clave_acceso": null,
+    "total": "89.60",
+    "estado": "ACTIVA"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 8,
+  "fields": {
+    "cliente": 2,
+    "fecha": "2025-12-13T15:17:18.094Z",
+    "numero": "001-001-000000008",
+    "forma_pago": "TRANSFERENCIA",
+    "subtotal": "100.00",
+    "subtotal_iva": "100.00",
+    "subtotal_cero": "0.00",
+    "descuento_total": "0.00",
+    "iva_total": "12.00",
+    "clave_acceso": null,
+    "total": "112.00",
+    "estado": "ACTIVA"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 9,
+  "fields": {
+    "cliente": 2,
+    "fecha": "2025-12-14T21:51:44.163Z",
+    "numero": "001-001-000000009",
+    "forma_pago": "TRANSFERENCIA",
+    "subtotal": "1400.00",
+    "subtotal_iva": "1400.00",
+    "subtotal_cero": "0.00",
+    "descuento_total": "0.00",
+    "iva_total": "168.00",
+    "clave_acceso": null,
+    "total": "1568.00",
+    "estado": "ACTIVA"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 10,
+  "fields": {
+    "cliente": 2,
+    "fecha": "2025-12-18T15:01:51.699Z",
+    "numero": "001-001-000000010",
+    "forma_pago": "TRANSFERENCIA",
+    "subtotal": "125.00",
+    "subtotal_iva": "125.00",
+    "subtotal_cero": "0.00",
+    "descuento_total": "15.00",
+    "iva_total": "15.00",
+    "clave_acceso": null,
+    "total": "140.00",
+    "estado": "ANULADA"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 11,
+  "fields": {
+    "cliente": 10,
+    "fecha": "2025-12-23T15:59:34.973Z",
+    "numero": "001-001-000000011",
+    "forma_pago": "TRANSFERENCIA",
+    "subtotal": "1350.00",
+    "subtotal_iva": "1350.00",
+    "subtotal_cero": "0.00",
+    "descuento_total": "50.00",
+    "iva_total": "162.00",
+    "clave_acceso": "23122025019999999999999910010010000000113597579117",
+    "total": "1512.00",
+    "estado": "ACTIVA"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 12,
+  "fields": {
+    "cliente": 2,
+    "fecha": "2025-12-24T18:51:03.244Z",
+    "numero": "001-001-000000012",
+    "forma_pago": "TARJETA",
+    "subtotal": "140.00",
+    "subtotal_iva": "140.00",
+    "subtotal_cero": "0.00",
+    "descuento_total": "0.00",
+    "iva_total": "16.80",
+    "clave_acceso": "24122025019999999999999910010010000000121662928211",
+    "total": "156.80",
+    "estado": "ACTIVA"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 13,
+  "fields": {
+    "cliente": 3,
+    "fecha": "2025-12-24T20:09:45.051Z",
+    "numero": "001-001-000000013",
+    "forma_pago": "TRANSFERENCIA",
+    "subtotal": "9.00",
+    "subtotal_iva": "9.00",
+    "subtotal_cero": "0.00",
+    "descuento_total": "0.00",
+    "iva_total": "1.08",
+    "clave_acceso": "24122025019999999999999910010010000000134122325111",
+    "total": "10.08",
+    "estado": "ACTIVA"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 14,
+  "fields": {
+    "cliente": 4,
+    "fecha": "2025-12-24T20:14:51.883Z",
+    "numero": "001-001-000000014",
+    "forma_pago": "TRANSFERENCIA",
+    "subtotal": "1440.00",
+    "subtotal_iva": "1440.00",
+    "subtotal_cero": "0.00",
+    "descuento_total": "0.00",
+    "iva_total": "172.80",
+    "clave_acceso": "24122025019999999999999910010010000000145541749411",
+    "total": "1612.80",
+    "estado": "ACTIVA"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 15,
+  "fields": {
+    "cliente": 3,
+    "fecha": "2025-12-26T15:41:45.548Z",
+    "numero": "001-001-000000015",
+    "forma_pago": "TRANSFERENCIA",
+    "subtotal": "35.00",
+    "subtotal_iva": "35.00",
+    "subtotal_cero": "0.00",
+    "descuento_total": "0.00",
+    "iva_total": "4.20",
+    "clave_acceso": "26122025019999999999999910010010000000155694120213",
+    "total": "39.20",
+    "estado": "ACTIVA"
+  }
+},
+{
+  "model": "facturacion_app.factura",
+  "pk": 16,
+  "fields": {
+    "cliente": 12,
+    "fecha": "2026-01-01T23:30:01.989Z",
+    "numero": "001-001-000000016",
+    "forma_pago": "TRANSFERENCIA",
+    "subtotal": "1400.00",
+    "subtotal_iva": "1400.00",
+    "subtotal_cero": "0.00",
+    "descuento_total": "0.00",
+    "iva_total": "168.00",
+    "clave_acceso": "01012026019999999999999910010010000000161938733017",
+    "total": "1568.00",
+    "estado": "ANULADA"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 1,
+  "fields": {
+    "factura": 1,
+    "producto": 1,
+    "cantidad": 2,
+    "precio_unitario": "4.50",
+    "descuento": "0.00",
+    "subtotal": "9.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 2,
+  "fields": {
+    "factura": 2,
+    "producto": 1,
+    "cantidad": 2,
+    "precio_unitario": "4.50",
+    "descuento": "0.00",
+    "subtotal": "9.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 3,
+  "fields": {
+    "factura": 3,
+    "producto": 1,
+    "cantidad": 5,
+    "precio_unitario": "4.50",
+    "descuento": "0.00",
+    "subtotal": "22.50"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 4,
+  "fields": {
+    "factura": 4,
+    "producto": 1,
+    "cantidad": 5,
+    "precio_unitario": "4.50",
+    "descuento": "0.00",
+    "subtotal": "22.50"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 5,
+  "fields": {
+    "factura": 5,
+    "producto": 1,
+    "cantidad": 1,
+    "precio_unitario": "4.50",
+    "descuento": "0.00",
+    "subtotal": "4.50"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 6,
+  "fields": {
+    "factura": 5,
+    "producto": 2,
+    "cantidad": 1,
+    "precio_unitario": "35.00",
+    "descuento": "2.00",
+    "subtotal": "33.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 7,
+  "fields": {
+    "factura": 6,
+    "producto": 2,
+    "cantidad": 1,
+    "precio_unitario": "35.00",
+    "descuento": "0.00",
+    "subtotal": "35.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 8,
+  "fields": {
+    "factura": 6,
+    "producto": 1,
+    "cantidad": 3,
+    "precio_unitario": "4.50",
+    "descuento": "0.00",
+    "subtotal": "13.50"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 9,
+  "fields": {
+    "factura": 7,
+    "producto": 4,
+    "cantidad": 2,
+    "precio_unitario": "40.00",
+    "descuento": "0.00",
+    "subtotal": "80.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 10,
+  "fields": {
+    "factura": 8,
+    "producto": 4,
+    "cantidad": 1,
+    "precio_unitario": "40.00",
+    "descuento": "0.00",
+    "subtotal": "40.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 11,
+  "fields": {
+    "factura": 8,
+    "producto": 5,
+    "cantidad": 1,
+    "precio_unitario": "60.00",
+    "descuento": "0.00",
+    "subtotal": "60.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 12,
+  "fields": {
+    "factura": 9,
+    "producto": 8,
+    "cantidad": 1,
+    "precio_unitario": "1400.00",
+    "descuento": "0.00",
+    "subtotal": "1400.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 13,
+  "fields": {
+    "factura": 10,
+    "producto": 4,
+    "cantidad": 2,
+    "precio_unitario": "40.00",
+    "descuento": "10.00",
+    "subtotal": "70.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 14,
+  "fields": {
+    "factura": 10,
+    "producto": 5,
+    "cantidad": 1,
+    "precio_unitario": "60.00",
+    "descuento": "5.00",
+    "subtotal": "55.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 15,
+  "fields": {
+    "factura": 11,
+    "producto": 8,
+    "cantidad": 1,
+    "precio_unitario": "1400.00",
+    "descuento": "50.00",
+    "subtotal": "1350.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 16,
+  "fields": {
+    "factura": 12,
+    "producto": 4,
+    "cantidad": 2,
+    "precio_unitario": "40.00",
+    "descuento": "0.00",
+    "subtotal": "80.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 17,
+  "fields": {
+    "factura": 12,
+    "producto": 5,
+    "cantidad": 1,
+    "precio_unitario": "60.00",
+    "descuento": "0.00",
+    "subtotal": "60.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 18,
+  "fields": {
+    "factura": 13,
+    "producto": 1,
+    "cantidad": 2,
+    "precio_unitario": "4.50",
+    "descuento": "0.00",
+    "subtotal": "9.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 19,
+  "fields": {
+    "factura": 14,
+    "producto": 8,
+    "cantidad": 1,
+    "precio_unitario": "1400.00",
+    "descuento": "0.00",
+    "subtotal": "1400.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 20,
+  "fields": {
+    "factura": 14,
+    "producto": 4,
+    "cantidad": 1,
+    "precio_unitario": "40.00",
+    "descuento": "0.00",
+    "subtotal": "40.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 21,
+  "fields": {
+    "factura": 15,
+    "producto": 2,
+    "cantidad": 1,
+    "precio_unitario": "35.00",
+    "descuento": "0.00",
+    "subtotal": "35.00"
+  }
+},
+{
+  "model": "facturacion_app.detallefactura",
+  "pk": 22,
+  "fields": {
+    "factura": 16,
+    "producto": 8,
+    "cantidad": 1,
+    "precio_unitario": "1400.00",
+    "descuento": "0.00",
+    "subtotal": "1400.00"
+  }
+},
+{
+  "model": "categorias.categoria",
+  "pk": 3,
+  "fields": {
+    "nombre": "Cargadores"
+  }
+},
+{
+  "model": "categorias.categoria",
+  "pk": 4,
+  "fields": {
+    "nombre": "Videojuegos"
+  }
+},
+{
+  "model": "categorias.categoria",
+  "pk": 5,
+  "fields": {
+    "nombre": "Cables"
+  }
+},
+{
+  "model": "categorias.categoria",
+  "pk": 6,
+  "fields": {
+    "nombre": "Laptops"
+  }
+},
+{
+  "model": "categorias.categoria",
+  "pk": 7,
+  "fields": {
+    "nombre": "Perifericos"
+  }
+},
+{
+  "model": "categorias.categoria",
+  "pk": 8,
+  "fields": {
+    "nombre": "Discos duros"
+  }
+},
+{
+  "model": "proveedores.proveedor",
+  "pk": 2,
+  "fields": {
+    "tipo_identificacion": "RUC",
+    "identificacion": "0828367283643",
+    "nombre_razon_social": "Inalecsa",
+    "telefono": "042162040",
+    "celular": "0956783231",
+    "direccion": "V?a a Daule, Km. 16 1/2",
+    "correo": "inalecsa_contacto@inalecsa.com.ec",
+    "contacto_nombre": "Hernesto Flores",
+    "contacto_telefono": "0978238923",
+    "ciudad": "Guayaquil",
+    "observaciones": "N/A",
+    "estado": true,
+    "fecha_creacion": "2025-12-13T19:55:39.991Z"
+  }
+},
+{
+  "model": "proveedores.proveedor",
+  "pk": 3,
+  "fields": {
+    "tipo_identificacion": "RUC",
+    "identificacion": "1892038296734",
+    "nombre_razon_social": "ASUS",
+    "telefono": "020878323",
+    "celular": "0992236735",
+    "direccion": "Av. Maldonado, Y, Quito 170146",
+    "correo": "contacto_asus@asus.com.ec",
+    "contacto_nombre": "Hector Hernandez",
+    "contacto_telefono": "0996723023",
+    "ciudad": "Quito",
+    "observaciones": "Proveedor de productos Asus",
+    "estado": true,
+    "fecha_creacion": "2025-12-14T20:37:59.303Z"
+  }
+},
+{
+  "model": "proveedores.proveedor",
+  "pk": 4,
+  "fields": {
+    "tipo_identificacion": "RUC",
+    "identificacion": "1892038013283",
+    "nombre_razon_social": "Juegos Digitales Ecuador",
+    "telefono": "2670173",
+    "celular": "0982900124",
+    "direccion": "Av Teniente Hugo Ortiz y Transversal 28",
+    "correo": "juegosdigitales@ecu.com.ec",
+    "contacto_nombre": "Ricardo Linterna",
+    "contacto_telefono": "0993792012",
+    "ciudad": "Quito",
+    "observaciones": "Proveedores de juegos digitales para toda consola, digitales y fisicos",
+    "estado": true,
+    "fecha_creacion": "2026-01-02T00:11:14.169Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 466,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGOUT",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": null,
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-19T20:58:20.252Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 467,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": null,
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-19T20:58:24.330Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 468,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-19T21:01:16.086Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 469,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "CREAR",
+    "modelo_afectado": "Producto",
+    "registro_id": 13,
+    "cambios_antes": null,
+    "cambios_despues": null,
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-19T21:03:08.743Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 470,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "EDITAR",
+    "modelo_afectado": "Producto",
+    "registro_id": 13,
+    "cambios_antes": {
+      "categoria": 7,
+      "proveedor": 3,
+      "precio": "45.00",
+      "costo": "41.00"
+    },
+    "cambios_despues": {
+      "categoria": "7",
+      "proveedor": "2",
+      "precio": 47.5,
+      "costo": 42.0
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-19T21:04:26.724Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 471,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "181.211.41.40"
+    },
+    "ip": "181.211.41.40",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T01:24:10.877Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 472,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "EDITAR",
+    "modelo_afectado": "Producto",
+    "registro_id": 8,
+    "cambios_antes": {
+      "stock": 1
+    },
+    "cambios_despues": {
+      "stock": 2
+    },
+    "ip": "181.211.41.40",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T02:06:51.133Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 473,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "EDITAR",
+    "modelo_afectado": "Factura",
+    "registro_id": 16,
+    "cambios_antes": {
+      "estado": "ACTIVA"
+    },
+    "cambios_despues": {
+      "estado": "ANULADA"
+    },
+    "ip": "181.211.41.40",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T02:06:51.136Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 474,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Chrome",
+      "ip": "2800:bf0:30:f8c:1899:b02e:8b1:28d6"
+    },
+    "ip": "2800:bf0:30:f8c:1899:b02e:8b1:28d6",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "fecha": "2026-01-20T02:10:44.009Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 475,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "181.211.41.40"
+    },
+    "ip": "181.211.41.40",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T02:28:03.944Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 476,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T20:13:39.763Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 477,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T20:54:10.576Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 478,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T21:02:43.269Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 479,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T21:09:26.101Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 480,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T21:10:10.556Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 481,
+  "fields": {
+    "usuario": [
+      "sebastian"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 5,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T21:11:27.308Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 482,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T21:12:40.652Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 483,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T21:17:35.284Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 484,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T21:26:46.323Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 485,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T21:26:52.940Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 486,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "M?vil",
+      "sistema": "Android",
+      "navegador": "Chrome",
+      "ip": "192.168.0.109"
+    },
+    "ip": "192.168.0.109",
+    "user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Mobile Safari/537.36",
+    "fecha": "2026-01-20T21:29:21.532Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 487,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T21:32:44.222Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 488,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T21:40:14.712Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 489,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T21:45:55.444Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 490,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T21:46:26.208Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 491,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T21:46:46.064Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 492,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T21:46:51.408Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 493,
+  "fields": {
+    "usuario": [
+      "jorge"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 6,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "M?vil",
+      "sistema": "Android",
+      "navegador": "Chrome",
+      "ip": "2800:370:11e:5990:e86a:2ee2:ff82:e968"
+    },
+    "ip": "2800:370:11e:5990:e86a:2ee2:ff82:e968",
+    "user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+    "fecha": "2026-01-20T21:56:44.883Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 494,
+  "fields": {
+    "usuario": [
+      "jorge"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 6,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "M?vil",
+      "sistema": "Android",
+      "navegador": "Chrome",
+      "ip": "2800:370:11e:5990:e86a:2ee2:ff82:e968"
+    },
+    "ip": "2800:370:11e:5990:e86a:2ee2:ff82:e968",
+    "user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+    "fecha": "2026-01-20T21:57:19.574Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 495,
+  "fields": {
+    "usuario": [
+      "jorge"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 6,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "M?vil",
+      "sistema": "Android",
+      "navegador": "Chrome",
+      "ip": "2800:370:11e:5990:e86a:2ee2:ff82:e968"
+    },
+    "ip": "2800:370:11e:5990:e86a:2ee2:ff82:e968",
+    "user_agent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36",
+    "fecha": "2026-01-20T21:58:34.970Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 496,
+  "fields": {
+    "usuario": [
+      "sebastian"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 5,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T22:00:17.660Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 497,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.105"
+    },
+    "ip": "192.168.0.105",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T23:25:33.888Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 498,
+  "fields": {
+    "usuario": [
+      "sebastian"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 5,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.105"
+    },
+    "ip": "192.168.0.105",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T23:34:58.452Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 499,
+  "fields": {
+    "usuario": [
+      "sebastian"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 5,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.105"
+    },
+    "ip": "192.168.0.105",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T23:49:35.541Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 500,
+  "fields": {
+    "usuario": [
+      "sebastian"
+    ],
+    "accion": "EDITAR",
+    "modelo_afectado": "Producto",
+    "registro_id": 13,
+    "cambios_antes": {
+      "categoria": 7,
+      "proveedor": 2,
+      "precio": "47.50",
+      "costo": "42.00",
+      "imagen": null
+    },
+    "cambios_despues": {
+      "categoria": "7",
+      "proveedor": "2",
+      "precio": 47.5,
+      "costo": 42.0,
+      "imagen": "Proyecto_Facturacion/productos/eyc9fpu8zrawf3esjpvz"
+    },
+    "ip": "192.168.0.105",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T23:55:09.573Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 501,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Edge",
+      "ip": "192.168.0.105"
+    },
+    "ip": "192.168.0.105",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 Edg/144.0.0.0",
+    "fecha": "2026-01-20T23:59:04.011Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 502,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Chrome",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "fecha": "2026-01-21T14:07:10.895Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 503,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Chrome",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "fecha": "2026-01-21T14:20:25.665Z"
+  }
+},
+{
+  "model": "auditoria.auditorialog",
+  "pk": 504,
+  "fields": {
+    "usuario": [
+      "bryan"
+    ],
+    "accion": "LOGIN",
+    "modelo_afectado": "Auth",
+    "registro_id": 1,
+    "cambios_antes": null,
+    "cambios_despues": {
+      "dispositivo": "PC",
+      "sistema": "Windows",
+      "navegador": "Chrome",
+      "ip": "192.168.0.102"
+    },
+    "ip": "192.168.0.102",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+    "fecha": "2026-01-21T14:25:51.101Z"
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 1,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$BjH7j4BidUakWUZhERkZkJ$XH0odfl+rh3IEiR9msd+kdd2nse7Z19SDCvJ8dhuwwU=",
+    "created_at": "2026-01-20T20:46:28.613Z",
+    "expires_at": "2026-01-20T20:51:28.612Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 2,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$Z0nDBN0GNx02vpLuVNriHQ$6KVlGyFkYkEabLpnYeOVF/qsfbFEbmzXY5G/aApfM8w=",
+    "created_at": "2026-01-20T20:47:29.250Z",
+    "expires_at": "2026-01-20T20:52:29.249Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 3,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$BRz8YSkiRP40Kj4ZnmC2n9$KbJMVprn/CdLmiOuAq9LxW62l8RJ0kURFSV6BtbBtLw=",
+    "created_at": "2026-01-20T20:47:37.081Z",
+    "expires_at": "2026-01-20T20:52:37.081Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 4,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$ZIdBrx43yTAOeaH4YJms44$0KFhTbn+Ju1GRJP0mKrR+Zs8wq8LnVlwlIprJoqmIrE=",
+    "created_at": "2026-01-20T20:47:49.542Z",
+    "expires_at": "2026-01-20T20:52:49.542Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 5,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$BiMxUX5uMQHIuD5SJnJlHH$VfTzROCvnXDjf/PdXcGIobwNqfy0NE02DtnAxm29okM=",
+    "created_at": "2026-01-20T20:52:18.206Z",
+    "expires_at": "2026-01-20T20:57:18.206Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 6,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$1DmdhnbqwNSxDjNqY6w1en$xzYMASt6nNZoOqP8EljWlnOmh0hox4MHK7eMe431dWA=",
+    "created_at": "2026-01-20T20:53:18.421Z",
+    "expires_at": "2026-01-20T20:58:18.421Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 7,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$5KWfjRZoGDoHJoiRi0KVIv$xF8Ifx0RyNIZdfkgj3vl6Bzsb8by2JQRzRUH8ra5C60=",
+    "created_at": "2026-01-20T21:02:24.154Z",
+    "expires_at": "2026-01-20T21:07:23.735Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 8,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$4SbfIHrAU87q0D4JwdjdKv$G2rj/ZsVeHypsoRNPtFZezC9al1iEtyjDHJyKmE7eKA=",
+    "created_at": "2026-01-20T21:08:58.817Z",
+    "expires_at": "2026-01-20T21:13:58.816Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 9,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$8TJdSMLMEUxwhpZnTKt0wr$p573GSn1lLQZ5PN2YqYlYJ5SLAVH4NA+XNUuKeL/Fpw=",
+    "created_at": "2026-01-20T21:09:59.483Z",
+    "expires_at": "2026-01-20T21:14:59.482Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 10,
+  "fields": {
+    "user": [
+      "sebastian"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$NFP9UJGssBXVNX0yjWXTU1$M0pXHdq1Hulv4EncUsTUv0ZGoGNUl8wJ4iJyhvmvAUY=",
+    "created_at": "2026-01-20T21:10:52.613Z",
+    "expires_at": "2026-01-20T21:15:52.613Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 11,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$YO6y8O10WUcnbjOFr2Ihov$gPqFpjzjQ6lXAuFlTlZe8V3VEXhkpe3i9/Ha1ArMuWM=",
+    "created_at": "2026-01-20T21:11:55.583Z",
+    "expires_at": "2026-01-20T21:16:55.582Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 12,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$ChXBT8EWsf8OyAYJuwGC8z$nx2tOAYNliiC6wD7Q6lMl0rk6qjcwMTLPMT5/SdW4XU=",
+    "created_at": "2026-01-20T21:17:13.349Z",
+    "expires_at": "2026-01-20T21:22:13.349Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 13,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$6r5ZSFL4xpOWkBLm5q0XKu$vJRwDl/XfM7sJCNLkGHhQ20WBrwSy6NhYNh6e9Uj+ss=",
+    "created_at": "2026-01-20T21:26:31.080Z",
+    "expires_at": "2026-01-20T21:31:31.079Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 14,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$iH7iRWwDSk3u5hmTbcLtT1$b3YQUuLgU1x73jKhzNryI8idlo/W45rKYKDxn0JfoQo=",
+    "created_at": "2026-01-20T21:28:45.749Z",
+    "expires_at": "2026-01-20T21:33:45.748Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 15,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$8gS15jbXjmMPLqftVpGyBp$x3UTb02kH4XaIImnbEJCir6l3chbwTawA6pEYS9Xm1Q=",
+    "created_at": "2026-01-20T21:40:01.944Z",
+    "expires_at": "2026-01-20T21:45:01.944Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 16,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$00jMovIZEUSQBxxKRu18Ph$y0LtHkPdi+pjaq6aF5bEyo9R9VshStr0LeJ9ljTmewg=",
+    "created_at": "2026-01-20T21:45:45.037Z",
+    "expires_at": "2026-01-20T21:50:45.036Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 17,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$O8wmhbM8ferDkc4Luhk716$DWTJgRItAXewLKzEyFjSU3PiV9rCYznuGVeLbLpIfLY=",
+    "created_at": "2026-01-20T21:46:16.376Z",
+    "expires_at": "2026-01-20T21:51:16.376Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 18,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$a7txNd15veQsDZMx5AtcXB$k0WuBrRlFssOKUQdGAGaO1bTrD4d3TBqWk06MSndygE=",
+    "created_at": "2026-01-20T21:46:33.881Z",
+    "expires_at": "2026-01-20T21:51:33.880Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 19,
+  "fields": {
+    "user": [
+      "jorge"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$QmygmKbGST1imux0qx16jF$tcHEPtbWbPqj8upc8sSopGE2coHFKM84ZJJ49f/dR/U=",
+    "created_at": "2026-01-20T21:55:54.074Z",
+    "expires_at": "2026-01-20T22:00:54.074Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 20,
+  "fields": {
+    "user": [
+      "jorge"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$ZxBme6VYS152MdGtL3b0uU$44A+6LUpajw4LZ4SvMpULoO5OgRemtPSaBYM/lKqtmo=",
+    "created_at": "2026-01-20T21:57:51.770Z",
+    "expires_at": "2026-01-20T22:02:51.769Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 21,
+  "fields": {
+    "user": [
+      "sebastian"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$w6UPN3C9qxKkSRS9DYKCVH$IH4sVZe5svLeu+3K74vfFBFQ3ocg6bRvEYOdLXzaMHM=",
+    "created_at": "2026-01-20T21:59:59.539Z",
+    "expires_at": "2026-01-20T22:04:59.539Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 22,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$aG4XVn2dWvQNIM85RmhT6E$lATmpp3UDPfXqfMPrHCtbPkblkcXvS4oW9gyGh2RZ2I=",
+    "created_at": "2026-01-20T23:25:05.856Z",
+    "expires_at": "2026-01-20T23:30:05.856Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 23,
+  "fields": {
+    "user": [
+      "sebastian"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$0qn0QjoIyvLmPTfD7bDLYb$ygd3+8+bAfIoEG229hcyLpXEOkL/RUjmyOtz/VAUPjM=",
+    "created_at": "2026-01-20T23:33:28.849Z",
+    "expires_at": "2026-01-20T23:38:28.848Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 24,
+  "fields": {
+    "user": [
+      "sebastian"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$v2sxtT11QMbLFhjN1GPFLT$I9TsdDIuPqXkrzePhU/koIdqpsXilN0mOuDlpnb3NP8=",
+    "created_at": "2026-01-20T23:34:45.431Z",
+    "expires_at": "2026-01-20T23:39:45.431Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 25,
+  "fields": {
+    "user": [
+      "sebastian"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$AQRbOMhIYQUGWrWlDsYXu4$yGkVaA8tpXo72afwoxLffgRi/zvyt66E4Sox86tOjkU=",
+    "created_at": "2026-01-20T23:49:19.090Z",
+    "expires_at": "2026-01-20T23:54:19.089Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 26,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$rPZxYN9z6YfjG1KTNRAdOR$ZCP5l2n4O2Zube/rh+VSljvUHDj2XHn+2YW+S8EHZb0=",
+    "created_at": "2026-01-20T23:58:46.042Z",
+    "expires_at": "2026-01-21T00:03:46.042Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 27,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$KnH8bMW16KVh6VFKx219Ip$aSmngQxEl6qN9TSTa7H8t3C2Jxp5nfqo9VGcsyarRjI=",
+    "created_at": "2026-01-21T14:06:52.027Z",
+    "expires_at": "2026-01-21T14:11:52.026Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 28,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$RqRUWWKjjmOUOamyuS6oIx$Fm4NjZ2CrZRCAkI0Z5LV2Ge2N9dvtlh6ybnZhcCZ5Kc=",
+    "created_at": "2026-01-21T14:20:01.186Z",
+    "expires_at": "2026-01-21T14:25:01.185Z",
+    "is_used": true
+  }
+},
+{
+  "model": "twofa.emailotp",
+  "pk": 29,
+  "fields": {
+    "user": [
+      "bryan"
+    ],
+    "code_hash": "pbkdf2_sha256$1000000$aKo70e11DdFb0i6dtZwmHE$Eil0n2JGccVVcweih1t0YlRfVnPJ1026kDXgy7xYVxo=",
+    "created_at": "2026-01-21T14:25:23.969Z",
+    "expires_at": "2026-01-21T14:30:23.968Z",
+    "is_used": true
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2026-01-20T20:35:16.955Z",
+    "user": [
+      "bryan"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "5",
+    "object_repr": "sebastian",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2026-01-20T20:35:35.904Z",
+    "user": [
+      "bryan"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "5",
+    "object_repr": "sebastian",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"First name\", \"Last name\", \"Email address\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2026-01-20T20:35:46.050Z",
+    "user": [
+      "bryan"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "5",
+    "object_repr": "sebastian",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Staff status\", \"Superuser status\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2026-01-20T21:10:30.604Z",
+    "user": [
+      "bryan"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "5",
+    "object_repr": "sebastian",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Email address\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2026-01-20T21:49:52.808Z",
+    "user": [
+      "bryan"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "6",
+    "object_repr": "jorge",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2026-01-20T21:50:09.570Z",
+    "user": [
+      "bryan"
+    ],
+    "content_type": [
+      "auth",
+      "user"
+    ],
+    "object_id": "6",
+    "object_repr": "jorge",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"First name\", \"Last name\", \"Email address\", \"Staff status\", \"Superuser status\"]}}]"
+  }
+}
+]

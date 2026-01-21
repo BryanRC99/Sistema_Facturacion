@@ -1,34 +1,89 @@
 <!doctype html>
 <html>
-  <body style="margin:0;padding:0;background:#f4f6f8;font-family:Arial, sans-serif;">
-    <div style="max-width:520px;margin:30px auto;background:#ffffff;border-radius:10px;overflow:hidden;border:1px solid #e6e6e6;">
-      <div style="padding:18px 22px;background:#0f172a;color:#fff;">
-        <div style="font-size:16px;font-weight:700;">Sistema de Facturación</div>
-        <div style="font-size:12px;opacity:.9;">Código de verificación</div>
+  <body style="margin:0;padding:0;background:#f4f6f8;font-family:Arial, Helvetica, sans-serif;">
+    <div style="max-width:560px;margin:30px auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e6e6e6;">
+
+      <!-- HEADER -->
+      <div style="padding:20px 24px;background:#0f172a;color:#ffffff;">
+        <table width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="vertical-align:middle;">
+              <img src="{{ logo_url }}" alt="Sistema de Facturación"
+                   style="height:38px;display:block;">
+            </td>
+            <td style="text-align:right;font-size:12px;opacity:0.9;">
+              Verificación de seguridad
+            </td>
+          </tr>
+        </table>
       </div>
 
-      <div style="padding:22px;">
-        <p style="margin:0 0 10px;">Hola {{ user.username }},</p>
-        <p style="margin:0 0 14px;color:#334155;">Tu código de verificación es:</p>
+      <!-- BODY -->
+      <div style="padding:26px 24px;">
+        <p style="margin:0 0 10px;font-size:15px;color:#0f172a;">
+          Hola <b>{{ user.username }}</b>,
+        </p>
 
-        <div style="text-align:center;margin:18px 0;">
-          <div style="display:inline-block;padding:14px 18px;border:1px dashed #94a3b8;border-radius:10px;font-size:28px;letter-spacing:6px;font-weight:700;">
+        <p style="margin:0 0 16px;font-size:14px;color:#334155;">
+          Recibimos un intento de inicio de sesión en tu cuenta.
+          Para continuar, usa el siguiente código de verificación:
+        </p>
+
+        <!-- OTP -->
+        <div style="text-align:center;margin:22px 0;">
+          <div style="display:inline-block;
+                      padding:16px 22px;
+                      border:2px dashed #94a3b8;
+                      border-radius:12px;
+                      font-size:30px;
+                      letter-spacing:8px;
+                      font-weight:700;
+                      color:#0f172a;">
             {{ code }}
           </div>
         </div>
 
-        <p style="margin:0;color:#334155;">
-          Este código expira en <b>{{ ttl }} minutos</b>.
+        <p style="margin:0 0 14px;font-size:14px;color:#334155;">
+          ⏱️ Este código expira en <b>{{ ttl }} minutos</b>.
         </p>
 
-        <hr style="border:none;border-top:1px solid #e2e8f0;margin:18px 0;">
-        <p style="margin:0;font-size:12px;color:#64748b;">
-          Si tú no intentaste iniciar sesión, ignora este correo.
+        <!-- SECURITY INFO -->
+        <div style="margin:18px 0;padding:14px 16px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;">
+          <p style="margin:0 0 8px;font-size:13px;font-weight:600;color:#0f172a;">
+            Detalles del intento de acceso
+          </p>
+
+          <table width="100%" cellpadding="0" cellspacing="0" style="font-size:13px;color:#334155;">
+            <tr>
+              <td style="padding:4px 0;width:120px;">📍 IP</td>
+              <td style="padding:4px 0;">{{ ip_address }}</td>
+            </tr>
+            <tr>
+              <td style="padding:4px 0;">💻 Dispositivo</td>
+              <td style="padding:4px 0;">{{ device }}</td>
+            </tr>
+            <tr>
+              <td style="padding:4px 0;">🌐 Navegador</td>
+              <td style="padding:4px 0;">{{ browser }}</td>
+            </tr>
+            <tr>
+              <td style="padding:4px 0;">🕒 Fecha</td>
+              <td style="padding:4px 0;">{{ datetime }}</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- WARNING -->
+        <p style="margin:0;font-size:13px;color:#475569;">
+          ⚠️ Si <b>NO</b> fuiste tú quien intentó iniciar sesión,
+          te recomendamos cambiar tu contraseña inmediatamente y
+          contactar al administrador del sistema.
         </p>
       </div>
 
-      <div style="padding:12px 22px;background:#f8fafc;font-size:12px;color:#64748b;">
-        © {{ year }} Sistema de Facturación
+      <!-- FOOTER -->
+      <div style="padding:14px 22px;background:#f1f5f9;font-size:12px;color:#64748b;text-align:center;">
+        © {{ year }} Sistema de Facturación · Todos los derechos reservados
       </div>
     </div>
   </body>

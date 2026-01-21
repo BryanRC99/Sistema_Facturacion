@@ -20,7 +20,7 @@ class Factura(models.Model):
     subtotal_cero = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     descuento_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     iva_total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    clave_acceso = models.CharField(max_length=49, blank=True, null=True)
+    clave_acceso = models.CharField(max_length=150, blank=True, null=True)
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     estado = models.CharField(max_length=20, default="ACTIVA")  # ACTIVA / ANULADA

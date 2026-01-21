@@ -31,7 +31,7 @@ def login_with_2fa(request):
             return render(request, "registration/login.html")
 
         otp, code = create_otp(user)
-        send_otp_email(user, code)
+        send_otp_email(request, user, code)
 
         request.session["pending_2fa_user_id"] = user.id
         request.session["otp_last_sent_ts"] = int(timezone.now().timestamp())
