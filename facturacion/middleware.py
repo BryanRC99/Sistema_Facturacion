@@ -1,27 +1,16 @@
-from django.conf import settings
 from django.shortcuts import redirect
-from django.urls import resolve
-from urllib.parse import quote
 
 class LoginRequiredMiddleware:
-    EXEMPT_URL_NAMES = {
-        "login",
-        "logout",
-        "password_reset",
-        "password_reset_done",
-        "password_reset_confirm",
-        "password_reset_complete",
-    }
 
-    EXEMPT_PREFIXES = (
-        "/accounts/login",
-        "/accounts/logout",
-        "/admin",
-        "/static/",
-        "/media/",
-        "/2fa/",
-        "/no-autorizado",
-    )
+    EXEMPT_PATHS = [
+        '/accounts/login/',
+        '/accounts/logout/',
+        '/no-autorizado/',
+        '/admin/',
+
+        # ✅ 2FA: permitir la pantalla de verificación
+        '/2fa/verificar/',
+    ]
 
     def __init__(self, get_response):
         self.get_response = get_response
@@ -29,23 +18,23 @@ class LoginRequiredMiddleware:
     def __call__(self, request):
         path = request.path
 
-        # 1️⃣ Permitir prefijos
-        for prefix in self.EXEMPT_PREFIXES:
-            if path.startswith(prefix):
+        # ✅ Permitir archivos estáticos y media
+        if path.startswith('/static/') or path.startswith('/media/'):
+            return self.get_response(request)
+
+        # ✅ Permitir rutas exentas (login, logout, no-autorizado, admin, verify)
+        for exempt in self.EXEMPT_PATHS:
+            if path.startswith(exempt):
                 return self.get_response(request)
 
-        # 2️⃣ Permitir vistas auth por nombre
-        try:
-            match = resolve(path)
-            if match.url_name in self.EXEMPT_URL_NAMES:
-                return self.get_response(request)
-        except Exception:
-            pass
+        # ✅ Permitir cualquier ruta /2fa/ solo si hay sesión pendiente
+        # (evita que cualquiera acceda a /2fa/ sin pasar por login)
+        if path.startswith('/2fa/') and request.session.get('pending_2fa_user_id'):
+            return self.get_response(request)
 
-        # 3️⃣ Si está autenticado, pasar
+        # ✅ Si ya está autenticado, seguir normal
         if request.user.is_authenticated:
             return self.get_response(request)
 
-        # 4️⃣ Redirigir al login con next
-        login_url = settings.LOGIN_URL
-        return redirect(f"{login_url}?next={quote(request.get_full_path())}")
+        # 🚫 Bloquear todo lo demás
+        return redirect('acceso_no_autorizado')

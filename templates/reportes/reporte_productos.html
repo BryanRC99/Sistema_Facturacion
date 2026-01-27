@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}Reporte de productos{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto mt-10 px-4 space-y-8">
+
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div class="flex items-start gap-3">
+            <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                         bg-purple-50 dark:bg-purple-500/10
+                         border border-purple-100 dark:border-purple-500/20">
+                <i data-lucide="package" class="w-6 h-6 text-purple-700 dark:text-purple-300"></i>
+            </span>
+
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                    Reporte de productos
+                </h1>
+                <p class="mt-2 text-sm text-gray-600 dark:text-slate-400">
+                    Ranking de productos más vendidos.
+                </p>
+            </div>
+        </div>
+
+        <a href="{% url 'dashboard' %}"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
+                  bg-white dark:bg-slate-900
+                  border border-gray-200 dark:border-slate-700
+                  text-gray-800 dark:text-slate-100
+                  hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            Volver
+        </a>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+        <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-2">
+                <i data-lucide="sliders-horizontal" class="w-5 h-5 text-purple-700 dark:text-purple-300"></i>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Filtros
+                </h2>
+            </div>
+        </div>
+
+        <div class="p-6 sm:p-7">
+            <form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Inicio</label>
+                    <input type="date" name="fecha_inicio" value="{{ fecha_inicio|date:'Y-m-d' }}"
+                           class="w-full rounded-xl border-gray-200 dark:border-slate-700
+                                  bg-white dark:bg-slate-950
+                                  text-gray-900 dark:text-slate-100">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Fin</label>
+                    <input type="date" name="fecha_fin" value="{{ fecha_fin|date:'Y-m-d' }}"
+                           class="w-full rounded-xl border-gray-200 dark:border-slate-700
+                                  bg-white dark:bg-slate-950
+                                  text-gray-900 dark:text-slate-100">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Buscar producto</label>
+                    <input type="text" name="q" value="{{ q|default:'' }}"
+                           placeholder="Nombre del producto"
+                           class="w-full rounded-xl border-gray-200 dark:border-slate-700
+                                  bg-white dark:bg-slate-950
+                                  text-gray-900 dark:text-slate-100">
+                </div>
+
+                <div class="flex items-end gap-2">
+                    <button class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
+                                   bg-purple-600 hover:bg-purple-700 text-white shadow transition">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                        Filtrar
+                    </button>
+
+                    <a href="{% url 'reporte_productos' %}"
+                       class="px-4 py-2 rounded-xl border border-gray-200 dark:border-slate-700">
+                        <i data-lucide="rotate-ccw"></i>
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- KPI -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border flex gap-4">
+            <i data-lucide="package" class="w-8 h-8 text-purple-600"></i>
+            <div>
+                <p class="text-sm text-gray-500">Productos</p>
+                <p class="text-2xl font-bold">{{ productos|length }}</p>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border flex gap-4">
+            <i data-lucide="shopping-cart" class="w-8 h-8 text-green-600"></i>
+            <div>
+                <p class="text-sm text-gray-500">Más vendido</p>
+                <p class="text-2xl font-bold">
+                    {% if productos %}{{ productos.0.total_vendido|floatformat:2 }}{% else %}0{% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border flex gap-4">
+            <i data-lucide="hash" class="w-8 h-8 text-blue-600"></i>
+            <div>
+                <p class="text-sm text-gray-500">Unidades top</p>
+                <p class="text-2xl font-bold">
+                    {% if productos %}{{ productos.0.cantidad_vendida }}{% else %}0{% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRÁFICO -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border overflow-hidden">
+        <div class="px-6 py-4 bg-gray-50 dark:bg-slate-800 border-b">
+            <h2 class="text-lg font-bold">Top 10 productos</h2>
+        </div>
+        <div class="p-6">
+            <canvas id="productosChart" height="120"></canvas>
+        </div>
+    </div>
+
+    <!-- TABLA -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+                <thead>
+                    <tr class="border-b text-gray-500">
+                        <th class="px-4 py-3 text-left">Producto</th>
+                        <th class="px-4 py-3 text-right">Cantidad</th>
+                        <th class="px-4 py-3 text-right">Total vendido</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in productos %}
+                    <tr class="border-b hover:bg-gray-50 dark:hover:bg-slate-800">
+                        <td class="px-4 py-3 font-medium">
+                            {{ p.producto__nombre }}
+                        </td>
+                        <td class="px-4 py-3 text-right">
+                            {{ p.cantidad_vendida }}
+                        </td>
+                        <td class="px-4 py-3 text-right font-semibold">
+                            $ {{ p.total_vendido|floatformat:2 }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center py-10 text-gray-500">
+                            No hay productos en este rango
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    if (window.lucide) lucide.createIcons();
+
+    const labels = [
+        {% for p in productos|slice:":10" %}
+            "{{ p.producto__nombre|escapejs }}",
+        {% endfor %}
+    ];
+
+    const data = [
+        {% for p in productos|slice:":10" %}
+            {{ p.total_vendido }},
+        {% endfor %}
+    ];
+
+    const canvas = document.getElementById("productosChart");
+    if (!canvas) return;
+
+    new Chart(canvas, {
+        type: "bar",
+        data: {
+            labels,
+            datasets: [{
+                label: "Total vendido ($)",
+                data,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+});
+</script>
+
+{% endblock %}

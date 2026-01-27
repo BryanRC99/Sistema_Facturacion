@@ -1,0 +1,314 @@
+{% extends "base.html" %}
+
+{% block title %}Reporte de utilidad{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto mt-10 px-4 space-y-8">
+
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div class="flex items-start gap-3">
+            <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                         bg-teal-50 dark:bg-teal-500/10
+                         border border-teal-100 dark:border-teal-500/20">
+                <i data-lucide="line-chart" class="w-6 h-6 text-teal-700 dark:text-teal-300"></i>
+            </span>
+
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                    Reporte de utilidad
+                </h1>
+                <p class="mt-2 text-sm text-gray-600 dark:text-slate-400">
+                    Utilidad por producto (vendido - costo) y margen porcentual.
+                </p>
+            </div>
+        </div>
+
+        <a href="{% url 'dashboard' %}"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
+                  bg-white dark:bg-slate-900
+                  border border-gray-200 dark:border-slate-700
+                  text-gray-800 dark:text-slate-100
+                  hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            Volver
+        </a>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+        <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-2">
+                <i data-lucide="sliders-horizontal" class="w-5 h-5 text-teal-700 dark:text-teal-300"></i>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Filtros
+                </h2>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                Filtra por fechas y (opcional) categoría.
+            </p>
+        </div>
+
+        <div class="p-6 sm:p-7">
+            <form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-1">Inicio</label>
+                    <input type="date" name="fecha_inicio" value="{{ fecha_inicio|date:'Y-m-d' }}"
+                           class="w-full rounded-xl border-gray-200 dark:border-slate-700
+                                  bg-white dark:bg-slate-950
+                                  text-gray-900 dark:text-slate-100
+                                  focus:ring-teal-500 focus:border-teal-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-1">Fin</label>
+                    <input type="date" name="fecha_fin" value="{{ fecha_fin|date:'Y-m-d' }}"
+                           class="w-full rounded-xl border-gray-200 dark:border-slate-700
+                                  bg-white dark:bg-slate-950
+                                  text-gray-900 dark:text-slate-100
+                                  focus:ring-teal-500 focus:border-teal-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-1">Categoría (opcional)</label>
+
+                    {# Si algún día pasas "categorias" desde la vista, esto se verá como select. #}
+                    {% if categorias %}
+                        <select name="categoria_id"
+                                class="w-full rounded-xl border-gray-200 dark:border-slate-700
+                                       bg-white dark:bg-slate-950
+                                       text-gray-900 dark:text-slate-100
+                                       focus:ring-teal-500 focus:border-teal-500">
+                            <option value="">Todas</option>
+                            {% for cat in categorias %}
+                                <option value="{{ cat.id }}" {% if categoria_id|stringformat:"s" == cat.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ cat.nombre }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    {% else %}
+                        <input type="text" name="categoria_id" value="{{ categoria_id|default:'' }}"
+                               placeholder="ID categoría"
+                               class="w-full rounded-xl border-gray-200 dark:border-slate-700
+                                      bg-white dark:bg-slate-950
+                                      text-gray-900 dark:text-slate-100">
+                    {% endif %}
+                </div>
+
+                <div class="flex items-end gap-2">
+                    <button class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
+                                   bg-teal-600 hover:bg-teal-700 text-white shadow transition">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                        Filtrar
+                    </button>
+
+                    <a href="{% url 'reporte_utilidad' %}"
+                       class="inline-flex items-center justify-center px-4 py-2 rounded-xl text-sm font-semibold
+                              bg-white dark:bg-slate-900
+                              border border-gray-200 dark:border-slate-700
+                              text-gray-800 dark:text-slate-100
+                              hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {# ===== KPIs (calculados en template) ===== #}
+    {% with total_vendido=0 total_costo=0 total_utilidad=0 margen_sum=0 %}
+        {# Nota: Django templates no dejan sumar fácil con precisión; hacemos KPIs “ligeros” con JS abajo #}
+    {% endwith %}
+
+    <!-- KPI CARDS (se llenan con JS tomando la tabla) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 flex items-center gap-4">
+            <div class="bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-300 p-3 rounded-xl border border-green-200/50 dark:border-green-500/20">
+                <i data-lucide="dollar-sign" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 dark:text-slate-400">Total vendido</p>
+                <p id="kpiVendido" class="text-2xl font-bold text-gray-800 dark:text-slate-100">$ 0.00</p>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 flex items-center gap-4">
+            <div class="bg-amber-100 dark:bg-amber-500/10 text-amber-700 dark:text-amber-300 p-3 rounded-xl border border-amber-200/50 dark:border-amber-500/20">
+                <i data-lucide="wallet" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 dark:text-slate-400">Total costo</p>
+                <p id="kpiCosto" class="text-2xl font-bold text-gray-800 dark:text-slate-100">$ 0.00</p>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 flex items-center gap-4">
+            <div class="bg-teal-100 dark:bg-teal-500/10 text-teal-700 dark:text-teal-300 p-3 rounded-xl border border-teal-200/50 dark:border-teal-500/20">
+                <i data-lucide="trending-up" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 dark:text-slate-400">Utilidad</p>
+                <p id="kpiUtilidad" class="text-2xl font-bold text-gray-800 dark:text-slate-100">$ 0.00</p>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 flex items-center gap-4">
+            <div class="bg-blue-100 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 p-3 rounded-xl border border-blue-200/50 dark:border-blue-500/20">
+                <i data-lucide="percent" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 dark:text-slate-400">Margen prom.</p>
+                <p id="kpiMargen" class="text-2xl font-bold text-gray-800 dark:text-slate-100">0%</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRÁFICO -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+        <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-2">
+                <i data-lucide="bar-chart-3" class="w-5 h-5 text-teal-700 dark:text-teal-300"></i>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Top 10 productos (por utilidad)
+                </h2>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                Ranking de utilidad acumulada por producto.
+            </p>
+        </div>
+
+        <div class="p-6 sm:p-7">
+            <canvas id="utilidadChart" height="120"></canvas>
+        </div>
+    </div>
+
+    <!-- TABLA -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+        <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-2">
+                <i data-lucide="list" class="w-5 h-5 text-teal-700 dark:text-teal-300"></i>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Detalle de utilidad
+                </h2>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                Vendido, costo, utilidad y margen.
+            </p>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm" id="tablaUtilidad">
+                <thead class="bg-white dark:bg-slate-900">
+                    <tr class="border-b border-gray-200 dark:border-slate-700 text-gray-500 dark:text-slate-400">
+                        <th class="py-3 px-4 text-left font-semibold">Producto</th>
+                        <th class="py-3 px-4 text-right font-semibold">Vendido</th>
+                        <th class="py-3 px-4 text-right font-semibold">Costo</th>
+                        <th class="py-3 px-4 text-right font-semibold">Utilidad</th>
+                        <th class="py-3 px-4 text-right font-semibold">Margen</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for u in utilidad %}
+                        <tr class="border-b border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition"
+                            data-vendido="{{ u.total_vendido }}"
+                            data-costo="{{ u.total_costo }}"
+                            data-utilidad="{{ u.utilidad }}"
+                            data-margen="{{ u.margen_pct }}">
+                            <td class="py-3 px-4 font-medium text-gray-900 dark:text-slate-100">
+                                {{ u.producto__nombre|default:"(Sin nombre)" }}
+                            </td>
+                            <td class="py-3 px-4 text-right text-gray-700 dark:text-slate-200 whitespace-nowrap">
+                                $ {{ u.total_vendido|floatformat:2 }}
+                            </td>
+                            <td class="py-3 px-4 text-right text-gray-700 dark:text-slate-200 whitespace-nowrap">
+                                $ {{ u.total_costo|floatformat:2 }}
+                            </td>
+                            <td class="py-3 px-4 text-right font-semibold whitespace-nowrap
+                                       {% if u.utilidad < 0 %}
+                                            text-red-600 dark:text-red-400
+                                       {% else %}
+                                            text-teal-700 dark:text-teal-300
+                                       {% endif %}">
+                                $ {{ u.utilidad|floatformat:2 }}
+                            </td>
+                            <td class="py-3 px-4 text-right text-gray-700 dark:text-slate-200 whitespace-nowrap">
+                                {{ u.margen_pct|floatformat:1 }}%
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-10 text-gray-500 dark:text-slate-400">
+                                No hay datos de utilidad para este rango.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    if (window.lucide) lucide.createIcons();
+
+    // ---- KPIs desde tabla ----
+    const rows = Array.from(document.querySelectorAll("#tablaUtilidad tbody tr[data-vendido]"));
+    let vendido = 0, costo = 0, utilidad = 0, margenSum = 0, margenCount = 0;
+
+    rows.forEach(r => {
+        const v = parseFloat(r.dataset.vendido || "0");
+        const c = parseFloat(r.dataset.costo || "0");
+        const u = parseFloat(r.dataset.utilidad || "0");
+        const m = parseFloat(r.dataset.margen || "0");
+        vendido += v;
+        costo += c;
+        utilidad += u;
+        if (!isNaN(m)) { margenSum += m; margenCount += 1; }
+    });
+
+    const fmt = (n) => (isFinite(n) ? n.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : "0.00");
+    document.getElementById("kpiVendido").textContent = "$ " + fmt(vendido);
+    document.getElementById("kpiCosto").textContent = "$ " + fmt(costo);
+    document.getElementById("kpiUtilidad").textContent = "$ " + fmt(utilidad);
+    const margenProm = margenCount ? (margenSum / margenCount) : 0;
+    document.getElementById("kpiMargen").textContent = (isFinite(margenProm) ? margenProm.toFixed(1) : "0.0") + "%";
+
+    // ---- Chart Top 10 por utilidad ----
+    const labels = [
+        {% for u in utilidad|slice:":10" %}
+            "{{ u.producto__nombre|default:'(Sin nombre)'|escapejs }}",
+        {% endfor %}
+    ];
+
+    const data = [
+        {% for u in utilidad|slice:":10" %}
+            {{ u.utilidad|default:0 }},
+        {% endfor %}
+    ];
+
+    const canvas = document.getElementById("utilidadChart");
+    if (!canvas) return;
+
+    new Chart(canvas, {
+        type: "bar",
+        data: {
+            labels,
+            datasets: [{
+                label: "Utilidad ($)",
+                data,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+});
+</script>
+{% endblock %}

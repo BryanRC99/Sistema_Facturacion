@@ -4,112 +4,147 @@
 {% load static %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto mt-10">
 
-    <div class="flex items-center justify-between mb-6">
-        <h1 class="text-3xl font-semibold text-gray-800 dark:text-slate-100">
-            Usuarios
-        </h1>
+<!-- ENCABEZADO -->
+<div class="max-w-5xl mx-auto mt-10">
 
-        <a href="{% url 'usuarios:crear' %}"
-           class="bg-blue-600 hover:bg-blue-700 text-white font-medium
-                  py-2 px-4 rounded-lg transition duration-200">
-            + Crear usuario
-        </a>
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
+        <div class="flex items-start gap-3">
+            <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                         bg-indigo-50 dark:bg-indigo-500/10
+                         border border-indigo-100 dark:border-indigo-500/20">
+                <i data-lucide="users" class="w-6 h-6 text-indigo-700 dark:text-indigo-300"></i>
+            </span>
+
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                    Usuarios
+                </h1>
+
+                <div class="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-slate-400">
+                    <span class="inline-flex items-center gap-2">
+                        <i data-lucide="database" class="w-4 h-4"></i>
+                        {{ usuarios|length }} registrado(s)
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+            <a href="{% url 'usuarios:crear' %}"
+               class="inline-flex items-center gap-2
+                      bg-indigo-600 hover:bg-indigo-700
+                      text-white
+                      px-4 py-2.5 rounded-xl
+                      text-sm font-semibold
+                      shadow-md
+                      transition">
+                <i data-lucide="user-plus" class="w-4 h-4"></i>
+                Crear usuario
+            </a>
+        </div>
     </div>
 
-    <!-- Buscador -->
-    <div class="mb-3">
-        <input id="busquedaUsuario" type="text" placeholder="Buscar usuario..."
-               class="w-full p-2 rounded-lg
-                      border border-gray-300 dark:border-slate-700
-                      bg-white dark:bg-slate-800
-                      text-gray-700 dark:text-slate-200
-                      placeholder-gray-400 dark:placeholder-slate-400
-                      focus:ring focus:ring-blue-500 focus:outline-none"/>
+    <!-- BUSCADOR -->
+    <div class="mb-4">
+        <div class="relative">
+            <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <i data-lucide="search" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+            </span>
+
+            <input id="busquedaUsuario" type="text" placeholder="Buscar usuario..."
+                   class="w-full pl-10 pr-3 py-2.5 rounded-xl
+                          border border-gray-300 dark:border-slate-700
+                          bg-white dark:bg-slate-800
+                          text-gray-700 dark:text-slate-200
+                          placeholder-gray-400 dark:placeholder-slate-400
+                          focus:ring-2 focus:ring-indigo-500 focus:outline-none"/>
+        </div>
     </div>
 
-    <!-- Tabla -->
-    <div class="overflow-x-auto rounded-xl shadow-md
-                bg-white dark:bg-slate-900">
-        <table class="min-w-full text-sm
-                     text-gray-700 dark:text-slate-200">
+    <!-- TABLA -->
+    <div class="overflow-x-auto rounded-2xl shadow-xl
+                bg-white dark:bg-slate-900
+                border border-gray-200 dark:border-slate-700">
 
-            <thead
-                class="bg-gray-100 dark:bg-slate-800
-                       border-b border-gray-200 dark:border-slate-700">
-                <tr>
-                    <th class="text-left py-3 px-4 font-medium text-gray-700 dark:text-slate-300">
-                        Usuario
-                    </th>
-                    <th class="text-left py-3 px-4 font-medium text-gray-700 dark:text-slate-300">
-                        Nombre
-                    </th>
-                    <th class="text-left py-3 px-4 font-medium text-gray-700 dark:text-slate-300">
-                        Email
-                    </th>
-                    <th class="text-left py-3 px-4 font-medium text-gray-700 dark:text-slate-300">
-                        Acciones
-                    </th>
+        <table class="min-w-full text-sm text-gray-700 dark:text-slate-200">
+            <thead class="bg-gray-50 dark:bg-slate-800
+                          border-b border-gray-200 dark:border-slate-700">
+                <tr class="text-gray-600 dark:text-slate-300 uppercase text-xs tracking-wide">
+                    <th class="text-left py-3 px-6 font-semibold">Usuario</th>
+                    <th class="text-left py-3 px-6 font-semibold">Nombre</th>
+                    <th class="text-left py-3 px-6 font-semibold">Email</th>
+                    <th class="text-left py-3 px-6 font-semibold">Acciones</th>
                 </tr>
             </thead>
 
-            <tbody>
+            <tbody id="tbodyUsuarios" class="bg-white dark:bg-slate-900">
                 {% for user in usuarios %}
-                <tr
-                    class="border-b border-gray-200 dark:border-slate-700
-                           hover:bg-gray-50 dark:hover:bg-slate-800 transition">
-
-                    <td class="py-3 px-4">
+                <tr class="border-b dark:border-slate-800
+                           hover:bg-gray-50 dark:hover:bg-slate-800/60
+                           transition">
+                    <td class="py-3 px-6 font-semibold text-gray-800 dark:text-slate-100">
                         {{ user.username }}
                     </td>
 
-                    <td class="py-3 px-4">
+                    <td class="py-3 px-6">
                         {{ user.first_name }} {{ user.last_name }}
                     </td>
 
-                    <td class="py-3 px-4">
+                    <td class="py-3 px-6">
                         {{ user.email }}
                     </td>
 
-                    <td class="py-3 px-4 flex space-x-3">
+                    <td class="py-3 px-6">
+                        <div class="flex items-center gap-2">
 
-                        <!-- Ver -->
-                        <button type="button"
-                                class="text-green-600 dark:text-green-400
-                                       hover:text-green-800 dark:hover:text-green-300
-                                       font-semibold"
-                                onclick="abrirModalVer(this)"
-                                data-username="{{ user.username }}"
-                                data-nombre="{{ user.first_name }} {{ user.last_name }}"
-                                data-email="{{ user.email }}">
-                            <i data-lucide="eye" class="w-4 h-4"></i>
-                        </button>
+                            <!-- Ver -->
+                            <button type="button"
+                                    class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                                           border border-emerald-200 dark:border-emerald-400/20
+                                           bg-emerald-50 dark:bg-emerald-500/10
+                                           text-emerald-700 dark:text-emerald-300
+                                           hover:bg-emerald-100 dark:hover:bg-emerald-500/20
+                                           transition"
+                                    onclick="abrirModalVer(this)"
+                                    data-username="{{ user.username }}"
+                                    data-nombre="{{ user.first_name }} {{ user.last_name }}"
+                                    data-email="{{ user.email }}"
+                                    title="Ver">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                            </button>
 
-                        <!-- Editar -->
-                        <a href="{% url 'usuarios:editar' user.id %}"
-                           class="text-blue-600 dark:text-blue-400
-                                  hover:text-blue-800 dark:hover:text-blue-300
-                                  font-semibold">
-                            <i data-lucide="pencil" class="w-4 h-4"></i>
-                        </a>
+                            <!-- Editar -->
+                            <a href="{% url 'usuarios:editar' user.id %}"
+                               class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                                      border border-blue-200 dark:border-blue-400/20
+                                      bg-blue-50 dark:bg-blue-500/10
+                                      text-blue-700 dark:text-blue-300
+                                      hover:bg-blue-100 dark:hover:bg-blue-500/20
+                                      transition"
+                               title="Editar">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                            </a>
 
-                        <!-- Eliminar -->
-                        <button type="button"
-                                class="text-red-600 dark:text-red-400
-                                       hover:text-red-800 dark:hover:text-red-300
-                                       font-semibold"
-                                onclick="abrirModalEliminar('{{ user.id }}', '{{ user.username }}')">
-                            <i data-lucide="trash" class="w-4 h-4"></i>
-                        </button>
+                            <!-- Eliminar -->
+                            <button type="button"
+                                    class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                                           border border-red-200 dark:border-red-400/20
+                                           bg-red-50 dark:bg-red-500/10
+                                           text-red-700 dark:text-red-300
+                                           hover:bg-red-100 dark:hover:bg-red-500/20
+                                           transition"
+                                    onclick="abrirModalEliminar('{{ user.id }}', '{{ user.username }}')"
+                                    title="Eliminar">
+                                <i data-lucide="trash" class="w-4 h-4"></i>
+                            </button>
 
+                        </div>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td class="py-6 px-4 text-center
-                               text-gray-500 dark:text-slate-400"
-                        colspan="4">
+                    <td class="py-10 px-6 text-center text-gray-500 dark:text-slate-400" colspan="4">
                         No hay usuarios registrados.
                     </td>
                 </tr>
@@ -118,25 +153,36 @@
         </table>
     </div>
 
-    <!-- Paginación -->
-    <div class="flex justify-between items-center mt-4">
-        <span id="paginaActual" class="text-gray-600 dark:text-slate-400"></span>
+    <!-- PAGINACIÓN -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-4">
+        <span id="paginaActual"
+              class="inline-flex items-center gap-2 text-sm font-semibold
+                     text-gray-600 dark:text-slate-300
+                     px-3 py-2 rounded-xl
+                     bg-gray-50 dark:bg-slate-800/50
+                     border border-gray-200 dark:border-white/10 w-fit">
+            <i data-lucide="layers" class="w-4 h-4"></i>
+        </span>
 
-        <div class="flex space-x-2">
+        <div class="flex gap-2">
             <button id="prevPage"
-                class="px-4 py-2 rounded-lg transition
-                       bg-gray-200 hover:bg-gray-300
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl transition
+                       bg-gray-100 hover:bg-gray-200
                        dark:bg-slate-800 dark:hover:bg-slate-700
-                       text-gray-700 dark:text-slate-200">
+                       text-gray-700 dark:text-slate-200
+                       border border-gray-200 dark:border-white/10">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i>
                 Anterior
             </button>
 
             <button id="nextPage"
-                class="px-4 py-2 rounded-lg transition
-                       bg-gray-200 hover:bg-gray-300
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl transition
+                       bg-gray-100 hover:bg-gray-200
                        dark:bg-slate-800 dark:hover:bg-slate-700
-                       text-gray-700 dark:text-slate-200">
+                       text-gray-700 dark:text-slate-200
+                       border border-gray-200 dark:border-white/10">
                 Siguiente
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
             </button>
         </div>
     </div>
@@ -149,29 +195,34 @@
             bg-black/40 backdrop-blur-sm">
 
     <div class="bg-white dark:bg-slate-900
-                rounded-xl shadow-xl max-w-lg w-full p-6
+                rounded-2xl shadow-xl max-w-lg w-full p-6
+                border border-gray-200 dark:border-slate-700
                 relative animate-fadeIn">
 
         <button
             class="absolute top-3 right-3
                    text-gray-500 dark:text-slate-400
                    hover:text-gray-800 dark:hover:text-slate-200
-                   text-2xl font-bold"
+                   text-2xl font-bold transition"
             onclick="cerrarModal('modalVer')">
             &times;
         </button>
 
-        <h2 class="text-2xl font-bold mb-4
-                   text-gray-800 dark:text-slate-100">
-            Detalle del Usuario
-        </h2>
+        <div class="flex items-center gap-2 mb-4">
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                         bg-indigo-50 dark:bg-indigo-500/10
+                         border border-indigo-100 dark:border-indigo-500/20">
+                <i data-lucide="user" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+            </span>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-slate-100">
+                Detalle del Usuario
+            </h2>
+        </div>
 
-        <div class="space-y-2
-                    text-gray-700 dark:text-slate-200
-                    overflow-y-auto max-h-96">
-            <p><strong>Usuario:</strong> <span id="verUsername"></span></p>
-            <p><strong>Nombre:</strong> <span id="verNombre"></span></p>
-            <p><strong>Email:</strong> <span id="verEmail"></span></p>
+        <div class="space-y-2 text-gray-700 dark:text-slate-200 overflow-y-auto max-h-96">
+            <p><strong class="text-gray-900 dark:text-slate-100">Usuario:</strong> <span id="verUsername"></span></p>
+            <p><strong class="text-gray-900 dark:text-slate-100">Nombre:</strong> <span id="verNombre"></span></p>
+            <p><strong class="text-gray-900 dark:text-slate-100">Email:</strong> <span id="verEmail"></span></p>
         </div>
     </div>
 </div>
@@ -182,41 +233,50 @@
             bg-black/40 backdrop-blur-sm">
 
     <div class="bg-white dark:bg-slate-900
-                rounded-xl shadow-xl max-w-md w-full p-6
+                rounded-2xl shadow-xl max-w-md w-full p-6
+                border border-gray-200 dark:border-slate-700
                 relative animate-fadeIn">
 
         <button
             class="absolute top-3 right-3
                    text-gray-500 dark:text-slate-400
                    hover:text-gray-800 dark:hover:text-slate-200
-                   text-2xl font-bold"
+                   text-2xl font-bold transition"
             onclick="cerrarModal('modalEliminar')">
             &times;
         </button>
 
-        <h2 class="text-xl font-bold mb-4
-                   text-red-600 dark:text-red-400">
-            Confirmar Eliminación
-        </h2>
+        <div class="flex items-center gap-2 mb-4">
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                         bg-red-50 dark:bg-red-500/10
+                         border border-red-100 dark:border-red-500/20">
+                <i data-lucide="trash-2" class="w-5 h-5 text-red-700 dark:text-red-300"></i>
+            </span>
+            <h2 class="text-xl font-bold text-red-700 dark:text-red-300">
+                Confirmar Eliminación
+            </h2>
+        </div>
 
         <p class="text-gray-700 dark:text-slate-200 mb-4">
             ¿Seguro que deseas eliminar al usuario
-            <strong id="eliminarNombre"></strong>?
+            <strong id="eliminarNombre" class="text-gray-900 dark:text-slate-100"></strong>?
         </p>
 
         <div class="flex justify-end gap-3">
             <button onclick="cerrarModal('modalEliminar')"
-                class="px-4 py-2 rounded-lg transition
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl transition
                        bg-gray-100 hover:bg-gray-200
                        dark:bg-slate-800 dark:hover:bg-slate-700
-                       text-gray-700 dark:text-slate-200">
+                       text-gray-700 dark:text-slate-200
+                       border border-gray-200 dark:border-white/10">
+                <i data-lucide="x" class="w-4 h-4"></i>
                 Cancelar
             </button>
 
             <a href="#" id="eliminarLink"
-               class="px-4 py-2 rounded-lg font-semibold transition
-                      bg-red-300 text-red-900 hover:bg-red-400
-                      dark:bg-red-900 dark:text-red-200 dark:hover:bg-red-800">
+               class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold transition
+                      bg-red-500 text-white hover:bg-red-600 shadow-sm">
+                <i data-lucide="trash" class="w-4 h-4"></i>
                 Sí, eliminar
             </a>
         </div>
@@ -226,35 +286,37 @@
 <!-- JS -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const tbody = document.querySelector('tbody');
+    const tbody = document.getElementById('tbodyUsuarios');
     const inputBusqueda = document.getElementById('busquedaUsuario');
 
     let pagina = 1;
     const filasPorPagina = 10;
 
-    const filasOriginales = Array.from(tbody.querySelectorAll('tr'));
+    // Solo filas reales (con td)
+    const filasOriginales = Array.from(tbody.querySelectorAll('tr'))
+        .filter(tr => tr.querySelectorAll('td').length > 0);
 
     let filasFiltradas = [...filasOriginales];
 
     function renderizarTabla() {
-        tbody.innerHTML = '';
+        // Oculta todas (no destruimos el DOM)
+        filasOriginales.forEach(tr => tr.classList.add('hidden'));
+
+        const totalPaginas = Math.max(Math.ceil(filasFiltradas.length / filasPorPagina), 1);
+        if (pagina > totalPaginas) pagina = totalPaginas;
+
         const inicio = (pagina - 1) * filasPorPagina;
         const fin = inicio + filasPorPagina;
-        filasFiltradas.slice(inicio, fin).forEach(f => tbody.appendChild(f));
+
+        filasFiltradas.slice(inicio, fin).forEach(tr => tr.classList.remove('hidden'));
 
         document.getElementById('paginaActual').textContent =
-            `Página ${pagina} de ${Math.max(Math.ceil(filasFiltradas.length / filasPorPagina), 1)}`;
+            `Página ${pagina} de ${totalPaginas}`;
     }
 
     function filtrar() {
         const texto = inputBusqueda.value.toLowerCase().trim();
-        filasFiltradas = filasOriginales.filter(fila => {
-            const celdas = fila.querySelectorAll('td');
-            if (!celdas.length) return false;
-            return Array.from(celdas).some(td =>
-                td.textContent.toLowerCase().includes(texto)
-            );
-        });
+        filasFiltradas = filasOriginales.filter(fila => fila.textContent.toLowerCase().includes(texto));
         pagina = 1;
         renderizarTabla();
     }
@@ -264,31 +326,37 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('prevPage').addEventListener('click', () => {
         if (pagina > 1) { pagina--; renderizarTabla(); }
     });
+
     document.getElementById('nextPage').addEventListener('click', () => {
-        if (pagina < Math.ceil(filasFiltradas.length / filasPorPagina)) { pagina++; renderizarTabla(); }
+        const totalPaginas = Math.max(Math.ceil(filasFiltradas.length / filasPorPagina), 1);
+        if (pagina < totalPaginas) { pagina++; renderizarTabla(); }
     });
 
     renderizarTabla();
+
+    if (window.lucide) lucide.createIcons();
 });
 
-
 /* ---------- MODALES ---------- */
-
 function abrirModalVer(button) {
     document.getElementById('verUsername').textContent = button.dataset.username;
     document.getElementById('verNombre').textContent = button.dataset.nombre;
     document.getElementById('verEmail').textContent = button.dataset.email;
 
-    document.getElementById('modalVer').classList.remove('hidden');
-    document.getElementById('modalVer').classList.add('flex');
+    const modal = document.getElementById('modalVer');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    if (window.lucide) lucide.createIcons();
 }
 
 function abrirModalEliminar(id, username) {
     document.getElementById('eliminarNombre').textContent = username;
     document.getElementById('eliminarLink').href = `/usuarios/${id}/eliminar/`;
 
-    document.getElementById('modalEliminar').classList.remove('hidden');
-    document.getElementById('modalEliminar').classList.add('flex');
+    const modal = document.getElementById('modalEliminar');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
 }
 
 function cerrarModal(id) {

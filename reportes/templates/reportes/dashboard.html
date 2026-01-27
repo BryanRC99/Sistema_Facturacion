@@ -3,17 +3,106 @@
 {% block title %}Reportes{% endblock %}
 {% block content %}
 
-<div class="space-y-10">
+<div class="max-w-6xl mx-auto mt-10 px-4 space-y-8">
 
     <!-- HEADER -->
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800 dark:text-slate-100">
-                Dashboard de Ventas
-            </h1>
-            <p class="text-gray-500 dark:text-slate-400 mt-1">
-                Resumen general del día {{ resumen.fecha|date:"d/m/Y" }}
+    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div class="flex items-start gap-3">
+            <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                         bg-indigo-50 dark:bg-indigo-500/10
+                         border border-indigo-100 dark:border-indigo-500/20">
+                <i data-lucide="layout-dashboard" class="w-6 h-6 text-indigo-700 dark:text-indigo-300"></i>
+            </span>
+
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                    Dashboard de Ventas
+                </h1>
+                <p class="mt-2 text-sm text-gray-600 dark:text-slate-400">
+                    Resumen general del día {{ resumen.fecha|date:"d/m/Y" }}
+                </p>
+            </div>
+        </div>
+
+        <!-- ACCIONES -->
+        <div class="flex flex-wrap gap-2">
+            <button type="button"
+                    data-open-reportes
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
+                           bg-indigo-600 hover:bg-indigo-700 text-white shadow transition">
+                <i data-lucide="grid-3x3" class="w-4 h-4"></i>
+                Reportes
+            </button>
+
+            <button type="button"
+                    data-toggle-filtros
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
+                           bg-white dark:bg-slate-900
+                           border border-gray-200 dark:border-slate-700
+                           text-gray-800 dark:text-slate-100
+                           hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
+                Rango rápido
+            </button>
+        </div>
+    </div>
+
+    <!-- FILTROS RÁPIDOS (colapsable) -->
+    <div id="filtrosRango"
+         class="hidden bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+        <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-2">
+                <i data-lucide="calendar-range" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Reporte por rango
+                </h2>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                Elige un rango y te lleva al reporte completo.
             </p>
+        </div>
+
+        <div class="p-6 sm:p-7">
+            <form method="get" action="{% url 'reporte_ventas_rango' %}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-1">Inicio</label>
+                    <input type="date" name="fecha_inicio"
+                           class="w-full rounded-xl border-gray-200 dark:border-slate-700
+                                  bg-white dark:bg-slate-950
+                                  text-gray-900 dark:text-slate-100
+                                  focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-1">Fin</label>
+                    <input type="date" name="fecha_fin"
+                           class="w-full rounded-xl border-gray-200 dark:border-slate-700
+                                  bg-white dark:bg-slate-950
+                                  text-gray-900 dark:text-slate-100
+                                  focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-1">Agrupar</label>
+                    <select name="group_by"
+                            class="w-full rounded-xl border-gray-200 dark:border-slate-700
+                                   bg-white dark:bg-slate-950
+                                   text-gray-900 dark:text-slate-100
+                                   focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="dia">Día</option>
+                        <option value="semana">Semana</option>
+                        <option value="mes">Mes</option>
+                    </select>
+                </div>
+
+                <div class="flex items-end">
+                    <button class="w-full inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
+                                   bg-indigo-600 hover:bg-indigo-700 text-white shadow transition">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                        Ver reporte
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -21,8 +110,8 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
         <!-- Total Vendido -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6 flex items-center gap-4">
-            <div class="bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300 p-3 rounded-xl">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 flex items-center gap-4">
+            <div class="bg-green-100 dark:bg-green-500/10 text-green-600 dark:text-green-300 p-3 rounded-xl border border-green-200/50 dark:border-green-500/20">
                 <i data-lucide="dollar-sign" class="w-6 h-6"></i>
             </div>
             <div>
@@ -36,8 +125,8 @@
         </div>
 
         <!-- IVA -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6 flex items-center gap-4">
-            <div class="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 p-3 rounded-xl">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 flex items-center gap-4">
+            <div class="bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-300 p-3 rounded-xl border border-blue-200/50 dark:border-blue-500/20">
                 <i data-lucide="receipt" class="w-6 h-6"></i>
             </div>
             <div>
@@ -51,8 +140,8 @@
         </div>
 
         <!-- Facturas -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6 flex items-center gap-4">
-            <div class="bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300 p-3 rounded-xl">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 flex items-center gap-4">
+            <div class="bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-300 p-3 rounded-xl border border-purple-200/50 dark:border-purple-500/20">
                 <i data-lucide="file-text" class="w-6 h-6"></i>
             </div>
             <div>
@@ -66,8 +155,8 @@
         </div>
 
         <!-- Comparación -->
-        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6 flex items-center gap-4">
-            <div class="bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 p-3 rounded-xl">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 flex items-center gap-4">
+            <div class="bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 p-3 rounded-xl border border-gray-200 dark:border-slate-700">
                 <i data-lucide="trending-up" class="w-6 h-6"></i>
             </div>
             <div>
@@ -90,51 +179,68 @@
     </div>
 
     <!-- GRÁFICO -->
-    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6">
-        <h2 class="text-lg font-semibold text-gray-700 dark:text-slate-200 flex items-center gap-2 mb-4">
-            <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
-            Ventas por día
-        </h2>
-        <canvas id="ventasChart" height="110"></canvas>
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+        <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-2">
+                <i data-lucide="bar-chart-3" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Ventas por día
+                </h2>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                Evolución de ventas en los últimos días.
+            </p>
+        </div>
+
+        <div class="p-6 sm:p-7">
+            <canvas id="ventasChart" height="110"></canvas>
+        </div>
     </div>
 
     <!-- TABLA FACTURAS -->
-    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow p-6">
-        <h2 class="text-lg font-semibold text-gray-700 dark:text-slate-200 flex items-center gap-2 mb-4">
-            <i data-lucide="list" class="w-5 h-5"></i>
-            Facturas del día
-        </h2>
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+        <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-2">
+                <i data-lucide="list" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Facturas del día
+                </h2>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                Listado de facturas emitidas hoy.
+            </p>
+        </div>
 
         <div class="overflow-x-auto">
             <table class="min-w-full text-sm">
-                <thead>
+                <thead class="bg-white dark:bg-slate-900">
                     <tr class="border-b border-gray-200 dark:border-slate-700 text-gray-500 dark:text-slate-400">
-                        <th class="py-3 text-left">#</th>
-                        <th class="py-3 text-left">Cliente</th>
-                        <th class="py-3 text-left">Fecha</th>
-                        <th class="py-3 text-right">Total</th>
+                        <th class="py-3 px-4 text-left font-semibold">#</th>
+                        <th class="py-3 px-4 text-left font-semibold">Cliente</th>
+                        <th class="py-3 px-4 text-left font-semibold">Fecha</th>
+                        <th class="py-3 px-4 text-right font-semibold">Total</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     {% for f in facturas_hoy %}
-                        <tr class="border-b border-gray-200 dark:border-slate-700
-                                   hover:bg-gray-50 dark:hover:bg-slate-800 transition">
-                            <td class="py-3 text-gray-700 dark:text-slate-200">
+                        <tr class="border-b border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                            <td class="py-3 px-4 text-gray-700 dark:text-slate-200 whitespace-nowrap">
                                 {{ f.numero }}
                             </td>
-                            <td class="py-3 font-medium text-gray-800 dark:text-slate-100">
+                            <td class="py-3 px-4 font-medium text-gray-900 dark:text-slate-100">
                                 {{ f.cliente }}
                             </td>
-                            <td class="py-3 text-gray-500 dark:text-slate-400">
+                            <td class="py-3 px-4 text-gray-500 dark:text-slate-400 whitespace-nowrap">
                                 {{ f.fecha|date:"d/m/Y H:i" }}
                             </td>
-                            <td class="py-3 text-right font-semibold text-gray-800 dark:text-slate-100">
+                            <td class="py-3 px-4 text-right font-semibold text-gray-900 dark:text-slate-100 whitespace-nowrap">
                                 $ {{ f.total|floatformat:2 }}
                             </td>
                         </tr>
                     {% empty %}
                         <tr>
-                            <td colspan="4" class="text-center py-6 text-gray-500 dark:text-slate-400">
+                            <td colspan="4" class="text-center py-10 text-gray-500 dark:text-slate-400">
                                 No hay facturas registradas hoy
                             </td>
                         </tr>
@@ -145,12 +251,158 @@
     </div>
 
 </div>
+
+
+<!-- ========================= -->
+<!-- MODAL REPORTES -->
+<!-- ========================= -->
+<div id="modalReportes"
+     class="hidden fixed inset-0 z-50">
+    <!-- overlay -->
+    <div data-close-reportes class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+
+    <!-- panel -->
+    <div class="relative max-w-3xl mx-auto mt-16 px-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+
+            <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="grid-3x3" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-slate-100">Centro de reportes</h3>
+                </div>
+
+                <button type="button" data-close-reportes
+                        class="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 transition">
+                    <i data-lucide="x" class="w-5 h-5 text-gray-700 dark:text-slate-200"></i>
+                </button>
+            </div>
+
+            <div class="p-6 sm:p-7">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    <a href="{% url 'reporte_ventas_rango' %}"
+                       class="group p-4 rounded-2xl border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                        <div class="flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20 flex items-center justify-center">
+                                <i data-lucide="calendar-range" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+                            </span>
+                            <div>
+                                <p class="font-bold text-gray-900 dark:text-slate-100">Ventas por rango</p>
+                                <p class="text-sm text-gray-600 dark:text-slate-400">Día / semana / mes + KPIs</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="{% url 'reporte_metodos_pago' %}"
+                       class="group p-4 rounded-2xl border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                        <div class="flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 flex items-center justify-center">
+                                <i data-lucide="credit-card" class="w-5 h-5 text-blue-700 dark:text-blue-300"></i>
+                            </span>
+                            <div>
+                                <p class="font-bold text-gray-900 dark:text-slate-100">Métodos de pago</p>
+                                <p class="text-sm text-gray-600 dark:text-slate-400">Totales por forma de pago</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="{% url 'reporte_clientes' %}"
+                       class="group p-4 rounded-2xl border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                        <div class="flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 flex items-center justify-center">
+                                <i data-lucide="users" class="w-5 h-5 text-emerald-700 dark:text-emerald-300"></i>
+                            </span>
+                            <div>
+                                <p class="font-bold text-gray-900 dark:text-slate-100">Clientes</p>
+                                <p class="text-sm text-gray-600 dark:text-slate-400">Top clientes y frecuencia</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="{% url 'reporte_productos' %}"
+                       class="group p-4 rounded-2xl border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                        <div class="flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-500/10 border border-purple-100 dark:border-purple-500/20 flex items-center justify-center">
+                                <i data-lucide="package" class="w-5 h-5 text-purple-700 dark:text-purple-300"></i>
+                            </span>
+                            <div>
+                                <p class="font-bold text-gray-900 dark:text-slate-100">Productos</p>
+                                <p class="text-sm text-gray-600 dark:text-slate-400">Top vendidos + filtros</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="{% url 'reporte_categorias' %}"
+                       class="group p-4 rounded-2xl border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                        <div class="flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20 flex items-center justify-center">
+                                <i data-lucide="layers" class="w-5 h-5 text-amber-700 dark:text-amber-300"></i>
+                            </span>
+                            <div>
+                                <p class="font-bold text-gray-900 dark:text-slate-100">Categorías</p>
+                                <p class="text-sm text-gray-600 dark:text-slate-400">Ventas por categoría</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="{% url 'reporte_anuladas' %}"
+                       class="group p-4 rounded-2xl border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                        <div class="flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-500/10 border border-rose-100 dark:border-rose-500/20 flex items-center justify-center">
+                                <i data-lucide="ban" class="w-5 h-5 text-rose-700 dark:text-rose-300"></i>
+                            </span>
+                            <div>
+                                <p class="font-bold text-gray-900 dark:text-slate-100">Anuladas</p>
+                                <p class="text-sm text-gray-600 dark:text-slate-400">Control de anulaciones</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="{% url 'reporte_vendedores' %}"
+                       class="group p-4 rounded-2xl border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                        <div class="flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 flex items-center justify-center">
+                                <i data-lucide="badge-dollar-sign" class="w-5 h-5 text-slate-700 dark:text-slate-200"></i>
+                            </span>
+                            <div>
+                                <p class="font-bold text-gray-900 dark:text-slate-100">Vendedores</p>
+                                <p class="text-sm text-gray-600 dark:text-slate-400">Ranking por usuario</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="{% url 'reporte_utilidad' %}"
+                       class="group p-4 rounded-2xl border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                        <div class="flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-xl bg-teal-50 dark:bg-teal-500/10 border border-teal-100 dark:border-teal-500/20 flex items-center justify-center">
+                                <i data-lucide="line-chart" class="w-5 h-5 text-teal-700 dark:text-teal-300"></i>
+                            </span>
+                            <div>
+                                <p class="font-bold text-gray-900 dark:text-slate-100">Utilidad</p>
+                                <p class="text-sm text-gray-600 dark:text-slate-400">Margen y ganancia (si hay costo)</p>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 <!-- ========================= -->
 <!-- CHART.JS -->
 <!-- ========================= -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+document.addEventListener("DOMContentLoaded", () => {
+    // Lucide icons
+    if (window.lucide) lucide.createIcons();
+
+    // Chart
     const labels = [
         {% for v in ventas_grafico %}
             "{{ v.dia|date:'d/m' }}",
@@ -163,41 +415,51 @@
         {% endfor %}
     ];
 
-    const ctx = document.getElementById('ventasChart').getContext('2d');
-
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Ventas ($)',
-                data: data,
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true,
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false
-                }
+    const canvas = document.getElementById("ventasChart");
+    if (canvas) {
+        const ctx = canvas.getContext("2d");
+        new Chart(ctx, {
+            type: "line",
+            data: {
+                labels,
+                datasets: [{
+                    label: "Ventas ($)",
+                    data,
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true } }
             }
-        }
-    });
-</script>
+        });
+    }
 
-<!-- ========================= -->
-<!-- LUCIDE ICONS -->
-<!-- ========================= -->
-<script>
-    lucide.createIcons();
+    // Modal reportes
+    const modal = document.getElementById("modalReportes");
+    const openBtn = document.querySelector("[data-open-reportes]");
+    const closeBtns = document.querySelectorAll("[data-close-reportes]");
+
+    const openModal = () => modal?.classList.remove("hidden");
+    const closeModal = () => modal?.classList.add("hidden");
+
+    openBtn?.addEventListener("click", openModal);
+    closeBtns.forEach(btn => btn.addEventListener("click", closeModal));
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeModal();
+    });
+
+    // Toggle filtros rango
+    const filtros = document.getElementById("filtrosRango");
+    const toggleFiltros = document.querySelector("[data-toggle-filtros]");
+    toggleFiltros?.addEventListener("click", () => {
+        filtros?.classList.toggle("hidden");
+    });
+});
 </script>
 
 {% endblock %}

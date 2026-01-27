@@ -1,0 +1,127 @@
+{% if messages %}
+<div class="fixed top-5 right-5 z-50 flex flex-col gap-3 w-[360px] max-w-full">
+  {% for message in messages %}
+  <div
+    data-toast
+    class="
+      group relative overflow-hidden rounded-xl shadow-xl
+      border border-gray-200 dark:border-white/10
+      bg-white dark:bg-gray-900
+      text-gray-800 dark:text-gray-100
+      px-4 py-3 pr-10
+      flex items-start gap-3
+      animate-toast-in
+    "
+  >
+
+    <!-- ICONO -->
+    <div class="mt-0.5">
+      {% if message.tags == 'success' %}
+        <i data-lucide="check-circle"
+           class="w-5 h-5 text-green-600 dark:text-green-400"></i>
+      {% elif message.tags == 'error' %}
+        <i data-lucide="x-circle"
+           class="w-5 h-5 text-red-600 dark:text-red-400"></i>
+      {% elif message.tags == 'warning' %}
+        <i data-lucide="alert-triangle"
+           class="w-5 h-5 text-yellow-500"></i>
+      {% else %}
+        <i data-lucide="info"
+           class="w-5 h-5 text-blue-600 dark:text-blue-400"></i>
+      {% endif %}
+    </div>
+
+    <!-- MENSAJE -->
+    <div class="text-sm leading-snug">
+      {{ message }}
+    </div>
+
+    <!-- BOTÓN CERRAR -->
+    <button
+      onclick="closeToast(this)"
+      class="
+        absolute top-2 right-2
+        text-gray-400 hover:text-gray-600
+        dark:text-gray-500 dark:hover:text-gray-300
+        transition
+      "
+    >
+      <i data-lucide="x" class="w-4 h-4"></i>
+    </button>
+
+    <!-- BARRA DE TIEMPO -->
+    <div
+      class="
+        absolute bottom-0 left-0 h-[3px] w-full
+        {% if message.tags == 'success' %} bg-green-500
+        {% elif message.tags == 'error' %} bg-red-500
+        {% elif message.tags == 'warning' %} bg-yellow-400
+        {% else %} bg-blue-500
+        {% endif %}
+        animate-toast-bar
+      "
+    ></div>
+
+  </div>
+  {% endfor %}
+</div>
+
+<!-- ANIMACIONES -->
+<style>
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toast-out {
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+}
+
+@keyframes toast-bar {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.animate-toast-in {
+  animation: toast-in 0.35s ease-out forwards;
+}
+
+.animate-toast-out {
+  animation: toast-out 0.3s ease-in forwards;
+}
+
+.animate-toast-bar {
+  animation: toast-bar 3s linear forwards;
+}
+</style>
+
+<!-- JS -->
+<script>
+function closeToast(btn) {
+  const toast = btn.closest('[data-toast]');
+  toast.classList.add('animate-toast-out');
+  setTimeout(() => toast.remove(), 300);
+}
+
+setTimeout(() => {
+  document.querySelectorAll('[data-toast]').forEach(toast => {
+    toast.classList.add('animate-toast-out');
+    setTimeout(() => toast.remove(), 300);
+  });
+}, 3000);
+
+// Re-render icons por si se cargan dinámicamente
+if (window.lucide) {
+  lucide.createIcons();
+}
+</script>
+{% endif %}

@@ -4,50 +4,88 @@
 
 {% block content %}
 
-<!-- Header -->
-<div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-    <h1 class="text-3xl font-bold text-gray-800 dark:text-slate-100">
-        Productos
-    </h1>
+<!-- ENCABEZADO -->
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
+    <div class="flex items-start gap-3">
+        <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                     bg-indigo-50 dark:bg-indigo-500/10
+                     border border-indigo-100 dark:border-indigo-500/20">
+            <i data-lucide="package" class="w-6 h-6 text-indigo-700 dark:text-indigo-300"></i>
+        </span>
 
-    <a href="{% url 'crear_producto' %}"
-       class="inline-flex items-center gap-2
-              bg-indigo-600 hover:bg-indigo-700
-              text-white px-4 py-2 text-sm font-medium
-              rounded-md shadow-sm transition">
-        <i data-lucide="badge-plus" class="w-4 h-4"></i>
-        Nuevo Producto
-    </a>
+        <div>
+            <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                Productos
+            </h1>
+
+            <div class="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-slate-400">
+                <span class="inline-flex items-center gap-2">
+                    <i data-lucide="database" class="w-4 h-4"></i>
+                    {{ productos|length }} registrado(s)
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-wrap gap-2">
+        <a href="{% url 'crear_producto' %}"
+           class="inline-flex items-center gap-2
+                  bg-indigo-600 hover:bg-indigo-700
+                  text-white
+                  px-4 py-2.5 rounded-xl
+                  text-sm font-semibold
+                  shadow-md
+                  transition">
+            <i data-lucide="badge-plus" class="w-4 h-4"></i>
+            Nuevo Producto
+        </a>
+    </div>
 </div>
 
-<!-- Card -->
+<!-- CONTENIDO PRINCIPAL -->
 <div class="bg-white dark:bg-slate-900
-            p-6 rounded-xl shadow-xl
+            p-6 sm:p-7 rounded-2xl shadow-xl
             border border-gray-100 dark:border-slate-700
-            space-y-4">
+            space-y-5">
 
     <!-- Barra búsqueda -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <input type="text" id="busquedaProducto"
-               placeholder="Buscar por código o nombre..."
-               class="w-full md:w-1/3
-                      px-3 py-2 rounded-lg
-                      border border-gray-300 dark:border-slate-600
-                      bg-white dark:bg-slate-800
-                      text-gray-800 dark:text-slate-100
-                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <div class="w-full md:w-1/3">
+            <label class="sr-only" for="busquedaProducto">Buscar productos</label>
+            <div class="relative">
+                <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <i data-lucide="search" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                </span>
+
+                <input type="text" id="busquedaProducto"
+                       placeholder="Buscar por código o nombre..."
+                       class="w-full
+                              pl-10 pr-3 py-2.5 rounded-xl
+                              border border-gray-300 dark:border-slate-600
+                              bg-white dark:bg-slate-800
+                              text-gray-800 dark:text-slate-100
+                              placeholder-gray-400 dark:placeholder-gray-500
+                              focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+        </div>
 
         <span id="paginaActual"
-              class="text-gray-700 dark:text-slate-400 font-medium">
+              class="inline-flex items-center gap-2 text-sm font-semibold
+                     text-gray-600 dark:text-slate-300
+                     px-3 py-2 rounded-xl
+                     bg-gray-50 dark:bg-slate-800/50
+                     border border-gray-200 dark:border-white/10">
+            <i data-lucide="layers" class="w-4 h-4"></i>
         </span>
     </div>
 
     <!-- Tabla -->
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto rounded-2xl border border-gray-200 dark:border-white/10">
         <table class="w-full border-collapse text-sm">
             <thead>
-                <tr class="bg-gray-100 dark:bg-slate-800
-                           text-gray-600 dark:text-slate-300 uppercase">
+                <tr class="bg-gray-50 dark:bg-slate-800
+                           text-gray-600 dark:text-slate-300
+                           uppercase text-xs tracking-wide">
                     <th class="py-3 px-6 text-left">Código</th>
                     <th class="py-3 px-6 text-left">Nombre</th>
                     <th class="py-3 px-6 text-left">Categoría</th>
@@ -58,56 +96,86 @@
                 </tr>
             </thead>
 
-            <tbody class="text-gray-700 dark:text-slate-200" id="tbodyProductos">
+            <!-- Sin iconos en las celdas para evitar saturación visual -->
+            <tbody class="text-gray-700 dark:text-slate-200 bg-white dark:bg-slate-900" id="tbodyProductos">
                 {% for p in productos %}
-                <tr class="border-b border-gray-100 dark:border-slate-700
-                           hover:bg-gray-50 dark:hover:bg-slate-800 transition">
-                    <td class="py-2 px-6">{{ p.codigo }}</td>
-                    <td class="py-2 px-6">{{ p.nombre }}</td>
-                    <td class="py-2 px-6">{{ p.categoria.nombre }}</td>
-                    <td class="py-2 px-6">$ {{ p.precio }}</td>
-                    <td class="py-2 px-6">{{ p.stock }}</td>
-                    <td class="py-2 px-6">
+                <tr class="border-b dark:border-slate-800
+                           hover:bg-gray-50 dark:hover:bg-slate-800/60
+                           transition">
+                    <td class="py-3 px-6 font-semibold text-gray-800 dark:text-slate-100">{{ p.codigo }}</td>
+                    <td class="py-3 px-6 font-semibold">{{ p.nombre }}</td>
+                    <td class="py-3 px-6">{{ p.categoria.nombre }}</td>
+                    <td class="py-3 px-6">$ {{ p.precio }}</td>
+                    <td class="py-3 px-6">{{ p.stock }}</td>
+                    <td class="py-3 px-6">
                         {% if p.iva %}
-                            <span class="text-green-600 dark:text-green-400 font-semibold">✔</span>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold
+                                         bg-emerald-50 dark:bg-emerald-500/10
+                                         text-emerald-700 dark:text-emerald-300
+                                         border border-emerald-100 dark:border-emerald-500/20">
+                                ✔
+                                <span class="hidden sm:inline">Sí</span>
+                            </span>
                         {% else %}
-                            <span class="text-gray-400">✘</span>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold
+                                         bg-gray-100 dark:bg-slate-800
+                                         text-gray-600 dark:text-slate-300
+                                         border border-gray-200 dark:border-white/10">
+                                ✘
+                                <span class="hidden sm:inline">No</span>
+                            </span>
                         {% endif %}
                     </td>
 
                     <!-- Acciones -->
-                    <td class="py-2 px-6 flex gap-3">
+                    <td class="py-3 px-6">
+                        <div class="flex items-center gap-2">
+                            <!-- Ver -->
+                            <button type="button"
+                                    class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                                           border border-emerald-200 dark:border-emerald-400/20
+                                           bg-emerald-50 dark:bg-emerald-500/10
+                                           text-emerald-700 dark:text-emerald-300
+                                           hover:bg-emerald-100 dark:hover:bg-emerald-500/20
+                                           transition"
+                                    onclick="mostrarProducto(this)"
+                                    data-codigo="{{ p.codigo }}"
+                                    data-nombre="{{ p.nombre }}"
+                                    data-categoria="{{ p.categoria.nombre }}"
+                                    data-proveedor="{{ p.proveedor.nombre_razon_social }}"
+                                    data-precio="{{ p.precio }}"
+                                    data-costo="{{ p.costo }}"
+                                    data-stock="{{ p.stock }}"
+                                    data-iva="{{ p.iva }}"
+                                    data-estado="{{ p.estado }}"
+                                    data-descripcion="{{ p.descripcion|default:'-' }}"
+                                    data-imagen="{% if p.imagen %}{{ p.imagen.url }}{% endif %}">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                            </button>
 
-                        <!-- Ver -->
-                        <button type="button"
-                                class="text-green-600 dark:text-green-400 hover:opacity-80"
-                                onclick="mostrarProducto(this)"
-                                data-codigo="{{ p.codigo }}"
-                                data-nombre="{{ p.nombre }}"
-                                data-categoria="{{ p.categoria.nombre }}"
-                                data-proveedor="{{ p.proveedor.nombre_razon_social }}"
-                                data-precio="{{ p.precio }}"
-                                data-costo="{{ p.costo }}"
-                                data-stock="{{ p.stock }}"
-                                data-iva="{{ p.iva }}"
-                                data-estado="{{ p.estado }}"
-                                data-descripcion="{{ p.descripcion|default:'-' }}"
-                                data-imagen="{% if p.imagen %}{{ p.imagen.url }}{% endif %}">
-                            <i data-lucide="eye" class="w-4 h-4"></i>
-                        </button>
+                            <!-- Editar -->
+                            <a href="{% url 'editar_producto' p.id %}"
+                               class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                                      border border-blue-200 dark:border-blue-400/20
+                                      bg-blue-50 dark:bg-blue-500/10
+                                      text-blue-700 dark:text-blue-300
+                                      hover:bg-blue-100 dark:hover:bg-blue-500/20
+                                      transition">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                            </a>
 
-                        <!-- Editar -->
-                        <a href="{% url 'editar_producto' p.id %}"
-                           class="text-blue-600 dark:text-blue-400 hover:opacity-80">
-                            <i data-lucide="pencil" class="w-4 h-4"></i>
-                        </a>
-
-                        <!-- Eliminar -->
-                        <button type="button"
-                                class="text-red-600 dark:text-red-400 hover:opacity-80"
-                                onclick="abrirModalEliminar('{{ p.id }}')">
-                            <i data-lucide="trash" class="w-4 h-4"></i>
-                        </button>
+                            <!-- Eliminar -->
+                            <button type="button"
+                                    class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                                           border border-red-200 dark:border-red-400/20
+                                           bg-red-50 dark:bg-red-500/10
+                                           text-red-700 dark:text-red-300
+                                           hover:bg-red-100 dark:hover:bg-red-500/20
+                                           transition"
+                                    onclick="abrirModalEliminar('{{ p.id }}')">
+                                <i data-lucide="trash" class="w-4 h-4"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
 
@@ -118,24 +186,46 @@
                         <div class="bg-white dark:bg-slate-900
                                     rounded-2xl shadow-xl
                                     border border-gray-200 dark:border-slate-700">
+
                             <div class="flex justify-between items-center px-6 py-4
-                                        bg-gray-50 dark:bg-slate-800 border-b">
-                                <h3 class="font-semibold text-gray-700 dark:text-slate-200">
-                                    Confirmar eliminación
-                                </h3>
+                                        bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                                                 bg-red-50 dark:bg-red-500/10
+                                                 border border-red-100 dark:border-red-500/20">
+                                        <i data-lucide="trash-2" class="w-5 h-5 text-red-700 dark:text-red-300"></i>
+                                    </span>
+                                    <h3 class="font-bold text-gray-900 dark:text-slate-100">
+                                        Confirmar eliminación
+                                    </h3>
+                                </div>
+
                                 <button onclick="cerrarModal('modalEliminar{{ p.id }}')"
-                                        class="text-xl">&times;</button>
+                                        class="text-gray-500 dark:text-slate-400 hover:text-gray-800 dark:hover:text-slate-200 text-2xl font-bold transition">
+                                    &times;
+                                </button>
                             </div>
-                            <div class="px-6 py-5">
-                                ¿Eliminar el producto <strong>{{ p.nombre }}</strong>?
+
+                            <div class="px-6 py-5 text-gray-700 dark:text-slate-300">
+                                ¿Eliminar el producto <strong class="text-gray-900 dark:text-slate-100">{{ p.nombre }}</strong>?
                             </div>
+
                             <div class="px-6 py-4 flex justify-end gap-3 bg-gray-50 dark:bg-slate-800">
                                 <button onclick="cerrarModal('modalEliminar{{ p.id }}')"
-                                        class="px-4 py-2 rounded-lg bg-gray-100 dark:bg-slate-700">
+                                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl
+                                               bg-gray-100 dark:bg-slate-700
+                                               text-gray-700 dark:text-slate-200
+                                               hover:bg-gray-200 dark:hover:bg-slate-600
+                                               transition border border-gray-200 dark:border-white/10">
+                                    <i data-lucide="x" class="w-4 h-4"></i>
                                     Cancelar
                                 </button>
+
                                 <a href="{% url 'eliminar_producto' p.id %}"
-                                   class="px-4 py-2 rounded-lg bg-red-500 text-white font-semibold">
+                                   class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl
+                                          bg-red-500 text-white font-semibold
+                                          hover:bg-red-600 transition shadow-sm">
+                                    <i data-lucide="trash" class="w-4 h-4"></i>
                                     Eliminar
                                 </a>
                             </div>
@@ -145,7 +235,7 @@
 
                 {% empty %}
                 <tr>
-                    <td colspan="7" class="text-center py-6 text-gray-500 dark:text-slate-400">
+                    <td colspan="7" class="text-center py-10 text-gray-500 dark:text-slate-400">
                         No hay productos registrados.
                     </td>
                 </tr>
@@ -155,16 +245,25 @@
     </div>
 
     <!-- Paginación -->
-    <div class="flex justify-end gap-2 mt-4">
+    <div class="flex justify-end gap-2">
         <button id="prevPage"
-                class="px-4 py-2 rounded-lg
-                       bg-gray-200 dark:bg-slate-700">
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl
+                       bg-gray-100 dark:bg-slate-700
+                       text-gray-800 dark:text-gray-200
+                       hover:bg-gray-200 dark:hover:bg-slate-600 transition
+                       border border-gray-200 dark:border-white/10">
+            <i data-lucide="chevron-left" class="w-4 h-4"></i>
             Anterior
         </button>
+
         <button id="nextPage"
-                class="px-4 py-2 rounded-lg
-                       bg-gray-200 dark:bg-slate-700">
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl
+                       bg-gray-100 dark:bg-slate-700
+                       text-gray-800 dark:text-gray-200
+                       hover:bg-gray-200 dark:hover:bg-slate-600 transition
+                       border border-gray-200 dark:border-white/10">
             Siguiente
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
         </button>
     </div>
 
@@ -177,31 +276,51 @@
         <div class="bg-white dark:bg-slate-900
                     rounded-2xl shadow-xl
                     border border-gray-200 dark:border-slate-700">
+
             <div class="flex justify-between items-center px-6 py-4
-                        bg-gray-50 dark:bg-slate-800 border-b">
-                <h3 class="font-semibold">Detalle del Producto</h3>
-                <button onclick="cerrarModal('modalProducto')" class="text-xl">&times;</button>
+                        bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                                 bg-indigo-50 dark:bg-indigo-500/10
+                                 border border-indigo-100 dark:border-indigo-500/20">
+                        <i data-lucide="scan-eye" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+                    </span>
+                    <h3 class="font-bold text-gray-900 dark:text-slate-100">
+                        Detalle del Producto
+                    </h3>
+                </div>
+
+                <button onclick="cerrarModal('modalProducto')"
+                        class="text-gray-500 dark:text-slate-400 hover:text-gray-800 dark:hover:text-slate-200 text-2xl font-bold transition">
+                    &times;
+                </button>
             </div>
 
-            <div class="px-6 py-5 space-y-2 max-h-96 overflow-y-auto">
+            <div class="px-6 py-5 space-y-2 max-h-96 overflow-y-auto text-gray-700 dark:text-slate-300">
                 <img id="modalImagen"
-                     class="hidden max-h-64 mx-auto object-contain mb-4 cursor-pointer"
+                     class="hidden max-h-64 mx-auto object-contain mb-4 cursor-pointer rounded-xl border border-gray-200 dark:border-slate-700"
                      onclick="openImage(this.src)">
-                <p><strong>Código:</strong> <span id="modalCodigo"></span></p>
-                <p><strong>Nombre:</strong> <span id="modalNombre"></span></p>
-                <p><strong>Categoría:</strong> <span id="modalCategoria"></span></p>
-                <p><strong>Proveedor:</strong> <span id="modalProveedor"></span></p>
-                <p><strong>Precio:</strong> $ <span id="modalPrecio"></span></p>
-                <p><strong>Costo:</strong> $ <span id="modalCosto"></span></p>
-                <p><strong>Stock:</strong> <span id="modalStock"></span></p>
-                <p><strong>IVA:</strong> <span id="modalIVA"></span></p>
-                <p><strong>Estado:</strong> <span id="modalEstado"></span></p>
-                <p><strong>Descripción:</strong> <span id="modalDescripcion"></span></p>
+
+                <p><strong class="text-gray-900 dark:text-slate-100">Código:</strong> <span id="modalCodigo"></span></p>
+                <p><strong class="text-gray-900 dark:text-slate-100">Nombre:</strong> <span id="modalNombre"></span></p>
+                <p><strong class="text-gray-900 dark:text-slate-100">Categoría:</strong> <span id="modalCategoria"></span></p>
+                <p><strong class="text-gray-900 dark:text-slate-100">Proveedor:</strong> <span id="modalProveedor"></span></p>
+                <p><strong class="text-gray-900 dark:text-slate-100">Precio:</strong> $ <span id="modalPrecio"></span></p>
+                <p><strong class="text-gray-900 dark:text-slate-100">Costo:</strong> $ <span id="modalCosto"></span></p>
+                <p><strong class="text-gray-900 dark:text-slate-100">Stock:</strong> <span id="modalStock"></span></p>
+                <p><strong class="text-gray-900 dark:text-slate-100">IVA:</strong> <span id="modalIVA"></span></p>
+                <p><strong class="text-gray-900 dark:text-slate-100">Estado:</strong> <span id="modalEstado"></span></p>
+                <p><strong class="text-gray-900 dark:text-slate-100">Descripción:</strong> <span id="modalDescripcion"></span></p>
             </div>
 
             <div class="px-6 py-4 flex justify-end bg-gray-50 dark:bg-slate-800">
                 <button onclick="cerrarModal('modalProducto')"
-                        class="px-4 py-2 rounded-lg bg-gray-100 dark:bg-slate-700">
+                        class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl
+                               bg-gray-100 dark:bg-slate-700
+                               text-gray-700 dark:text-slate-200
+                               hover:bg-gray-200 dark:hover:bg-slate-600 transition
+                               border border-gray-200 dark:border-white/10">
+                    <i data-lucide="x" class="w-4 h-4"></i>
                     Cerrar
                 </button>
             </div>
@@ -209,62 +328,127 @@
     </div>
 </div>
 
+<script>
+    function mostrarProducto(button) {
+        modalCodigo.textContent = button.dataset.codigo;
+        modalNombre.textContent = button.dataset.nombre;
+        modalCategoria.textContent = button.dataset.categoria;
+        modalProveedor.textContent = button.dataset.proveedor;
+        modalPrecio.textContent = button.dataset.precio;
+        modalCosto.textContent = button.dataset.costo;
+        modalStock.textContent = button.dataset.stock;
+        modalIVA.textContent = button.dataset.iva === 'True' ? 'Sí' : 'No';
+        modalEstado.textContent = button.dataset.estado === 'True' ? 'Activo' : 'Inactivo';
+        modalDescripcion.textContent = button.dataset.descripcion;
 
-    <script>
-        function mostrarProducto(button) {
-            modalCodigo.textContent = button.dataset.codigo;
-            modalNombre.textContent = button.dataset.nombre;
-            modalCategoria.textContent = button.dataset.categoria;
-            modalProveedor.textContent = button.dataset.proveedor;
-            modalPrecio.textContent = button.dataset.precio;
-            modalCosto.textContent = button.dataset.costo;
-            modalStock.textContent = button.dataset.stock;
-            modalIVA.textContent = button.dataset.iva === 'True' ? 'Sí' : 'No';
-            modalEstado.textContent = button.dataset.estado === 'True' ? 'Activo' : 'Inactivo';
-            modalDescripcion.textContent = button.dataset.descripcion;
+        const img = document.getElementById('modalImagen');
+        if (button.dataset.imagen) {
+            img.src = button.dataset.imagen;
+            img.classList.remove('hidden');
+        } else {
+            img.src = '';
+            img.classList.add('hidden');
+        }
 
-            const img = document.getElementById('modalImagen');
-            if (button.dataset.imagen) {
-                img.src = button.dataset.imagen;
-                img.classList.remove('hidden');
-            } else {
-                img.src = '';
-                img.classList.add('hidden');
+        modalProducto.classList.remove('hidden');
+        modalProducto.classList.add('flex');
+
+        if (window.lucide) lucide.createIcons();
+    }
+
+    function cerrarModal(id) {
+        const modal = document.getElementById(id);
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    function abrirModalEliminar(id) {
+        const modal = document.getElementById('modalEliminar' + id);
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        if (window.lucide) lucide.createIcons();
+    }
+
+    /* ===== VISOR DE IMAGEN ===== */
+    function openImage(src) {
+        const viewer = document.getElementById('imageViewer');
+        const img = document.getElementById('imageViewerImg');
+
+        img.src = src;
+        viewer.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+    }
+
+    function closeImage(event) {
+        if (event) event.stopPropagation();
+        const viewer = document.getElementById('imageViewer');
+        viewer.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+    }
+
+    // ===== BUSQUEDA + PAGINACION (sin romper modales dentro del tbody) =====
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('busquedaProducto');
+        const tbody = document.getElementById('tbodyProductos');
+        const paginaActual = document.getElementById('paginaActual');
+        const prevBtn = document.getElementById('prevPage');
+        const nextBtn = document.getElementById('nextPage');
+
+        let pagina = 1;
+        const filasPorPagina = 10;
+
+        // Solo filas reales de tabla (las que tienen <td>)
+        const filas = Array.from(tbody.querySelectorAll('tr'))
+            .filter(tr => tr.querySelectorAll('td').length > 0);
+
+        let filasFiltradas = [...filas];
+
+        function renderizar() {
+            // Oculta todas
+            filas.forEach(tr => tr.classList.add('hidden'));
+
+            const totalPaginas = Math.max(Math.ceil(filasFiltradas.length / filasPorPagina), 1);
+            if (pagina > totalPaginas) pagina = totalPaginas;
+
+            const inicio = (pagina - 1) * filasPorPagina;
+            const fin = inicio + filasPorPagina;
+
+            filasFiltradas.slice(inicio, fin).forEach(tr => tr.classList.remove('hidden'));
+
+            if (paginaActual) {
+                paginaActual.textContent = `Página ${pagina} de ${totalPaginas}`;
             }
 
-            modalProducto.classList.remove('hidden');
-            modalProducto.classList.add('flex');
+            // (opcional) deshabilita botones
+            if (prevBtn) prevBtn.disabled = (pagina <= 1);
+            if (nextBtn) nextBtn.disabled = (pagina >= totalPaginas);
         }
 
-        function cerrarModal(id) {
-            const modal = document.getElementById(id);
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+        function filtrar() {
+            const q = (input?.value || '').toLowerCase().trim();
+            filasFiltradas = filas.filter(tr => tr.textContent.toLowerCase().includes(q));
+            pagina = 1;
+            renderizar();
         }
 
-        function abrirModalEliminar(id) {
-            const modal = document.getElementById('modalEliminar' + id);
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
+        if (input) input.addEventListener('input', filtrar);
 
-        /* ===== VISOR DE IMAGEN ===== */
-        function openImage(src) {
-            const viewer = document.getElementById('imageViewer');
-            const img = document.getElementById('imageViewerImg');
+        if (prevBtn) prevBtn.addEventListener('click', () => {
+            if (pagina > 1) { pagina--; renderizar(); }
+        });
 
-            img.src = src;
-            viewer.classList.remove('hidden');
-            document.body.classList.add('overflow-hidden');
-        }
+        if (nextBtn) nextBtn.addEventListener('click', () => {
+            const totalPaginas = Math.max(Math.ceil(filasFiltradas.length / filasPorPagina), 1);
+            if (pagina < totalPaginas) { pagina++; renderizar(); }
+        });
 
-        function closeImage(event) {
-            if (event) event.stopPropagation();
-            const viewer = document.getElementById('imageViewer');
-            viewer.classList.add('hidden');
-            document.body.classList.remove('overflow-hidden');
-        }
-    </script>
+        renderizar();
+
+        // Lucide icons (inicial)
+        if (window.lucide) lucide.createIcons();
+    });
+</script>
 
 <!-- Animación entrada suave -->
 <style>
@@ -273,20 +457,18 @@
             opacity: 0;
             transform: scale(0.97);
         }
-
         to {
             opacity: 1;
             transform: scale(1);
         }
     }
-
     .animate-fadeIn {
         animation: fadeIn 0.25s ease-out;
     }
 </style>
 
 <div id="imageViewer" class="fixed inset-0 bg-black/90 hidden z-[999] flex items-center justify-center"
-    onclick="closeImage()">
+     onclick="closeImage()">
 
     <button class="absolute top-5 right-6 text-white text-4xl font-bold" onclick="closeImage(event)">
         &times;
@@ -294,6 +476,5 @@
 
     <img id="imageViewerImg" class="max-w-[90%] max-h-[90%] object-contain rounded-xl shadow-2xl">
 </div>
-
 
 {% endblock %}

@@ -4,206 +4,318 @@
 {% load auditoria_extras %}
 
 {% block content %}
-<div class="mx-auto max-w-6xl px-4 py-8">
 
-    <h1 class="text-3xl font-bold text-gray-800 dark:text-slate-100 mb-6">
-        Registro de Auditoría
-    </h1>
+<div class="max-w-6xl mx-auto mt-10 px-4">
 
-    <!-- Filtros -->
-    <form method="get"
-        class="bg-white dark:bg-slate-900 rounded-xl shadow p-4 mb-6
-               grid grid-cols-1 md:grid-cols-4 gap-4">
+    <!-- Header -->
+    <div class="flex items-start justify-between gap-4 mb-8">
+        <div class="flex items-start gap-3">
+            <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                         bg-indigo-50 dark:bg-indigo-500/10
+                         border border-indigo-100 dark:border-indigo-500/20">
+                <i data-lucide="shield" class="w-6 h-6 text-indigo-700 dark:text-indigo-300"></i>
+            </span>
 
-        <input type="text" name="q" value="{{ request.GET.q }}"
-            placeholder="Acción, modelo, usuario, IP o ID..."
-            class="border border-gray-300 dark:border-slate-700
-                   bg-white dark:bg-slate-800
-                   text-gray-700 dark:text-slate-200
-                   placeholder-gray-400 dark:placeholder-slate-400
-                   rounded-lg px-3 py-2
-                   focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                    Registro de Auditoría
+                </h1>
+            </div>
+        </div>
 
-        <input type="date" name="fecha" value="{{ request.GET.fecha }}"
-            class="border border-gray-300 dark:border-slate-700
-                   bg-white dark:bg-slate-800
-                   text-gray-700 dark:text-slate-200
-                   rounded-lg px-3 py-2
-                   focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        <a href="javascript:history.back()"
+           class="inline-flex items-center gap-2
+                  border border-gray-200 dark:border-white/10
+                  bg-white dark:bg-slate-900
+                  text-gray-700 dark:text-slate-200
+                  px-4 py-2.5 rounded-xl
+                  text-sm font-semibold
+                  hover:bg-gray-50 dark:hover:bg-slate-800
+                  transition shadow-sm">
+            <i data-lucide="circle-arrow-left" class="w-4 h-4"></i>
+            Volver
+        </a>
+    </div>
 
-        <input type="text" name="usuario" value="{{ request.GET.usuario }}"
-            placeholder="Usuario"
-            class="border border-gray-300 dark:border-slate-700
-                   bg-white dark:bg-slate-800
-                   text-gray-700 dark:text-slate-200
-                   placeholder-gray-400 dark:placeholder-slate-400
-                   rounded-lg px-3 py-2
-                   focus:ring-2 focus:ring-blue-500 focus:outline-none">
+    <!-- Card: Filtros -->
+    <div class="bg-white dark:bg-slate-900
+                border border-gray-200 dark:border-slate-700
+                rounded-2xl shadow-xl overflow-hidden mb-6">
 
-        <button type="submit"
-            class="bg-blue-600 hover:bg-blue-700 text-white
-                   rounded-lg px-4 py-2 font-semibold transition">
-            Filtrar
-        </button>
-    </form>
+        <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800
+                    border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-2">
+                <i data-lucide="filter" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Filtros
+                </h2>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                Filtra por texto, fecha y usuario. Se mantiene en la paginación.
+            </p>
+        </div>
 
-    <!-- Tabla -->
-    <div class="bg-white dark:bg-slate-900 rounded-xl shadow overflow-auto">
-        <table class="w-full text-left text-sm text-gray-700 dark:text-slate-200">
-            <thead class="bg-gray-100 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
-                <tr>
-                    <th class="py-3 px-4 font-semibold text-gray-600 dark:text-slate-300">Fecha</th>
-                    <th class="py-3 px-4 font-semibold text-gray-600 dark:text-slate-300">Usuario</th>
-                    <th class="py-3 px-4 font-semibold text-gray-600 dark:text-slate-300">Acción</th>
-                    <th class="py-3 px-4 font-semibold text-gray-600 dark:text-slate-300">Modelo</th>
-                    <th class="py-3 px-4 font-semibold text-gray-600 dark:text-slate-300 hidden md:table-cell">ID</th>
-                    <th class="py-3 px-4 font-semibold text-gray-600 dark:text-slate-300">Detalle</th>
-                    <th class="py-3 px-4 font-semibold text-gray-600 dark:text-slate-300 hidden md:table-cell">IP</th>
-                </tr>
-            </thead>
+        <form method="get" class="p-6 sm:p-7">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
-            <tbody>
-                {% for registro in auditorias %}
-                <tr class="border-b border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition">
-
-                    <td class="py-3 px-4 whitespace-nowrap">
-                        {{ registro.fecha|date:"d/m/Y H:i" }}
-                    </td>
-
-                    <td class="py-3 px-4">
-                        {{ registro.usuario.username|default:"-" }}
-                    </td>
-
-                    <td class="py-3 px-4">
-                        {% if registro.accion == "CREAR" %}
-                            <span class="px-2 py-1 rounded-full text-xs font-semibold
-                                         bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
-                                Crear
-                            </span>
-                        {% elif registro.accion == "EDITAR" %}
-                            <span class="px-2 py-1 rounded-full text-xs font-semibold
-                                         bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300">
-                                Editar
-                            </span>
-                        {% elif registro.accion == "ELIMINAR" %}
-                            <span class="px-2 py-1 rounded-full text-xs font-semibold
-                                         bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300">
-                                Eliminar
-                            </span>
-                        {% else %}
-                            <span class="px-2 py-1 rounded-full text-xs font-semibold
-                                         bg-gray-100 text-gray-700 dark:bg-slate-700 dark:text-slate-200">
-                                {{ registro.get_accion_display }}
-                            </span>
-                        {% endif %}
-                    </td>
-
-                    <td class="py-3 px-4">
-                        {{ registro.modelo_afectado }}
-                    </td>
-
-                    <td class="py-3 px-4 hidden md:table-cell">
-                        {{ registro.registro_id|default:"-" }}
-                    </td>
-
-                    <td class="py-3 px-4">
-                        {% if registro.cambios_antes %}
-                            <span class="text-xs font-semibold">
-                                Ver cambios ({{ registro.cambios_antes|length }})
-                            </span>
-                            <span class="text-xs text-gray-500 dark:text-slate-400 ml-2">
-                                (ver abajo)
-                            </span>
-                        {% else %}
-                            <span class="text-gray-400 dark:text-slate-500">-</span>
-                        {% endif %}
-                    </td>
-
-                    <td class="py-3 px-4 hidden md:table-cell">
-                        <span title="{{ registro.user_agent|default:'' }}">
-                            {{ registro.ip|default:"-" }}
+                <!-- q -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+                        Búsqueda
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i data-lucide="search" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
                         </span>
-                    </td>
-                </tr>
+                        <input type="text" name="q" value="{{ request.GET.q }}"
+                               placeholder="Acción, modelo, usuario, IP o ID..."
+                               class="w-full pl-10 pr-3 py-2.5 rounded-xl
+                                      border border-gray-300 dark:border-slate-600
+                                      bg-white dark:bg-slate-800
+                                      text-gray-800 dark:text-slate-100
+                                      placeholder-gray-400 dark:placeholder-slate-500
+                                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
 
-                {% if registro.cambios_antes %}
-                <tr class="border-b border-gray-200 dark:border-slate-700">
-                    <td colspan="7" class="px-4 py-3">
-                        <details>
-                            <summary class="cursor-pointer select-none text-sm font-semibold text-gray-700 dark:text-slate-200">
-                                Ver detalle de cambios
-                            </summary>
+                <!-- fecha -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+                        Fecha
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i data-lucide="calendar" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                        </span>
+                        <input type="date" name="fecha" value="{{ request.GET.fecha }}"
+                               class="w-full pl-10 pr-3 py-2.5 rounded-xl
+                                      border border-gray-300 dark:border-slate-600
+                                      bg-white dark:bg-slate-800
+                                      text-gray-800 dark:text-slate-100
+                                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
 
-                            <div class="mt-3 overflow-auto">
-                                <table class="w-full text-left text-xs">
-                                    <thead class="text-gray-500 dark:text-slate-400">
-                                        <tr>
-                                            <th class="py-2 pr-4">Campo</th>
-                                            <th class="py-2 pr-4">Antes</th>
-                                            <th class="py-2 pr-4">Después</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for k,v in registro.cambios_antes.items %}
-                                        <tr class="border-t border-gray-200 dark:border-slate-700">
-                                            <td class="py-2 pr-4 font-semibold">{{ k }}</td>
-                                            <td class="py-2 pr-4 text-gray-500 dark:text-slate-400">{{ v }}</td>
-                                            <td class="py-2 pr-4 text-gray-900 dark:text-slate-100">
-                                                {{ registro.cambios_despues|get_item:k|default:"" }}
-                                            </td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
+                <!-- usuario -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+                        Usuario
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i data-lucide="user" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                        </span>
+                        <input type="text" name="usuario" value="{{ request.GET.usuario }}"
+                               placeholder="Usuario"
+                               class="w-full pl-10 pr-3 py-2.5 rounded-xl
+                                      border border-gray-300 dark:border-slate-600
+                                      bg-white dark:bg-slate-800
+                                      text-gray-800 dark:text-slate-100
+                                      placeholder-gray-400 dark:placeholder-slate-500
+                                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+            </div>
 
-                            {% if registro.user_agent %}
-                            <div class="mt-3 text-xs text-gray-500 dark:text-slate-400">
-                                <span class="font-semibold">User-Agent:</span> {{ registro.user_agent }}
-                            </div>
+            <div class="flex flex-col sm:flex-row sm:justify-end gap-3 pt-5">
+                <a href="?"
+                   class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl
+                          border border-gray-200 dark:border-white/10
+                          bg-white dark:bg-slate-900
+                          text-gray-700 dark:text-slate-200
+                          hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                    Limpiar
+                </a>
+
+                <button type="submit"
+                        class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+                               bg-indigo-600 hover:bg-indigo-700
+                               text-white font-semibold
+                               shadow-md transition">
+                    <i data-lucide="filter" class="w-4 h-4"></i>
+                    Filtrar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Card: Tabla -->
+    <div class="bg-white dark:bg-slate-900
+                border border-gray-200 dark:border-slate-700
+                rounded-2xl shadow-xl overflow-hidden">
+
+        <div class="overflow-auto">
+            <table class="w-full text-left text-sm text-gray-700 dark:text-slate-200">
+                <thead class="bg-gray-100 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+                    <tr>
+                        <th class="py-3 px-4 font-semibold text-gray-600 dark:text-slate-300">Fecha</th>
+                        <th class="py-3 px-4 font-semibold text-gray-600 dark:text-slate-300">Usuario</th>
+                        <th class="py-3 px-4 font-semibold text-gray-600 dark:text-slate-300">Acción</th>
+                        <th class="py-3 px-4 font-semibold text-gray-600 dark:text-slate-300">Modelo</th>
+                        <th class="py-3 px-4 font-semibold text-gray-600 dark:text-slate-300 hidden md:table-cell">ID</th>
+                        <th class="py-3 px-4 font-semibold text-gray-600 dark:text-slate-300">Detalle</th>
+                        <th class="py-3 px-4 font-semibold text-gray-600 dark:text-slate-300 hidden md:table-cell">IP</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for registro in auditorias %}
+                    <tr class="border-b border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+
+                        <td class="py-3 px-4 whitespace-nowrap">
+                            {{ registro.fecha|date:"d/m/Y H:i" }}
+                        </td>
+
+                        <td class="py-3 px-4">
+                            {{ registro.usuario.username|default:"-" }}
+                        </td>
+
+                        <td class="py-3 px-4">
+                            {% if registro.accion == "CREAR" %}
+                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold
+                                             bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300">
+                                    Crear
+                                </span>
+                            {% elif registro.accion == "EDITAR" %}
+                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold
+                                             bg-yellow-100 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-300">
+                                    Editar
+                                </span>
+                            {% elif registro.accion == "ELIMINAR" %}
+                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold
+                                             bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300">
+                                    Eliminar
+                                </span>
+                            {% else %}
+                                <span class="px-2.5 py-1 rounded-full text-xs font-semibold
+                                             bg-gray-100 text-gray-700 dark:bg-slate-700 dark:text-slate-200">
+                                    {{ registro.get_accion_display }}
+                                </span>
                             {% endif %}
-                        </details>
-                    </td>
-                </tr>
-                {% endif %}
+                        </td>
 
-                {% empty %}
-                <tr>
-                    <td colspan="7" class="py-6 text-center text-gray-500 dark:text-slate-400">
-                        No hay registros disponibles
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                        <td class="py-3 px-4">
+                            {{ registro.modelo_afectado }}
+                        </td>
 
-    <!-- Paginación -->
-    {% if auditorias.has_other_pages %}
-    <div class="flex justify-center items-center mt-6 gap-4">
-        {% if auditorias.has_previous %}
-        <a href="?page={{ auditorias.previous_page_number }}&{{ params }}"
-            class="px-4 py-2 rounded-lg text-sm bg-gray-200 hover:bg-gray-300
-                   dark:bg-slate-800 dark:hover:bg-slate-700
-                   text-gray-700 dark:text-slate-200">
-            Anterior
-        </a>
+                        <td class="py-3 px-4 hidden md:table-cell">
+                            {{ registro.registro_id|default:"-" }}
+                        </td>
+
+                        <td class="py-3 px-4">
+                            {% if registro.cambios_antes %}
+                                <span class="inline-flex items-center gap-2 text-xs font-semibold text-indigo-700 dark:text-indigo-300">
+                                    <i data-lucide="file-diff" class="w-4 h-4"></i>
+                                    Ver cambios ({{ registro.cambios_antes|length }})
+                                </span>
+                                <span class="text-xs text-gray-500 dark:text-slate-400 ml-2">
+                                    (ver abajo)
+                                </span>
+                            {% else %}
+                                <span class="text-gray-400 dark:text-slate-500">-</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="py-3 px-4 hidden md:table-cell">
+                            <span title="{{ registro.user_agent|default:'' }}">
+                                {{ registro.ip|default:"-" }}
+                            </span>
+                        </td>
+                    </tr>
+
+                    {% if registro.cambios_antes %}
+                    <tr class="border-b border-gray-200 dark:border-slate-700">
+                        <td colspan="7" class="px-4 py-3 bg-gray-50/60 dark:bg-slate-800/40">
+                            <details class="rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
+                                <summary class="cursor-pointer select-none text-sm font-semibold text-gray-700 dark:text-slate-200 flex items-center gap-2">
+                                    <i data-lucide="list-details" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                                    Ver detalle de cambios
+                                </summary>
+
+                                <div class="mt-4 overflow-auto">
+                                    <table class="w-full text-left text-xs">
+                                        <thead class="text-gray-500 dark:text-slate-400">
+                                            <tr>
+                                                <th class="py-2 pr-4">Campo</th>
+                                                <th class="py-2 pr-4">Antes</th>
+                                                <th class="py-2 pr-4">Después</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for k,v in registro.cambios_antes.items %}
+                                            <tr class="border-t border-gray-200 dark:border-slate-700">
+                                                <td class="py-2 pr-4 font-semibold text-gray-800 dark:text-slate-200">{{ k }}</td>
+                                                <td class="py-2 pr-4 text-gray-500 dark:text-slate-400">{{ v }}</td>
+                                                <td class="py-2 pr-4 text-gray-900 dark:text-slate-100">
+                                                    {{ registro.cambios_despues|get_item:k|default:"" }}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                {% if registro.user_agent %}
+                                <div class="mt-4 text-xs text-gray-500 dark:text-slate-400">
+                                    <span class="font-semibold">User-Agent:</span> {{ registro.user_agent }}
+                                </div>
+                                {% endif %}
+                            </details>
+                        </td>
+                    </tr>
+                    {% endif %}
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="py-10 text-center text-gray-500 dark:text-slate-400">
+                            No hay registros disponibles
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Paginación -->
+        {% if auditorias.has_other_pages %}
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-4 p-5 border-t border-gray-200 dark:border-slate-700">
+            {% if auditorias.has_previous %}
+            <a href="?page={{ auditorias.previous_page_number }}&{{ params }}"
+               class="px-4 py-2 rounded-xl text-sm
+                      border border-gray-200 dark:border-white/10
+                      bg-white dark:bg-slate-900
+                      text-gray-700 dark:text-slate-200
+                      hover:bg-gray-50 dark:hover:bg-slate-800 transition shadow-sm">
+                Anterior
+            </a>
+            {% endif %}
+
+            <span class="text-gray-600 dark:text-slate-400 text-sm">
+                Página {{ auditorias.number }} de {{ auditorias.paginator.num_pages }}
+            </span>
+
+            {% if auditorias.has_next %}
+            <a href="?page={{ auditorias.next_page_number }}&{{ params }}"
+               class="px-4 py-2 rounded-xl text-sm
+                      border border-gray-200 dark:border-white/10
+                      bg-white dark:bg-slate-900
+                      text-gray-700 dark:text-slate-200
+                      hover:bg-gray-50 dark:hover:bg-slate-800 transition shadow-sm">
+                Siguiente
+            </a>
+            {% endif %}
+        </div>
         {% endif %}
 
-        <span class="text-gray-600 dark:text-slate-400 text-sm">
-            Página {{ auditorias.number }} de {{ auditorias.paginator.num_pages }}
-        </span>
-
-        {% if auditorias.has_next %}
-        <a href="?page={{ auditorias.next_page_number }}&{{ params }}"
-            class="px-4 py-2 rounded-lg text-sm bg-gray-200 hover:bg-gray-300
-                   dark:bg-slate-800 dark:hover:bg-slate-700
-                   text-gray-700 dark:text-slate-200">
-            Siguiente
-        </a>
-        {% endif %}
     </div>
-    {% endif %}
-
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    if (window.lucide) lucide.createIcons();
+});
+</script>
+
 {% endblock %}
+

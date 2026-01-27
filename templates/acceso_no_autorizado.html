@@ -4,81 +4,68 @@
 {% block title %}Acceso no autorizado{% endblock %}
 
 {% block content %}
-<div class="relative min-h-screen flex items-center justify-center overflow-hidden">
+<div class="relative h-dvh overflow-hidden flex items-center justify-center px-4 sm:px-6">
 
     <!-- FONDO -->
-    <div class="absolute inset-0">
+    <div class="fixed inset-0 -z-10">
         <img src="{% static 'img/login-bg.jpg' %}"
              class="w-full h-full object-cover blur-md scale-110"
              alt="Fondo">
-        <div class="absolute inset-0 bg-black/50"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-black/75"></div>
     </div>
 
     <!-- CARD -->
-    <div class="relative z-10 w-full max-w-md
+    <div class="w-full max-w-sm sm:max-w-md
                 bg-gray-900/70 backdrop-blur-2xl
                 rounded-3xl shadow-2xl
                 border border-white/10
-                p-10 text-center text-white
+                p-6 sm:p-8 text-center text-white
                 animate-fade-in">
 
-        <!-- Ícono -->
-        <div class="mx-auto mb-6 flex items-center justify-center
-                    w-20 h-20 rounded-full bg-red-500/20">
-            <svg class="w-10 h-10 text-red-400" fill="none" stroke="currentColor" stroke-width="2"
-                 viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M12 9v2m0 4h.01M5.07 19a10 10 0 1113.86 0H5.07z" />
-            </svg>
+        <!-- ICONO (lucide) -->
+        <div class="mx-auto mb-5 sm:mb-6
+                    w-16 h-16 sm:w-20 sm:h-20 rounded-2xl
+                    bg-red-500/15 border border-red-500/20
+                    flex items-center justify-center">
+            <i data-lucide="shield-alert" class="w-8 h-8 sm:w-10 sm:h-10 text-red-300"></i>
         </div>
 
-        <!-- Título -->
-        <h1 class="text-3xl font-extrabold mb-3">
+        <!-- TÍTULO -->
+        <h1 class="font-extrabold tracking-tight
+                   text-2xl sm:text-3xl">
             Acceso restringido
         </h1>
 
-        <p class="text-gray-300 mb-8 leading-relaxed">
+        <p class="text-gray-300 mt-2 mb-6 sm:mb-7 leading-relaxed text-sm sm:text-base">
             Por favor, inicia sesión para continuar.
         </p>
 
-        <!-- Botón -->
+        <!-- BOTÓN -->
         <a href="{% url 'login' %}"
-           class="inline-flex items-center justify-center gap-2
-                  px-8 py-3 bg-indigo-600 text-white rounded-xl
-                  font-semibold shadow-lg
-                  hover:bg-indigo-700 hover:scale-105
-                  transition-transform duration-200">
-
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2"
-                 viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M5 12h14m-7-7l7 7-7 7" />
-            </svg>
+           class="w-full inline-flex items-center justify-center gap-2
+                  px-6 py-3 rounded-2xl
+                  bg-indigo-600 text-white font-semibold
+                  hover:bg-indigo-700
+                  transition transform hover:-translate-y-0.5
+                  focus:outline-none focus:ring-2 focus:ring-indigo-500/70">
+            <i data-lucide="log-in" class="w-5 h-5"></i>
             Iniciar sesión
         </a>
 
-        <!-- Nota -->
-        <p class="mt-6 text-sm text-gray-400">
+        <!-- NOTA -->
+        <p class="mt-5 sm:mt-6 text-xs sm:text-sm text-gray-400">
             Sistema protegido · Acceso solo para usuarios autorizados
         </p>
     </div>
+
 </div>
 
 <!-- Animación -->
 <style>
 @keyframes fade-in {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
-
-.animate-fade-in {
-    animation: fade-in 0.6s ease-out;
-}
+.animate-fade-in { animation: fade-in 0.55s ease-out; }
 </style>
 {% endblock %}

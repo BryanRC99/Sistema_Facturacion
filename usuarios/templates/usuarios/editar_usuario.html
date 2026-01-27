@@ -2,6 +2,8 @@
 {% load static %}
 {% load widget_tweaks %}
 
+{% block title %}Editar usuario{% endblock %}
+
 {% block content %}
 
 <div class="max-w-4xl mx-auto mt-12">
@@ -33,37 +35,210 @@
             {% csrf_token %}
 
             {% for field in form %}
-                <div class="{% if field.name == 'password2' or field.name == 'password1' %}md:col-span-2{% endif %}">
-                    <label class="block mb-2 text-gray-700 dark:text-slate-300 font-semibold">
-                        {{ field.label }}
-                    </label>
+            <div class="{% if field.name == 'password2' or field.name == 'password1' %}md:col-span-2{% endif %}">
+                <label class="block mb-2 text-gray-700 dark:text-slate-300 font-semibold">
+                    {{ field.label }}
+                </label>
 
-                    {{ field|add_class:"border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 w-full shadow-sm bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" }}
+                {{ field|add_class:"border border-gray-300 dark:border-slate-700 rounded-lg px-3 py-2 w-full shadow-sm bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" }}
 
-                    {% if field.errors %}
-                        <p class="mt-1 text-red-600 dark:text-red-400 text-sm font-medium flex items-center gap-1">
-                            <i data-lucide="alert-circle" class="w-4 h-4"></i>
-                            {{ field.errors.0 }}
-                        </p>
-                    {% endif %}
-                </div>
+                {% if field.errors %}
+                <p class="mt-1 text-red-600 dark:text-red-400 text-sm font-medium flex items-center gap-1">
+                    <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                    {{ field.errors.0 }}
+                </p>
+                {% endif %}
+            </div>
             {% endfor %}
 
             <!-- Botón Guardar -->
             <div class="md:col-span-2 flex justify-center mt-6">
                 <button type="submit"
-                    class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition shadow-md">
+                        class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition shadow-md">
                     <i data-lucide="save" class="w-5 h-5"></i>
                     Guardar cambios
                 </button>
             </div>
         </form>
+
+        <!-- SECCIÓN SEGURIDAD 2FA (Solo el dueño de la cuenta) -->
+        {% if request.user.id == usuario.id %}
+        <div class="mt-10 p-6 rounded-2xl border border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/40">
+            <h3 class="text-xl font-bold text-gray-800 dark:text-slate-100 flex items-center gap-2 mb-2">
+                <i data-lucide="shield-check" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                Seguridad (2FA)
+            </h3>
+
+            <p class="text-gray-600 dark:text-slate-400 mb-4">
+                Puedes activar Google Authenticator para mejorar la seguridad. El código por correo (Brevo) seguirá
+                disponible como alternativa.
+            </p>
+
+            {# Evita error si todavía no existe totp_profile #}
+            {% with totp_enabled=usuario.totp_profile.enabled|default:False %}
+                {% if totp_enabled %}
+                <div class="flex items-start justify-between gap-4 flex-col md:flex-row">
+                    <div>
+                        <p class="font-semibold text-green-700 dark:text-green-400 flex items-center gap-2">
+                            <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                            Google Authenticator: Activado
+                        </p>
+                        <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                            Al iniciar sesión, se te pedirá el código de tu app. Puedes elegir “usar correo” si lo
+                            necesitas.
+                        </p>
+                    </div>
+
+                    <!-- Botón abre modal -->
+                    <form method="post" action="{% url 'totp:disable' %}" id="disableTotpForm">
+                        {% csrf_token %}
+                        <button type="button" id="openDisableTotpModal"
+                                class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition shadow-md">
+                            <i data-lucide="shield-off" class="w-5 h-5"></i>
+                            Desactivar Authenticator
+                        </button>
+                    </form>
+                </div>
+                {% else %}
+                <div class="flex items-start justify-between gap-4 flex-col md:flex-row">
+                    <div>
+                        <p class="font-semibold text-yellow-700 dark:text-yellow-400 flex items-center gap-2">
+                            <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                            Google Authenticator: Desactivado
+                        </p>
+                        <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                            Recomendado activar para mayor seguridad.
+                        </p>
+                    </div>
+
+                    <a href="{% url 'totp:setup' %}"
+                       class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition shadow-md">
+                        <i data-lucide="qr-code" class="w-5 h-5"></i>
+                        Activar Authenticator
+                    </a>
+                </div>
+                {% endif %}
+            {% endwith %}
+        </div>
+        {% endif %}
+
     </div>
 </div>
 
-<!-- Activar íconos Lucide -->
+<!-- Modal Confirmación Desactivar 2FA -->
+<div id="disableTotpModal"
+     class="fixed inset-0 z-[60] hidden"
+     aria-hidden="true">
+
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" data-modal-close></div>
+
+    <!-- Dialog -->
+    <div class="relative min-h-screen flex items-center justify-center p-4">
+        <div role="dialog"
+             aria-modal="true"
+             aria-labelledby="modalTitle"
+             aria-describedby="modalDesc"
+             class="w-full max-w-md rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900 overflow-hidden">
+
+            <!-- Header -->
+            <div class="px-6 py-5 border-b border-gray-100 dark:border-slate-700 flex items-start gap-3">
+                <div class="mt-0.5 w-10 h-10 rounded-xl bg-red-50 dark:bg-red-500/10 flex items-center justify-center">
+                    <i data-lucide="shield-alert" class="w-6 h-6 text-red-600 dark:text-red-400"></i>
+                </div>
+
+                <div class="flex-1">
+                    <h3 id="modalTitle" class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                        ¿Desactivar Google Authenticator?
+                    </h3>
+                    <p id="modalDesc" class="mt-1 text-sm text-gray-600 dark:text-slate-400">
+                        Al desactivar, tu cuenta quedará con menos seguridad. Podrás seguir usando la verificación por correo si la tienes activa.
+                    </p>
+                </div>
+
+                <button type="button" id="closeDisableTotpModalX"
+                        class="text-gray-400 hover:text-gray-600 dark:text-slate-500 dark:hover:text-slate-300 transition"
+                        aria-label="Cerrar">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="px-6 py-5">
+                <div class="rounded-xl border border-amber-200/70 dark:border-amber-400/20 bg-amber-50 dark:bg-amber-500/10 p-4">
+                    <p class="text-sm text-amber-900 dark:text-amber-200 flex items-start gap-2">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 mt-0.5"></i>
+                        <span>
+                            Recomendado solo si perdiste acceso a tu app o estás cambiando de dispositivo.
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="px-6 py-5 border-t border-gray-100 dark:border-slate-700 flex items-center justify-end gap-3">
+                <button type="button" id="cancelDisableTotpModal"
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-gray-50 dark:hover:bg-slate-700 transition">
+                    <i data-lucide="x-circle" class="w-5 h-5"></i>
+                    Cancelar
+                </button>
+
+                <button type="button" id="confirmDisableTotp"
+                        class="inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold bg-red-600 hover:bg-red-700 text-white transition shadow-md">
+                    <i data-lucide="shield-off" class="w-5 h-5"></i>
+                    Sí, desactivar
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <script>
-    lucide.createIcons();
+  document.addEventListener("DOMContentLoaded", () => {
+    // Si ya lo llamas en base.html, esto es opcional; pero no rompe nada.
+    if (window.lucide) lucide.createIcons();
+
+    const modal = document.getElementById("disableTotpModal");
+    const openBtn = document.getElementById("openDisableTotpModal");
+    const closeX = document.getElementById("closeDisableTotpModalX");
+    const cancelBtn = document.getElementById("cancelDisableTotpModal");
+    const confirmBtn = document.getElementById("confirmDisableTotp");
+    const form = document.getElementById("disableTotpForm");
+
+    if (!modal || !openBtn || !form) return;
+
+    function openModal() {
+      modal.classList.remove("hidden");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.classList.add("overflow-hidden");
+      setTimeout(() => cancelBtn?.focus(), 0);
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function closeModal() {
+      modal.classList.add("hidden");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("overflow-hidden");
+      openBtn.focus();
+    }
+
+    openBtn.addEventListener("click", openModal);
+    closeX?.addEventListener("click", closeModal);
+    cancelBtn?.addEventListener("click", closeModal);
+
+    modal.addEventListener("click", (e) => {
+      if (e.target && e.target.hasAttribute("data-modal-close")) closeModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !modal.classList.contains("hidden")) closeModal();
+    });
+
+    confirmBtn?.addEventListener("click", () => {
+      form.submit();
+    });
+  });
 </script>
 
 {% endblock %}

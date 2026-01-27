@@ -7,7 +7,6 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 from django.conf import settings
 
-
 from .models import EmailOTP
 
 OTP_TTL_MINUTES = 5
@@ -77,8 +76,11 @@ def send_otp_email(request, user, code: str):
     device, browser = _parse_user_agent(request)
     dt_str = timezone.localtime(timezone.now()).strftime("%d/%m/%Y %H:%M:%S")
 
-    # ✅ Aquí estaba el error: getattr(settings, "LOGO_URL", "")  (no la URL como key)
-    logo_url = getattr(settings, "LOGO_URL", "https://res.cloudinary.com/dmhed5kxh/image/upload/v1769004998/logo_vifmb7.png")
+    logo_url = getattr(
+        settings,
+        "LOGO_URL",
+        "https://res.cloudinary.com/dmhed5kxh/image/upload/v1769004998/logo_vifmb7.png",
+    )
 
     text = (
         f"Tu código es: {code}. Expira en {OTP_TTL_MINUTES} minutos.\n"

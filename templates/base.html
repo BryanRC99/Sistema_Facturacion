@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="es" class="transition-colors duration-300">
 
@@ -6,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Sistema de Facturación{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'img/logo.png' %}">
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -29,7 +31,7 @@
 </head>
 
 <body class="bg-gray-50 text-gray-800 dark:bg-darkbg dark:text-gray-200 overflow-hidden transition-colors duration-300">
-
+    {% include "includes/messages.html" %}
     <div class="flex min-h-screen">
 
         <!-- ================== SIDEBAR ================== -->
@@ -60,31 +62,27 @@
                     <span class="sidebar-text">Proveedores</span>
                 </a>
 
-                <details class="group">
-                    <summary class="sidebar-item cursor-pointer
-                    {% if '/productos/' in request.path or '/categorias/' in request.path %}active{% endif %}">
-                        <i data-lucide="shopping-basket"></i>
-                        <span class="sidebar-text flex-1">Productos</span>
-                        <i data-lucide="chevron-down"
-                            class="sidebar-text transition-transform duration-300 group-open:rotate-180"></i>
-                    </summary>
+                <a href="/productos/" class="sidebar-item {% if '/productos/' in request.path %}active{% endif %}">
+                    <i data-lucide="shopping-basket"></i>
+                    <span class="sidebar-text">Productos</span>
+                </a>
 
-                    <div class="ml-10 mt-1 space-y-1">
-                        <a href="/productos/" class="sidebar-sub">Productos</a>
-                        <a href="/categorias/" class="sidebar-sub">Categorías</a>
-                    </div>
-                </details>
+                <a href="/categorias/" class="sidebar-item {% if '/categorias/' in request.path %}active{% endif %}">
+                    <i data-lucide="layers-3"></i>
+                    <span class="sidebar-text">Categorías</span>
+                </a>
 
                 <a href="/facturas/" class="sidebar-item {% if '/facturas/' in request.path %}active{% endif %}">
                     <i data-lucide="receipt"></i>
                     <span class="sidebar-text">Facturas</span>
                 </a>
 
-                <a href="{% url 'reportes:dashboard' %}"
+                <a href="{% url 'dashboard' %}"
                     class="sidebar-item {% if '/reportes/' in request.path %}active{% endif %}">
                     <i data-lucide="bar-chart-3"></i>
                     <span class="sidebar-text">Reportes</span>
                 </a>
+
 
                 <a href="{% url 'auditoria:dashboard' %}"
                     class="sidebar-item {% if '/auditoria/' in request.path %}active{% endif %}">
@@ -275,9 +273,39 @@
 
     <!-- ================== ESTILOS ================== -->
     <style>
+        /* ================= FADE-IN AL CARGAR ================= */
+        body {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        body.loaded {
+            opacity: 1;
+        }
+
         /* ================= SIDEBAR ================= */
         #sidebar {
             transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* IMPORTANTE: que el sidebar NO recorte el popover cuando está colapsado */
+        #sidebar.w-20 {
+            overflow: visible !important;
+        }
+
+        /* NAV: permite que el popover salga a la derecha (sin recorte) */
+        nav.sidebar-scroll {
+            overflow-y: auto;
+            overflow-x: visible !important;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 999px;
         }
 
         /* ================= TEXTOS DEL SIDEBAR ================= */
@@ -290,29 +318,30 @@
             transform: translateX(-10px);
         }
 
+        /* ================= ITEMS ================= */
         .sidebar-item {
             display: flex;
             align-items: center;
-            gap: .75rem;
-            padding: .55rem .75rem;
-            border-radius: .5rem;
-            transition: all .2s ease;
+            gap: 0.75rem;
+            padding: 0.55rem 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
             position: relative;
         }
 
         .sidebar-item:hover {
-            background: rgba(255, 255, 255, .08);
+            background: rgba(255, 255, 255, 0.08);
             color: #fff;
             transform: translateX(2px);
         }
 
         .sidebar-item.active {
-            background: rgba(96, 165, 250, .2);
+            background: rgba(96, 165, 250, 0.2);
             color: #60a5fa;
         }
 
         .sidebar-item.active::before {
-            content: '';
+            content: "";
             position: absolute;
             left: -6px;
             top: 20%;
@@ -322,40 +351,83 @@
             border-radius: 999px;
         }
 
-        .sidebar-sub {
-            display: block;
-            padding: .35rem .75rem;
-            border-radius: .375rem;
-            font-size: .8rem;
-            color: #cbd5f5;
-            transition: all .2s;
+        /* Evita marcador de <summary> */
+        summary::-webkit-details-marker {
+            display: none;
         }
 
-        .sidebar-sub:hover {
-            background: rgba(255, 255, 255, .08);
+        /* ================= SUBMENU ================= */
+        .sidebar-submenu {
+            margin-left: 2.5rem;
+            /* similar a ml-10 */
+        }
+
+        .sidebar-sub-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.65rem;
+            border-radius: 0.5rem;
+            font-size: 0.85rem;
+            color: #cbd5f5;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .sidebar-sub-link:hover {
+            background: rgba(255, 255, 255, 0.08);
             color: #fff;
             transform: translateX(2px);
         }
 
-        .sidebar-scroll::-webkit-scrollbar {
-            width: 6px;
+        .sidebar-sub-link.active {
+            background: rgba(96, 165, 250, 0.18);
+            color: #60a5fa;
         }
 
-        .sidebar-scroll::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, .15);
-            border-radius: 999px;
+        /* ==========================
+     ✅ MODO COLAPSADO (w-20)
+     Submenu como POPOVER (hover)
+     ========================== */
+        #sidebar.w-20 details {
+            position: relative;
         }
 
-        /* ================= FADE-IN AL CARGAR ================= */
-        body {
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        /* En colapsado: centramos los items */
+        #sidebar.w-20 .sidebar-item,
+        #sidebar.w-20 summary.sidebar-item {
+            justify-content: center;
         }
 
-        body.loaded {
-            opacity: 1;
+        /* En colapsado: esconder submenú por defecto y mostrarlo como popover */
+        #sidebar.w-20 details .sidebar-submenu {
+            display: none;
+            position: absolute;
+            left: calc(100% + 12px);
+            top: 50%;
+            transform: translateY(-50%);
+            margin-left: 0;
+            width: 230px;
+
+            padding: 0.5rem;
+            border-radius: 0.9rem;
+            background: rgba(15, 23, 42, 0.98);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+            z-index: 9999;
+        }
+
+        #sidebar.w-20 details:hover .sidebar-submenu {
+            display: block;
+        }
+
+        /* En colapsado: un hover más claro en summary */
+        #sidebar.w-20 details:hover>summary {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
         }
     </style>
+
 
     <!-- ================== USER MENU SCRIPT ================== -->
     <script>

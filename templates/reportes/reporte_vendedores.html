@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block title %}Reporte de vendedores{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto mt-10 px-4 space-y-8">
+
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div class="flex items-start gap-3">
+            <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                         bg-slate-100 dark:bg-slate-800
+                         border border-gray-200 dark:border-slate-700">
+                <i data-lucide="badge-dollar-sign" class="w-6 h-6 text-slate-700 dark:text-slate-200"></i>
+            </span>
+
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                    Reporte de vendedores
+                </h1>
+                <p class="mt-2 text-sm text-gray-600 dark:text-slate-400">
+                    Ranking por ventas y número de facturas.
+                </p>
+            </div>
+        </div>
+
+        <a href="{% url 'dashboard' %}"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
+                  bg-white dark:bg-slate-900
+                  border border-gray-200 dark:border-slate-700
+                  text-gray-800 dark:text-slate-100
+                  hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            Volver
+        </a>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+        <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-2">
+                <i data-lucide="calendar-range" class="w-5 h-5 text-slate-700 dark:text-slate-200"></i>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Filtros
+                </h2>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                Filtra el ranking por rango de fechas.
+            </p>
+        </div>
+
+        <div class="p-6 sm:p-7">
+            <form method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-1">Inicio</label>
+                    <input type="date" name="fecha_inicio" value="{{ fecha_inicio|date:'Y-m-d' }}"
+                           class="w-full rounded-xl border-gray-200 dark:border-slate-700
+                                  bg-white dark:bg-slate-950
+                                  text-gray-900 dark:text-slate-100
+                                  focus:ring-slate-500 focus:border-slate-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-1">Fin</label>
+                    <input type="date" name="fecha_fin" value="{{ fecha_fin|date:'Y-m-d' }}"
+                           class="w-full rounded-xl border-gray-200 dark:border-slate-700
+                                  bg-white dark:bg-slate-950
+                                  text-gray-900 dark:text-slate-100
+                                  focus:ring-slate-500 focus:border-slate-500">
+                </div>
+
+                <div class="flex items-end gap-2">
+                    <button class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
+                                   bg-slate-800 hover:bg-slate-900 text-white shadow transition">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                        Filtrar
+                    </button>
+
+                    <a href="{% url 'reporte_vendedores' %}"
+                       class="inline-flex items-center justify-center px-4 py-2 rounded-xl text-sm font-semibold
+                              bg-white dark:bg-slate-900
+                              border border-gray-200 dark:border-slate-700
+                              text-gray-800 dark:text-slate-100
+                              hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 flex items-center gap-4">
+            <div class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 p-3 rounded-xl border border-gray-200 dark:border-slate-700">
+                <i data-lucide="users" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 dark:text-slate-400">Vendedores</p>
+                <p class="text-2xl font-bold text-gray-800 dark:text-slate-100">{{ vendedores|length }}</p>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 flex items-center gap-4">
+            <div class="bg-green-100 dark:bg-green-500/10 text-green-700 dark:text-green-300 p-3 rounded-xl border border-green-200/50 dark:border-green-500/20">
+                <i data-lucide="trophy" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 dark:text-slate-400">Top ventas</p>
+                <p class="text-2xl font-bold text-gray-800 dark:text-slate-100">
+                    $ {% if vendedores %}{{ vendedores.0.total|floatformat:2 }}{% else %}0.00{% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 flex items-center gap-4">
+            <div class="bg-blue-100 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 p-3 rounded-xl border border-blue-200/50 dark:border-blue-500/20">
+                <i data-lucide="file-text" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 dark:text-slate-400">Facturas top</p>
+                <p class="text-2xl font-bold text-gray-800 dark:text-slate-100">
+                    {% if vendedores %}{{ vendedores.0.cantidad }}{% else %}0{% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRÁFICO -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+        <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-2">
+                <i data-lucide="bar-chart-3" class="w-5 h-5 text-slate-700 dark:text-slate-200"></i>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Top vendedores (por total)
+                </h2>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                Comparación del total vendido.
+            </p>
+        </div>
+
+        <div class="p-6 sm:p-7">
+            <canvas id="vendedoresChart" height="120"></canvas>
+        </div>
+    </div>
+
+    <!-- TABLA -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+        <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-2">
+                <i data-lucide="list" class="w-5 h-5 text-slate-700 dark:text-slate-200"></i>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Ranking
+                </h2>
+            </div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+                <thead class="bg-white dark:bg-slate-900">
+                    <tr class="border-b border-gray-200 dark:border-slate-700 text-gray-500 dark:text-slate-400">
+                        <th class="py-3 px-4 text-left font-semibold">Vendedor</th>
+                        <th class="py-3 px-4 text-right font-semibold">Facturas</th>
+                        <th class="py-3 px-4 text-right font-semibold">Ticket</th>
+                        <th class="py-3 px-4 text-right font-semibold">Total</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for v in vendedores %}
+                        <tr class="border-b border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                            <td class="py-3 px-4 font-medium text-gray-900 dark:text-slate-100">
+                                {{ v.vendedor__username|default:v.user__username|default:"(Sin usuario)" }}
+                            </td>
+                            <td class="py-3 px-4 text-right text-gray-700 dark:text-slate-200">
+                                {{ v.cantidad|default:0 }}
+                            </td>
+                            <td class="py-3 px-4 text-right text-gray-700 dark:text-slate-200 whitespace-nowrap">
+                                $ {{ v.ticket_promedio|default:0|floatformat:2 }}
+                            </td>
+                            <td class="py-3 px-4 text-right font-semibold text-gray-900 dark:text-slate-100 whitespace-nowrap">
+                                $ {{ v.total|default:0|floatformat:2 }}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-10 text-gray-500 dark:text-slate-400">
+                                No hay datos de vendedores para este rango.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    if (window.lucide) lucide.createIcons();
+
+    const labels = [
+        {% for v in vendedores|slice:":10" %}
+            "{{ v.vendedor__username|default:v.user__username|default:'(Sin usuario)'|escapejs }}",
+        {% endfor %}
+    ];
+
+    const data = [
+        {% for v in vendedores|slice:":10" %}
+            {{ v.total|default:0 }},
+        {% endfor %}
+    ];
+
+    const canvas = document.getElementById("vendedoresChart");
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels,
+            datasets: [{
+                label: "Total vendido ($)",
+                data,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } }
+        }
+    });
+});
+</script>
+{% endblock %}

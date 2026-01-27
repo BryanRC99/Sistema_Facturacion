@@ -14,6 +14,8 @@ import random
 from django.shortcuts import get_object_or_404
 from datetime import datetime
 import json
+from django.contrib import messages
+
 
 from clientes.models import Cliente
 from productos.models import Producto
@@ -145,13 +147,35 @@ def crear_factura(request):
     productos = Producto.objects.filter(estado=True)
 
     if request.method == 'POST':
-        cliente_id = request.POST['cliente']
-        forma_pago = request.POST['forma_pago']
+        cliente_id = request.POST.get('cliente')
+        forma_pago = request.POST.get('forma_pago')
 
-        # Crear número de factura simple (puedes mejorar)
-        ultimo = Factura.objects.all().count() + 1
+        if not cliente_id:
+            messages.error(request, " Debes seleccionar un cliente.")
+            return render(request, 'facturacion/crear.html', {'clientes': clientes, 'productos': productos, 'form_data': request.POST})
+
+        if not forma_pago:
+            messages.error(request, " Debes seleccionar una forma de pago.")
+            return render(request, 'facturacion/crear.html', {'clientes': clientes, 'productos': productos, 'form_data': request.POST})
+
+        productos_ids = request.POST.getlist('producto_id')
+        cantidades = request.POST.getlist('cantidad')
+        precios = request.POST.getlist('precio_unitario')
+        descuentos = request.POST.getlist('descuento')
+
+        if not productos_ids:
+            messages.error(request, " Debes agregar al menos un producto a la factura.")
+            return render(request, 'facturacion/crear.html', {'clientes': clientes, 'productos': productos, 'form_data': request.POST})
+
+        if not (len(productos_ids) == len(cantidades) == len(precios) == len(descuentos)):
+            messages.error(request, " Los detalles de la factura están incompletos.")
+            return render(request, 'facturacion/crear.html', {'clientes': clientes, 'productos': productos, 'form_data': request.POST})
+
+        # Número de factura simple
+        ultimo = Factura.objects.count() + 1
         numero_factura = f"001-001-{ultimo:09d}"
 
+        # Creamos factura “temporal” (si algo falla, la eliminamos)
         factura = Factura.objects.create(
             cliente_id=cliente_id,
             forma_pago=forma_pago,
@@ -159,26 +183,50 @@ def crear_factura(request):
             fecha=now()
         )
 
-        # VARIABLES DE CALCULO
+        def fail(msg: str):
+            # elimina lo creado en esta transacción y vuelve al form
+            factura.delete()
+            messages.error(request, msg)
+            return render(request, 'facturacion/crear.html', {
+                'clientes': clientes,
+                'productos': productos,
+                'form_data': request.POST
+            })
+
         subtotal = 0
         subtotal_iva = 0
         subtotal_cero = 0
         descuento_total = 0
-        iva_total = 0
-
-        # RECIBIR DETALLES DEL FORM
-        productos_ids = request.POST.getlist('producto_id')
-        cantidades = request.POST.getlist('cantidad')
-        precios = request.POST.getlist('precio_unitario')
-        descuentos = request.POST.getlist('descuento')
 
         for i in range(len(productos_ids)):
-            prod = Producto.objects.get(id=productos_ids[i])
-            cantidad = int(cantidades[i])
-            precio = float(precios[i])
-            desc = float(descuentos[i])
+            # Parse seguro
+            try:
+                prod_id = int(productos_ids[i])
+                cantidad = int((cantidades[i] or "0").strip())
+                precio = float((precios[i] or "0").strip())
+                desc = float((descuentos[i] or "0").strip())
+            except (ValueError, TypeError):
+                return fail(" Hay valores inválidos en los detalles de la factura.")
+
+            # Validaciones por línea
+            if cantidad <= 0:
+                return fail(" La cantidad debe ser mayor a 0.")
+            if precio < 0:
+                return fail(" El precio no puede ser negativo.")
+            if desc < 0:
+                return fail(" El descuento no puede ser negativo.")
+
+            # Producto + stock (bloquea fila para evitar carreras)
+            prod = Producto.objects.select_for_update().get(id=prod_id)
+
+            if not prod.estado:
+                return fail(f" El producto '{prod.nombre}' no está disponible.")
+            if prod.stock < cantidad:
+                return fail(f" Stock insuficiente para '{prod.nombre}'. Disponible: {prod.stock}.")
 
             sub = (precio * cantidad) - desc
+            if sub < 0:
+                return fail(f" El subtotal de '{prod.nombre}' no puede ser negativo.")
 
             # Guardar detalle
             DetalleFactura.objects.create(
@@ -190,16 +238,14 @@ def crear_factura(request):
                 subtotal=sub
             )
 
-            # ACTUALIZAR STOCK
+            # Actualizar stock (audit)
             prod.stock -= cantidad
             prod._current_user = request.user
             prod._ip_address = request.META.get('REMOTE_ADDR')
             prod.save()
 
-            # CÁLCULOS TOTALES
             descuento_total += desc
             subtotal += sub
-
             if prod.iva:
                 subtotal_iva += sub
             else:
@@ -208,28 +254,27 @@ def crear_factura(request):
         iva_total = subtotal_iva * 0.12
         total = subtotal + iva_total
 
-        # Guardar totales en factura
         factura.subtotal = subtotal
         factura.subtotal_iva = subtotal_iva
         factura.subtotal_cero = subtotal_cero
         factura.descuento_total = descuento_total
         factura.iva_total = iva_total
         factura.total = total
-        # ===== GENERAR CLAVE DE ACCESO SRI (PRUEBAS) =====
+
         factura.clave_acceso = generar_clave_acceso_sri(
-           fecha_emision=factura.fecha,
-           ruc="99999999999999",          # RUC EMPRESA (PRUEBAS)
-           establecimiento="001",
-           punto_emision="001",
-           secuencial=ultimo,             # usa el mismo secuencial
-           ambiente="1"                   # PRUEBAS
+            fecha_emision=factura.fecha,
+            ruc="99999999999999",
+            establecimiento="001",
+            punto_emision="001",
+            secuencial=ultimo,
+            ambiente="1"
         )
 
-        # ======== REGISTRAR USUARIO E IP PARA AUDITORÍA ========
-        factura._current_user = request.user       # <--- NUEVO
-        factura._ip_address = request.META.get('REMOTE_ADDR')  # <--- NUEVO
+        factura._current_user = request.user
+        factura._ip_address = request.META.get('REMOTE_ADDR')
         factura.save()
 
+        messages.success(request, f" Factura {factura.numero} creada correctamente.")
         return redirect('factura_lista')
 
     return render(request, 'facturacion/crear.html', {
@@ -250,7 +295,6 @@ def ver_factura(request, id):
         'detalles': detalles
     })
 
-
 # ============================
 # ANULAR FACTURA
 # ============================
@@ -259,17 +303,22 @@ def anular_factura(request, id):
     factura = get_object_or_404(Factura, id=id)
 
     if factura.estado == "ANULADA":
+        messages.info(request, " La factura ya se encuentra anulada.")
         return redirect('factura_lista')
 
-    # devolver stock
-    for det in factura.detalles.all():
+    for det in factura.detalles.select_related('producto').select_for_update():
         prod = det.producto
         prod.stock += det.cantidad
+        prod._current_user = request.user
+        prod._ip_address = request.META.get('REMOTE_ADDR')
         prod.save()
 
     factura.estado = "ANULADA"
+    factura._current_user = request.user
+    factura._ip_address = request.META.get('REMOTE_ADDR')
     factura.save()
 
+    messages.success(request, f" Factura {factura.numero} anulada correctamente.")
     return redirect('factura_lista')
 
 # ============================

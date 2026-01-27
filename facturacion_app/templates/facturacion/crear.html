@@ -4,98 +4,184 @@
 
 {% block content %}
 
-<h1 class="text-3xl font-bold text-gray-800 dark:text-slate-100 mb-6">
-    Crear Factura
-</h1>
+<!-- Header -->
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+    <div>
+        <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100 flex items-center gap-3">
+            <span
+                class="inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-100 dark:border-indigo-500/20">
+                <i data-lucide="receipt" class="w-6 h-6 text-indigo-700 dark:text-indigo-300"></i>
+            </span>
+            Crear Factura
+        </h1>
+        <p class="mt-2 text-gray-600 dark:text-slate-400">
+            Completa los datos generales y agrega los productos a facturar.
+        </p>
+    </div>
 
-<form method="POST">
+    <div class="flex items-center gap-3">
+        <a href="{% url 'factura_lista' %}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold
+                  border border-gray-200 dark:border-white/10
+                  bg-white dark:bg-slate-900
+                  text-gray-700 dark:text-slate-200
+                  hover:bg-gray-50 dark:hover:bg-slate-800 transition shadow-sm">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+            Volver
+        </a>
+
+        <button type="button" onclick="agregarFila()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold
+                       bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-md">
+            <i data-lucide="plus" class="w-5 h-5"></i>
+            Agregar producto
+        </button>
+    </div>
+</div>
+
+<form method="POST" class="space-y-6">
     {% csrf_token %}
 
     <!-- DATOS GENERALES -->
-    <div class="bg-white dark:bg-slate-900
-                p-6 rounded-xl shadow-xl mb-6
-                border border-gray-100 dark:border-slate-700">
+    <div
+        class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700">
+        <div class="flex items-start justify-between gap-4 mb-6">
+            <div>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100 flex items-center gap-2">
+                    <i data-lucide="id-card" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+                    Datos generales
+                </h2>
+                <p class="mt-1 text-sm text-gray-600 dark:text-slate-400">
+                    Selecciona el cliente y la forma de pago.
+                </p>
+            </div>
 
-        <!-- Cliente -->
-        <div class="mb-4">
-            <label class="block font-semibold text-gray-700 dark:text-slate-300 mb-1">
-                Cliente:
-            </label>
-            <select name="cliente"
-                class="w-full rounded-lg p-2
-                       bg-gray-50 dark:bg-slate-800
-                       border border-gray-300 dark:border-slate-600
-                       text-gray-800 dark:text-slate-100
-                       focus:ring-2 focus:ring-indigo-500">
-                {% for c in clientes %}
-                    <option value="{{ c.id }}">{{ c.nombre_razon_social }}</option>
-                {% endfor %}
-            </select>
+            <div class="hidden sm:flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-slate-400">
+                <i data-lucide="lock" class="w-4 h-4"></i>
+                Guardado seguro
+            </div>
         </div>
 
-        <!-- Forma de pago -->
-        <div class="mb-4">
-            <label class="block font-semibold text-gray-700 dark:text-slate-300 mb-1">
-                Forma de pago:
-            </label>
-            <select name="forma_pago"
-                class="w-full rounded-lg p-2
-                       bg-gray-50 dark:bg-slate-800
-                       border border-gray-300 dark:border-slate-600
-                       text-gray-800 dark:text-slate-100
-                       focus:ring-2 focus:ring-indigo-500">
-                <option value="EFECTIVO">Efectivo</option>
-                <option value="TARJETA">Tarjeta</option>
-                <option value="TRANSFERENCIA">Transferencia</option>
-                <option value="OTROS">Otros</option>
-            </select>
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- Cliente -->
+            <div>
+                <label class="block font-semibold text-gray-700 dark:text-slate-300 mb-2">
+                    Cliente
+                </label>
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </span>
+                    <select name="cliente" class="w-full rounded-xl pl-11 pr-3 py-2.5
+                                   bg-gray-50 dark:bg-slate-800
+                                   border border-gray-300 dark:border-slate-600
+                                   text-gray-800 dark:text-slate-100
+                                   focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                        {% for c in clientes %}
+                        <option value="{{ c.id }}">{{ c.nombre_razon_social }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
 
+            <!-- Forma de pago (con UI dinámica) -->
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <label class="block font-semibold text-gray-700 dark:text-slate-300">
+                        Forma de pago
+                    </label>
+
+                    <!-- Badge dinámico -->
+                    <span id="pagoBadge" class="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full
+                                 bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-300
+                                 border border-gray-200 dark:border-white/10">
+                        <i id="pagoBadgeIcon" data-lucide="wallet" class="w-4 h-4"></i>
+                        <span id="pagoBadgeText">Efectivo</span>
+                    </span>
+                </div>
+
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500">
+                        <!-- Icono dinámico del select -->
+                        <i id="pagoIcon" data-lucide="wallet" class="w-5 h-5"></i>
+                    </span>
+
+                    <select id="formaPago" name="forma_pago" class="w-full rounded-xl pl-11 pr-3 py-2.5
+                                   bg-gray-50 dark:bg-slate-800
+                                   border border-gray-300 dark:border-slate-600
+                                   text-gray-800 dark:text-slate-100
+                                   focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
+                        <option value="EFECTIVO">Efectivo</option>
+                        <option value="TARJETA">Tarjeta</option>
+                        <option value="TRANSFERENCIA">Transferencia</option>
+                        <option value="OTROS">Otros</option>
+                    </select>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- DETALLES -->
-    <div class="bg-white dark:bg-slate-900
-                p-6 rounded-xl shadow-xl
-                border border-gray-100 dark:border-slate-700">
+    <div
+        class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+            <div>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100 flex items-center gap-2">
+                    <i data-lucide="list-ordered" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+                    Detalles
+                </h2>
+                <p class="mt-1 text-sm text-gray-600 dark:text-slate-400">
+                    Agrega uno o más productos. Se calculará el subtotal por línea.
+                </p>
+            </div>
 
-        <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-slate-100">
-            Detalles
-        </h2>
+            <div class="flex items-center gap-2">
+                <span
+                    class="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full
+                             bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-300 border border-gray-200 dark:border-white/10">
+                    <i data-lucide="mouse-pointer-click" class="w-4 h-4"></i>
+                    Tip: selecciona producto para autollenar precio
+                </span>
+            </div>
+        </div>
 
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm mb-4 border-collapse">
+        <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-white/10">
+            <table class="w-full text-sm border-collapse">
                 <thead>
-                    <tr class="bg-gray-100 dark:bg-slate-800
-                               text-gray-600 dark:text-slate-300
-                               uppercase text-sm">
-                        <th class="py-2 px-3">Producto</th>
-                        <th class="py-2 px-3">Cantidad</th>
-                        <th class="py-2 px-3">Precio</th>
-                        <th class="py-2 px-3">Descuento</th>
-                        <th class="py-2 px-3">Subtotal</th>
-                        <th></th>
+                    <tr
+                        class="bg-gray-50 dark:bg-slate-800 text-gray-600 dark:text-slate-300 uppercase text-xs tracking-wide">
+                        <th class="py-3 px-4 text-left">Producto</th>
+                        <th class="py-3 px-4 text-left">Cantidad</th>
+                        <th class="py-3 px-4 text-left">Precio</th>
+                        <th class="py-3 px-4 text-left">Descuento</th>
+                        <th class="py-3 px-4 text-left">Subtotal</th>
+                        <th class="py-3 px-4 text-center w-12">Acción</th>
                     </tr>
                 </thead>
 
-                <tbody id="detalle-body"
-                       class="text-gray-700 dark:text-slate-200">
+                <tbody id="detalle-body" class="text-gray-700 dark:text-slate-200 bg-white dark:bg-slate-900">
+                    <!-- filas dinámicas -->
                 </tbody>
             </table>
         </div>
 
-        <button type="button" onclick="agregarFila()"
-            class="bg-green-600 text-white px-4 py-2 rounded-lg shadow
-                   hover:bg-green-700 transition">
-            + Agregar Producto
-        </button>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-4">
+            <button type="button" onclick="agregarFila()" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-semibold
+                           bg-emerald-600 hover:bg-emerald-700 text-white transition shadow-md">
+                <i data-lucide="plus" class="w-5 h-5"></i>
+                Agregar Producto
+            </button>
 
+            <div class="text-sm text-gray-500 dark:text-slate-400 flex items-center gap-2">
+                <i data-lucide="info" class="w-4 h-4"></i>
+                Los totales se calculan al guardar la factura.
+            </div>
+        </div>
     </div>
 
     <!-- BOTÓN -->
-    <div class="flex justify-end mt-6">
-        <button
-            class="bg-indigo-600 text-white px-6 py-3 rounded-lg shadow
-                   hover:bg-indigo-700 text-lg transition">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
+        <button type="submit" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold
+                       bg-indigo-600 hover:bg-indigo-700 text-white transition shadow-lg">
+            <i data-lucide="save" class="w-5 h-5"></i>
             Guardar Factura
         </button>
     </div>
@@ -111,12 +197,13 @@
         row.className = "border-b border-gray-200 dark:border-slate-700";
 
         row.innerHTML = `
-            <td class="py-2 px-3">
+            <td class="py-3 px-4 min-w-[280px]">
                 <select name="producto_id"
-                        class="w-full rounded-lg p-2
+                        class="w-full rounded-xl p-2.5
                                bg-gray-50 dark:bg-slate-800
                                border border-gray-300 dark:border-slate-600
-                               text-gray-800 dark:text-slate-100"
+                               text-gray-800 dark:text-slate-100
+                               focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
                         onchange="actualizarPrecio(this)">
                     <option value="">Seleccione…</option>
                     {% for p in productos %}
@@ -127,51 +214,71 @@
                 </select>
             </td>
 
-            <td class="py-2 px-3">
+            <td class="py-3 px-4 min-w-[140px]">
                 <input type="number" name="cantidad" value="1" min="1"
-                       class="w-full rounded-lg p-2
+                       class="w-full rounded-xl p-2.5
                               bg-gray-50 dark:bg-slate-800
                               border border-gray-300 dark:border-slate-600
-                              text-gray-800 dark:text-slate-100"
-                       onchange="calcularFila(this)">
+                              text-gray-800 dark:text-slate-100
+                              focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                       onchange="calcularFila(this)" oninput="calcularFila(this)">
             </td>
 
-            <td class="py-2 px-3">
-                <input type="number" step="0.01" name="precio_unitario"
-                       class="w-full rounded-lg p-2
-                              bg-gray-50 dark:bg-slate-800
-                              border border-gray-300 dark:border-slate-600
-                              text-gray-800 dark:text-slate-100"
-                       onchange="calcularFila(this)">
+            <td class="py-3 px-4 min-w-[160px]">
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500">$</span>
+                    <input type="number" step="0.01" name="precio_unitario"
+                           class="w-full rounded-xl pl-7 pr-3 py-2.5
+                                  bg-gray-50 dark:bg-slate-800
+                                  border border-gray-300 dark:border-slate-600
+                                  text-gray-800 dark:text-slate-100
+                                  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                           onchange="calcularFila(this)" oninput="calcularFila(this)">
+                </div>
             </td>
 
-            <td class="py-2 px-3">
-                <input type="number" step="0.01" name="descuento" value="0"
-                       class="w-full rounded-lg p-2
-                              bg-gray-50 dark:bg-slate-800
-                              border border-gray-300 dark:border-slate-600
-                              text-gray-800 dark:text-slate-100"
-                       onchange="calcularFila(this)">
+            <td class="py-3 px-4 min-w-[160px]">
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500">$</span>
+                    <input type="number" step="0.01" name="descuento" value="0"
+                           class="w-full rounded-xl pl-7 pr-3 py-2.5
+                                  bg-gray-50 dark:bg-slate-800
+                                  border border-gray-300 dark:border-slate-600
+                                  text-gray-800 dark:text-slate-100
+                                  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                           onchange="calcularFila(this)" oninput="calcularFila(this)">
+                </div>
             </td>
 
-            <td class="py-2 px-3">
-                <input type="text" name="subtotal" readonly
-                       class="w-full rounded-lg p-2
-                              bg-gray-100 dark:bg-slate-700
-                              border border-gray-300 dark:border-slate-600
-                              text-gray-800 dark:text-slate-100">
+            <td class="py-3 px-4 min-w-[160px]">
+                <div class="relative">
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-slate-500">$</span>
+                    <input type="text" name="subtotal" readonly
+                           class="w-full rounded-xl pl-7 pr-3 py-2.5
+                                  bg-gray-100 dark:bg-slate-700
+                                  border border-gray-300 dark:border-slate-600
+                                  text-gray-800 dark:text-slate-100">
+                </div>
             </td>
 
-            <td class="text-center">
+            <td class="py-3 px-4 text-center">
                 <button type="button"
                         onclick="this.closest('tr').remove()"
-                        class="text-red-600 dark:text-red-400 font-bold hover:scale-110 transition">
-                    ✕
+                        class="inline-flex items-center justify-center w-9 h-9 rounded-xl
+                               text-red-600 dark:text-red-400
+                               hover:bg-red-50 dark:hover:bg-red-500/10
+                               border border-transparent hover:border-red-200 dark:hover:border-red-400/20
+                               transition"
+                        aria-label="Eliminar fila">
+                    <span class="sr-only">Eliminar</span>
+                    <i data-lucide="trash-2" class="w-5 h-5"></i>
                 </button>
             </td>
         `;
 
         tbody.appendChild(row);
+
+        if (window.lucide) lucide.createIcons();
     }
 
     function actualizarPrecio(select) {
@@ -191,6 +298,45 @@
         let sub = (cantidad * precio) - descuento;
         fila.querySelector('input[name="subtotal"]').value = sub.toFixed(2);
     }
+
+    // UI dinámica método de pago (solo UI, no cambia tu lógica backend)
+    function setPagoUI(value) {
+        const iconEl = document.getElementById("pagoIcon");
+        const badgeIcon = document.getElementById("pagoBadgeIcon");
+        const badgeText = document.getElementById("pagoBadgeText");
+
+        let icon = "wallet";
+        let badge = "Efectivo";
+
+        if (value === "TARJETA") {
+            icon = "credit-card";
+            badge = "Tarjeta";
+        } else if (value === "TRANSFERENCIA") {
+            icon = "arrow-left-right";
+            badge = "Transferencia";
+        } else if (value === "OTROS") {
+            icon = "sparkles";
+            badge = "Otros";
+        }
+
+        // Cambiar los data-lucide y re-render
+        if (iconEl) iconEl.setAttribute("data-lucide", icon);
+        if (badgeIcon) badgeIcon.setAttribute("data-lucide", icon);
+        if (badgeText) badgeText.textContent = badge;
+
+        if (window.lucide) lucide.createIcons();
+    }
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+        if (window.lucide) lucide.createIcons();
+
+        const formaPago = document.getElementById("formaPago");
+        if (formaPago) {
+            setPagoUI(formaPago.value);
+            formaPago.addEventListener("change", (e) => setPagoUI(e.target.value));
+        }
+    });
 </script>
 
 {% endblock %}

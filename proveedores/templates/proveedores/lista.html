@@ -4,52 +4,89 @@
 
 {% block content %}
 
-<div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-    <!-- Título -->
-    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">
-        Proveedores
-    </h1>
+<!-- ENCABEZADO -->
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
+    <div class="flex items-start gap-3">
+        <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                     bg-indigo-50 dark:bg-indigo-500/10
+                     border border-indigo-100 dark:border-indigo-500/20">
+            <i data-lucide="truck" class="w-6 h-6 text-indigo-700 dark:text-indigo-300"></i>
+        </span>
 
-    <!-- Botón Nuevo Proveedor -->
-    <a href="{% url 'crear_proveedor' %}"
-       class="inline-flex items-center gap-2
-              bg-indigo-600 text-white
-              px-4 py-2 text-sm font-medium
-              rounded-md shadow-sm
-              hover:bg-indigo-700 transition">
-        <i data-lucide="contact" class="w-4 h-4"></i>
-        Nuevo Proveedor
-    </a>
+        <div>
+            <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                Proveedores
+            </h1>
+
+            <div class="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-slate-400">
+                <span class="inline-flex items-center gap-2">
+                    <i data-lucide="database" class="w-4 h-4"></i>
+                    {{ proveedores|length }} registrado(s)
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-wrap gap-2">
+        <a href="{% url 'crear_proveedor' %}"
+           class="inline-flex items-center gap-2
+                  bg-indigo-600 hover:bg-indigo-700
+                  text-white
+                  px-4 py-2.5 rounded-xl
+                  text-sm font-semibold
+                  shadow-md
+                  transition">
+            <i data-lucide="contact" class="w-4 h-4"></i>
+            Nuevo Proveedor
+        </a>
+    </div>
 </div>
 
+<!-- CONTENIDO PRINCIPAL -->
 <div class="bg-white dark:bg-slate-900
-            p-6 rounded-xl shadow-xl
+            p-6 sm:p-7 rounded-2xl shadow-xl
             border border-gray-100 dark:border-slate-700
-            space-y-4">
+            space-y-5">
 
     <!-- Barra de búsqueda -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <input type="text" id="busquedaProveedor"
-               placeholder="Buscar por nombre o identificación..."
-               class="w-full md:w-1/3
-                      border border-gray-300 dark:border-slate-600
-                      rounded-lg px-3 py-2
-                      bg-white dark:bg-slate-800
-                      text-gray-800 dark:text-gray-100
-                      placeholder-gray-400 dark:placeholder-gray-500
-                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <div class="w-full md:w-1/3">
+            <label class="sr-only" for="busquedaProveedor">Buscar proveedores</label>
+            <div class="relative">
+                <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <i data-lucide="search" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                </span>
+
+                <input type="text" id="busquedaProveedor"
+                       placeholder="Buscar por nombre o identificación..."
+                       class="w-full
+                              border border-gray-300 dark:border-slate-600
+                              rounded-xl pl-10 pr-3 py-2.5
+                              bg-white dark:bg-slate-800
+                              text-gray-800 dark:text-gray-100
+                              placeholder-gray-400 dark:placeholder-gray-500
+                              focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+        </div>
+
         <span id="paginaActual"
-              class="text-gray-700 dark:text-gray-300 font-medium md:ml-4">
+              class="inline-flex items-center gap-2 text-sm font-semibold
+                     text-gray-600 dark:text-slate-300
+                     px-3 py-2 rounded-xl
+                     bg-gray-50 dark:bg-slate-800/50
+                     border border-gray-200 dark:border-white/10">
+            <i data-lucide="layers" class="w-4 h-4"></i>
         </span>
     </div>
 
     <!-- Tabla -->
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto rounded-2xl border border-gray-200 dark:border-white/10">
         <table class="w-full table-auto border-collapse">
             <thead>
-                <tr class="bg-gray-100 dark:bg-slate-800
-                           text-left text-gray-600 dark:text-gray-300
-                           uppercase text-sm leading-normal">
+                <tr class="bg-gray-50 dark:bg-slate-800
+                           text-left
+                           text-gray-600 dark:text-slate-300
+                           uppercase text-xs tracking-wide">
                     <th class="py-3 px-6">Identificación</th>
                     <th class="py-3 px-6">Nombre / Razón Social</th>
                     <th class="py-3 px-6">Correo</th>
@@ -59,60 +96,75 @@
                 </tr>
             </thead>
 
-            <tbody class="text-gray-700 dark:text-gray-200 text-sm"
+            <!-- Nota: sin íconos en celdas para evitar saturación visual -->
+            <tbody class="text-gray-700 dark:text-slate-200 text-sm bg-white dark:bg-slate-900"
                    id="tbodyProveedores">
                 {% for p in proveedores %}
-                <tr class="border-b border-gray-200 dark:border-slate-700
-                           hover:bg-gray-50 dark:hover:bg-slate-800 transition">
-                    <td class="py-2 px-6">{{ p.identificacion }}</td>
-                    <td class="py-2 px-6">{{ p.nombre_razon_social }}</td>
-                    <td class="py-2 px-6">{{ p.correo }}</td>
-                    <td class="py-2 px-6">{{ p.telefono|default:"-" }}</td>
-                    <td class="py-2 px-6">{{ p.ciudad|default:"-" }}</td>
-                    <td class="py-2 px-6 flex gap-3">
+                <tr class="border-b dark:border-slate-800
+                           hover:bg-gray-50 dark:hover:bg-slate-800/60
+                           transition">
+                    <td class="py-3 px-6 font-semibold text-gray-800 dark:text-gray-100">{{ p.identificacion }}</td>
+                    <td class="py-3 px-6 font-semibold">{{ p.nombre_razon_social }}</td>
+                    <td class="py-3 px-6">{{ p.correo }}</td>
+                    <td class="py-3 px-6">{{ p.telefono|default:"-" }}</td>
+                    <td class="py-3 px-6">{{ p.ciudad|default:"-" }}</td>
 
-                        <!-- Ver -->
-                        <button type="button"
-                                class="text-green-600 dark:text-green-400
-                                       hover:text-green-800 dark:hover:text-green-300 font-semibold"
-                                onclick="abrirModalVer(this)"
-                                data-tipo="{{ p.tipo_identificacion_display }}"
-                                data-identificacion="{{ p.identificacion }}"
-                                data-nombre="{{ p.nombre_razon_social }}"
-                                data-telefono="{{ p.telefono|default:'-' }}"
-                                data-celular="{{ p.celular|default:'-' }}"
-                                data-direccion="{{ p.direccion|default:'-' }}"
-                                data-correo="{{ p.correo|default:'-' }}"
-                                data-ciudad="{{ p.ciudad|default:'-' }}"
-                                data-contacto="{{ p.contacto_nombre|default:'-' }}"
-                                data-contacto-tel="{{ p.contacto_telefono|default:'-' }}"
-                                data-observaciones="{{ p.observaciones|default:'-' }}"
-                                data-estado="{{ p.estado }}">
-                            <i data-lucide="eye" class="w-4 h-4"></i>
-                        </button>
+                    <td class="py-3 px-6">
+                        <div class="flex items-center gap-2">
+                            <!-- Ver -->
+                            <button type="button"
+                                    class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                                           border border-emerald-200 dark:border-emerald-400/20
+                                           bg-emerald-50 dark:bg-emerald-500/10
+                                           text-emerald-700 dark:text-emerald-300
+                                           hover:bg-emerald-100 dark:hover:bg-emerald-500/20
+                                           transition"
+                                    onclick="abrirModalVer(this)"
+                                    data-tipo="{{ p.tipo_identificacion_display }}"
+                                    data-identificacion="{{ p.identificacion }}"
+                                    data-nombre="{{ p.nombre_razon_social }}"
+                                    data-telefono="{{ p.telefono|default:'-' }}"
+                                    data-celular="{{ p.celular|default:'-' }}"
+                                    data-direccion="{{ p.direccion|default:'-' }}"
+                                    data-correo="{{ p.correo|default:'-' }}"
+                                    data-ciudad="{{ p.ciudad|default:'-' }}"
+                                    data-contacto="{{ p.contacto_nombre|default:'-' }}"
+                                    data-contacto-tel="{{ p.contacto_telefono|default:'-' }}"
+                                    data-observaciones="{{ p.observaciones|default:'-' }}"
+                                    data-estado="{{ p.estado }}">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                            </button>
 
-                        <!-- Editar -->
-                        <a href="{% url 'editar_proveedor' p.id %}"
-                           class="text-blue-600 dark:text-blue-400
-                                  hover:text-blue-800 dark:hover:text-blue-300 font-semibold">
-                            <i data-lucide="pencil" class="w-4 h-4"></i>
-                        </a>
+                            <!-- Editar -->
+                            <a href="{% url 'editar_proveedor' p.id %}"
+                               class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                                      border border-blue-200 dark:border-blue-400/20
+                                      bg-blue-50 dark:bg-blue-500/10
+                                      text-blue-700 dark:text-blue-300
+                                      hover:bg-blue-100 dark:hover:bg-blue-500/20
+                                      transition">
+                                <i data-lucide="pencil" class="w-4 h-4"></i>
+                            </a>
 
-                        <!-- Eliminar -->
-                        <button type="button"
-                                class="text-red-600 dark:text-red-400
-                                       hover:text-red-800 dark:hover:text-red-300 font-semibold"
-                                onclick="abrirModalEliminar('{{ p.id }}',
-                                                          '{{ p.nombre_razon_social }}',
-                                                          '{{ p.identificacion }}')">
-                            <i data-lucide="trash" class="w-4 h-4"></i>
-                        </button>
+                            <!-- Eliminar -->
+                            <button type="button"
+                                    class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                                           border border-red-200 dark:border-red-400/20
+                                           bg-red-50 dark:bg-red-500/10
+                                           text-red-700 dark:text-red-300
+                                           hover:bg-red-100 dark:hover:bg-red-500/20
+                                           transition"
+                                    onclick="abrirModalEliminar('{{ p.id }}',
+                                                              '{{ p.nombre_razon_social }}',
+                                                              '{{ p.identificacion }}')">
+                                <i data-lucide="trash" class="w-4 h-4"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6"
-                        class="text-center py-4 text-gray-500 dark:text-gray-400">
+                    <td colspan="6" class="text-center py-10 text-gray-500 dark:text-gray-400">
                         No hay proveedores registrados.
                     </td>
                 </tr>
@@ -122,20 +174,25 @@
     </div>
 
     <!-- Paginación -->
-    <div class="flex justify-end items-center mt-4 gap-2">
+    <div class="flex justify-end items-center gap-2">
         <button id="prevPage"
-                class="px-4 py-2 rounded-lg
-                       bg-gray-200 dark:bg-slate-700
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl
+                       bg-gray-100 dark:bg-slate-700
                        text-gray-800 dark:text-gray-200
-                       hover:bg-gray-300 dark:hover:bg-slate-600 transition">
+                       hover:bg-gray-200 dark:hover:bg-slate-600 transition
+                       border border-gray-200 dark:border-white/10">
+            <i data-lucide="chevron-left" class="w-4 h-4"></i>
             Anterior
         </button>
+
         <button id="nextPage"
-                class="px-4 py-2 rounded-lg
-                       bg-gray-200 dark:bg-slate-700
+                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl
+                       bg-gray-100 dark:bg-slate-700
                        text-gray-800 dark:text-gray-200
-                       hover:bg-gray-300 dark:hover:bg-slate-600 transition">
+                       hover:bg-gray-200 dark:hover:bg-slate-600 transition
+                       border border-gray-200 dark:border-white/10">
             Siguiente
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
         </button>
     </div>
 </div>
@@ -144,34 +201,99 @@
 <div id="modalVer"
      class="hidden fixed inset-0 z-50 flex items-center justify-center
             bg-black/40 backdrop-blur-sm">
-    <div class="bg-white dark:bg-slate-900
-                rounded-xl shadow-xl max-w-lg w-full p-6 relative animate-fadeIn
-                border border-gray-100 dark:border-slate-700">
 
+    <div class="bg-white dark:bg-slate-900
+                border border-gray-200 dark:border-slate-700
+                rounded-2xl shadow-xl
+                max-w-lg w-full
+                p-6 relative
+                animate-fadeIn">
+
+        <!-- Cerrar -->
         <button class="absolute top-3 right-3
                        text-gray-500 dark:text-gray-400
                        hover:text-gray-800 dark:hover:text-gray-200
-                       text-2xl font-bold"
+                       text-2xl font-bold transition"
                 onclick="cerrarModal('modalVer')">&times;</button>
 
-        <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">
-            Detalle del Proveedor
-        </h2>
+        <!-- Título -->
+        <div class="flex items-start gap-3 mb-4">
+            <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                         bg-indigo-50 dark:bg-indigo-500/10
+                         border border-indigo-100 dark:border-indigo-500/20">
+                <i data-lucide="contact" class="w-6 h-6 text-indigo-700 dark:text-indigo-300"></i>
+            </span>
 
-        <div class="space-y-2 text-gray-700 dark:text-gray-300
-                    max-h-96 overflow-y-auto">
-            <p><strong>Tipo Identificación:</strong> <span id="verTipo"></span></p>
-            <p><strong>Identificación:</strong> <span id="verIdentificacion"></span></p>
-            <p><strong>Nombre / Razón Social:</strong> <span id="verNombre"></span></p>
-            <p><strong>Teléfono:</strong> <span id="verTelefono"></span></p>
-            <p><strong>Celular:</strong> <span id="verCelular"></span></p>
-            <p><strong>Dirección:</strong> <span id="verDireccion"></span></p>
-            <p><strong>Ciudad:</strong> <span id="verCiudad"></span></p>
-            <p><strong>Correo:</strong> <span id="verCorreo"></span></p>
-            <p><strong>Contacto:</strong> <span id="verContacto"></span></p>
-            <p><strong>Tel. Contacto:</strong> <span id="verContactoTel"></span></p>
-            <p><strong>Observaciones:</strong> <span id="verObservaciones"></span></p>
-            <p><strong>Estado:</strong> <span id="verEstado"></span></p>
+            <div>
+                <h2 class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                    Detalle del Proveedor
+                </h2>
+                <p class="mt-1 text-sm text-gray-600 dark:text-slate-400">
+                    Información registrada del proveedor.
+                </p>
+            </div>
+        </div>
+
+        <div class="space-y-3 text-gray-700 dark:text-gray-300 max-h-96 overflow-y-auto">
+            <p class="flex items-start gap-2">
+                <i data-lucide="id-card" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                <span><strong class="text-gray-800 dark:text-gray-200">Tipo Identificación:</strong> <span id="verTipo"></span></span>
+            </p>
+
+            <p class="flex items-start gap-2">
+                <i data-lucide="badge-check" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                <span><strong class="text-gray-800 dark:text-gray-200">Identificación:</strong> <span id="verIdentificacion"></span></span>
+            </p>
+
+            <p class="flex items-start gap-2">
+                <i data-lucide="building-2" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                <span><strong class="text-gray-800 dark:text-gray-200">Nombre / Razón Social:</strong> <span id="verNombre"></span></span>
+            </p>
+
+            <p class="flex items-start gap-2">
+                <i data-lucide="phone" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                <span><strong class="text-gray-800 dark:text-gray-200">Teléfono:</strong> <span id="verTelefono"></span></span>
+            </p>
+
+            <p class="flex items-start gap-2">
+                <i data-lucide="smartphone" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                <span><strong class="text-gray-800 dark:text-gray-200">Celular:</strong> <span id="verCelular"></span></span>
+            </p>
+
+            <p class="flex items-start gap-2">
+                <i data-lucide="map-pin" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                <span><strong class="text-gray-800 dark:text-gray-200">Dirección:</strong> <span id="verDireccion"></span></span>
+            </p>
+
+            <p class="flex items-start gap-2">
+                <i data-lucide="map" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                <span><strong class="text-gray-800 dark:text-gray-200">Ciudad:</strong> <span id="verCiudad"></span></span>
+            </p>
+
+            <p class="flex items-start gap-2">
+                <i data-lucide="mail" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                <span><strong class="text-gray-800 dark:text-gray-200">Correo:</strong> <span id="verCorreo"></span></span>
+            </p>
+
+            <p class="flex items-start gap-2">
+                <i data-lucide="user-round" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                <span><strong class="text-gray-800 dark:text-gray-200">Contacto:</strong> <span id="verContacto"></span></span>
+            </p>
+
+            <p class="flex items-start gap-2">
+                <i data-lucide="phone-call" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                <span><strong class="text-gray-800 dark:text-gray-200">Tel. Contacto:</strong> <span id="verContactoTel"></span></span>
+            </p>
+
+            <p class="flex items-start gap-2">
+                <i data-lucide="sticky-note" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                <span><strong class="text-gray-800 dark:text-gray-200">Observaciones:</strong> <span id="verObservaciones"></span></span>
+            </p>
+
+            <p class="flex items-start gap-2">
+                <i data-lucide="shield-check" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                <span><strong class="text-gray-800 dark:text-gray-200">Estado:</strong> <span id="verEstado"></span></span>
+            </p>
         </div>
     </div>
 </div>
@@ -180,38 +302,62 @@
 <div id="modalEliminar"
      class="hidden fixed inset-0 z-50 flex items-center justify-center
             bg-black/40 backdrop-blur-sm">
-    <div class="bg-white dark:bg-slate-900
-                rounded-xl shadow-xl max-w-md w-full p-6 relative animate-fadeIn
-                border border-gray-100 dark:border-slate-700">
 
+    <div class="bg-white dark:bg-slate-900
+                border border-gray-200 dark:border-slate-700
+                rounded-2xl shadow-xl
+                max-w-md w-full
+                p-6 relative
+                animate-fadeIn">
+
+        <!-- Cerrar -->
         <button class="absolute top-3 right-3
                        text-gray-500 dark:text-gray-400
                        hover:text-gray-800 dark:hover:text-gray-200
-                       text-2xl font-bold"
+                       text-2xl font-bold transition"
                 onclick="cerrarModal('modalEliminar')">&times;</button>
 
-        <h2 class="text-xl font-bold mb-4 text-red-600 dark:text-red-400">
-            Confirmar Eliminación
-        </h2>
+        <!-- Título -->
+        <div class="flex items-start gap-3 mb-4">
+            <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                         bg-red-50 dark:bg-red-500/10
+                         border border-red-100 dark:border-red-500/20">
+                <i data-lucide="trash-2" class="w-6 h-6 text-red-700 dark:text-red-300"></i>
+            </span>
 
-        <p class="text-gray-700 dark:text-gray-300 mb-4">
+            <div>
+                <h2 class="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                    Confirmar Eliminación
+                </h2>
+                <p class="mt-1 text-sm text-gray-600 dark:text-slate-400">
+                    Esta acción no se puede deshacer.
+                </p>
+            </div>
+        </div>
+
+        <p class="text-gray-700 dark:text-gray-300 mb-5">
             ¿Seguro que deseas eliminar al proveedor
-            <strong id="eliminarNombre"></strong>
-            (<strong id="eliminarIdentificacion"></strong>)?
+            <strong id="eliminarNombre" class="text-gray-900 dark:text-gray-100"></strong>
+            (<strong id="eliminarIdentificacion" class="text-gray-900 dark:text-gray-100"></strong>)?
         </p>
 
         <div class="flex justify-end gap-3">
             <button onclick="cerrarModal('modalEliminar')"
-                    class="px-4 py-2 rounded-lg
+                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl
                            bg-gray-100 dark:bg-slate-700
-                           hover:bg-gray-200 dark:hover:bg-slate-600">
+                           text-gray-700 dark:text-gray-200
+                           hover:bg-gray-200 dark:hover:bg-slate-600
+                           transition border border-gray-200 dark:border-white/10">
+                <i data-lucide="x" class="w-4 h-4"></i>
                 Cancelar
             </button>
+
             <a href="#" id="eliminarLink"
-               class="px-4 py-2 rounded-lg
-                      bg-red-300 dark:bg-red-700
-                      text-red-900 dark:text-red-100
-                      hover:bg-red-400 dark:hover:bg-red-600 font-semibold">
+               class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl
+                      bg-red-500 text-white
+                      hover:bg-red-600
+                      transition font-semibold shadow-sm">
+                <i data-lucide="trash" class="w-4 h-4"></i>
                 Sí, eliminar
             </a>
         </div>
@@ -254,6 +400,8 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     renderizar();
+
+    if (window.lucide) lucide.createIcons();
 });
 
 function abrirModalVer(btn) {

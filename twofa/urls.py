@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import verify_2fa, forget_device
+from . import views
 
 app_name = "twofa"
 

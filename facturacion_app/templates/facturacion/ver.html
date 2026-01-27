@@ -5,14 +5,56 @@
 {% block content %}
 
 <!-- ENCABEZADO -->
-<div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
+    <div class="flex items-start gap-3">
+        <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                     bg-indigo-50 dark:bg-indigo-500/10
+                     border border-indigo-100 dark:border-indigo-500/20">
+            <i data-lucide="receipt" class="w-6 h-6 text-indigo-700 dark:text-indigo-300"></i>
+        </span>
 
-    <h1 class="text-3xl font-bold text-gray-800 dark:text-slate-100">
-        Factura {{ factura.numero }}
-    </h1>
+        <div>
+            <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                Factura {{ factura.numero }}
+            </h1>
 
-    <div class="flex gap-2">
+            <div class="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-slate-400">
+                <span class="inline-flex items-center gap-2">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                    {{ factura.fecha|date:"d/m/Y H:i" }}
+                </span>
 
+                <span class="mx-1 hidden sm:inline text-gray-300 dark:text-slate-600">•</span>
+
+                <span class="inline-flex items-center gap-2">
+                    <i data-lucide="wallet" class="w-4 h-4"></i>
+                    {{ factura.forma_pago }}
+                </span>
+
+                <span class="mx-1 hidden sm:inline text-gray-300 dark:text-slate-600">•</span>
+
+                {% if factura.estado == "ACTIVA" %}
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold
+                                 bg-emerald-50 dark:bg-emerald-500/10
+                                 text-emerald-700 dark:text-emerald-300
+                                 border border-emerald-100 dark:border-emerald-500/20">
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                        Activa
+                    </span>
+                {% else %}
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold
+                                 bg-red-50 dark:bg-red-500/10
+                                 text-red-700 dark:text-red-300
+                                 border border-red-100 dark:border-red-500/20">
+                        <i data-lucide="x-circle" class="w-4 h-4"></i>
+                        Anulada
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-wrap gap-2">
         {% if factura.estado == "ACTIVA" %}
         <a href="{% url 'imprimir_factura' factura.id %}"
            target="_blank"
@@ -20,102 +62,140 @@
            class="inline-flex items-center gap-2
                   bg-indigo-600 hover:bg-indigo-700
                   text-white
-                  px-4 py-2 rounded-md
-                  text-sm font-medium
-                  shadow
+                  px-4 py-2.5 rounded-xl
+                  text-sm font-semibold
+                  shadow-md
                   transition">
-
             <i data-lucide="printer" class="w-4 h-4"></i>
             Imprimir
         </a>
         {% endif %}
 
-        <!-- Botón volver -->
         <a href="{% url 'factura_lista' %}"
            class="inline-flex items-center gap-2
-                  border border-gray-300 dark:border-slate-600
+                  border border-gray-200 dark:border-white/10
+                  bg-white dark:bg-slate-900
                   text-gray-700 dark:text-slate-200
-                  px-4 py-2 rounded-md
-                  text-sm font-medium
-                  hover:bg-gray-100 dark:hover:bg-slate-800
-                  transition">
-
+                  px-4 py-2.5 rounded-xl
+                  text-sm font-semibold
+                  hover:bg-gray-50 dark:hover:bg-slate-800
+                  transition shadow-sm">
             <i data-lucide="circle-arrow-left" class="w-4 h-4"></i>
             Volver
         </a>
-
     </div>
 </div>
 
 <!-- CONTENIDO PRINCIPAL -->
 <div class="bg-white dark:bg-slate-900
-            p-6 rounded-xl shadow-xl
+            p-6 sm:p-7 rounded-2xl shadow-xl
             border border-gray-100 dark:border-slate-700">
 
     <!-- Información general -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
 
-        <div class="text-gray-700 dark:text-slate-300">
-            <h2 class="text-xl font-semibold
-                       text-gray-700 dark:text-slate-200
-                       mb-3 border-b dark:border-slate-700 pb-1">
-                Datos del Cliente
-            </h2>
-            <p><strong>Nombre / Razón Social:</strong> {{ factura.cliente.nombre_razon_social }}</p>
-            <p><strong>Cédula / RUC:</strong> {{ factura.cliente.identificacion }}</p>
-            <p><strong>Dirección:</strong> {{ factura.cliente.direccion }}</p>
+        <!-- Cliente -->
+        <div class="rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-800/40 p-6">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                             bg-white dark:bg-slate-900
+                             border border-gray-200 dark:border-white/10">
+                    <i data-lucide="user" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+                </span>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Datos del cliente
+                </h2>
+            </div>
+
+            <div class="space-y-2 text-gray-700 dark:text-slate-300">
+                <p class="flex items-start gap-2">
+                    <i data-lucide="building-2" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                    <span><strong>Nombre / Razón Social:</strong> {{ factura.cliente.nombre_razon_social }}</span>
+                </p>
+                <p class="flex items-start gap-2">
+                    <i data-lucide="badge-check" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                    <span><strong>Cédula / RUC:</strong> {{ factura.cliente.identificacion }}</span>
+                </p>
+                <p class="flex items-start gap-2">
+                    <i data-lucide="map-pin" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                    <span><strong>Dirección:</strong> {{ factura.cliente.direccion }}</span>
+                </p>
+            </div>
         </div>
 
-        <div class="text-gray-700 dark:text-slate-300">
-            <h2 class="text-xl font-semibold
-                       text-gray-700 dark:text-slate-200
-                       mb-3 border-b dark:border-slate-700 pb-1">
-                Detalles de Factura
-            </h2>
-
-            <p><strong>Número:</strong> {{ factura.numero }}</p>
-            <p><strong>Fecha:</strong> {{ factura.fecha|date:"d/m/Y H:i" }}</p>
-            <p><strong>Forma de Pago:</strong> {{ factura.forma_pago }}</p>
-
-            <p class="mt-2">
-                <strong>Estado:</strong>
-
-                {% if factura.estado == "ACTIVA" %}
-                <span class="inline-flex items-center gap-1 px-3 py-1
-                             bg-green-200 dark:bg-green-900
-                             text-green-700 dark:text-green-300
-                             rounded-lg font-semibold">
-                    <i data-lucide="check-circle" class="w-4 h-4"></i>
-                    Activa
+        <!-- Factura -->
+        <div class="rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-800/40 p-6">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                             bg-white dark:bg-slate-900
+                             border border-gray-200 dark:border-white/10">
+                    <i data-lucide="file-text" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
                 </span>
-                {% else %}
-                <span class="inline-flex items-center gap-1 px-3 py-1
-                             bg-red-200 dark:bg-red-900
-                             text-red-700 dark:text-red-300
-                             rounded-lg font-semibold">
-                    <i data-lucide="x-circle" class="w-4 h-4"></i>
-                    Anulada
-                </span>
-                {% endif %}
-            </p>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Detalles de factura
+                </h2>
+            </div>
+
+            <div class="space-y-2 text-gray-700 dark:text-slate-300">
+                <p class="flex items-start gap-2">
+                    <i data-lucide="hash" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                    <span><strong>Número:</strong> {{ factura.numero }}</span>
+                </p>
+                <p class="flex items-start gap-2">
+                    <i data-lucide="calendar-clock" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                    <span><strong>Fecha:</strong> {{ factura.fecha|date:"d/m/Y H:i" }}</span>
+                </p>
+                <p class="flex items-start gap-2">
+                    <i data-lucide="wallet" class="w-4 h-4 mt-0.5 text-gray-400 dark:text-slate-500"></i>
+                    <span><strong>Forma de pago:</strong> {{ factura.forma_pago }}</span>
+                </p>
+
+                <div class="pt-2">
+                    <span class="font-semibold text-gray-900 dark:text-slate-100">Estado:</span>
+                    {% if factura.estado == "ACTIVA" %}
+                        <span class="ml-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold
+                                     bg-emerald-50 dark:bg-emerald-500/10
+                                     text-emerald-700 dark:text-emerald-300
+                                     border border-emerald-100 dark:border-emerald-500/20">
+                            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                            Activa
+                        </span>
+                    {% else %}
+                        <span class="ml-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold
+                                     bg-red-50 dark:bg-red-500/10
+                                     text-red-700 dark:text-red-300
+                                     border border-red-100 dark:border-red-500/20">
+                            <i data-lucide="x-circle" class="w-4 h-4"></i>
+                            Anulada
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
         </div>
 
     </div>
 
     <!-- Tabla de productos -->
-    <h2 class="text-xl font-semibold
-               text-gray-700 dark:text-slate-200
-               mb-4 border-b dark:border-slate-700 pb-1">
-        Detalle de Productos
-    </h2>
+    <div class="flex items-center justify-between gap-4 mb-4">
+        <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100 flex items-center gap-2">
+            <i data-lucide="shopping-bag" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+            Detalle de productos
+        </h2>
 
-    <div class="overflow-x-auto">
+        <span class="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full
+                     bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-slate-300 border border-gray-200 dark:border-white/10">
+            <i data-lucide="layers" class="w-4 h-4"></i>
+            {{ detalles|length }} ítem(s)
+        </span>
+    </div>
+
+    <div class="overflow-x-auto rounded-2xl border border-gray-200 dark:border-white/10">
         <table class="w-full table-auto border-collapse">
             <thead>
-                <tr class="bg-gray-100 dark:bg-slate-800
+                <tr class="bg-gray-50 dark:bg-slate-800
                            text-left
                            text-gray-600 dark:text-slate-300
-                           uppercase text-sm tracking-wide">
+                           uppercase text-xs tracking-wide">
                     <th class="py-3 px-6">Producto</th>
                     <th class="py-3 px-6">Cantidad</th>
                     <th class="py-3 px-6">Precio</th>
@@ -123,15 +203,28 @@
                 </tr>
             </thead>
 
-            <tbody class="text-gray-700 dark:text-slate-200 text-sm">
+            <tbody class="text-gray-700 dark:text-slate-200 text-sm bg-white dark:bg-slate-900">
                 {% for d in detalles %}
-                <tr class="border-b dark:border-slate-700
-                           hover:bg-gray-50 dark:hover:bg-slate-800
+                <tr class="border-b dark:border-slate-800
+                           hover:bg-gray-50 dark:hover:bg-slate-800/60
                            transition">
-                    <td class="py-2 px-6">{{ d.producto.nombre }}</td>
-                    <td class="py-2 px-6">{{ d.cantidad }}</td>
-                    <td class="py-2 px-6">$ {{ d.precio_unitario }}</td>
-                    <td class="py-2 px-6 font-semibold">$ {{ d.subtotal }}</td>
+                    <td class="py-3 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl
+                                         bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-white/10">
+                                <i data-lucide="package" class="w-5 h-5 text-gray-600 dark:text-slate-300"></i>
+                            </span>
+                            <span class="font-semibold">{{ d.producto.nombre }}</span>
+                        </div>
+                    </td>
+                    <td class="py-3 px-6">
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-lg
+                                     bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-white/10">
+                            {{ d.cantidad }}
+                        </span>
+                    </td>
+                    <td class="py-3 px-6">$ {{ d.precio_unitario }}</td>
+                    <td class="py-3 px-6 font-bold">$ {{ d.subtotal }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -139,30 +232,63 @@
     </div>
 
     <!-- Totales -->
-    <div class="mt-8 flex justify-end">
-        <div class="bg-gray-100 dark:bg-slate-800
-                    p-5 rounded-lg shadow-lg
-                    w-72
-                    border border-gray-200 dark:border-slate-700
-                    text-gray-800 dark:text-slate-200">
+    <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        <div class="hidden lg:block">
+            <div class="rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-800/40 p-6">
+                <div class="flex items-center gap-2 mb-2">
+                    <i data-lucide="info" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+                    <h3 class="font-bold text-gray-900 dark:text-slate-100">Resumen</h3>
+                </div>
+                <p class="text-sm text-gray-600 dark:text-slate-400">
+                    Este resumen muestra los totales calculados de la factura.
+                </p>
+            </div>
+        </div>
 
-            <p class="flex justify-between mb-2">
-                <span>Subtotal:</span>
-                <span>$ {{ factura.subtotal }}</span>
-            </p>
+        <div class="flex justify-end">
+            <div class="w-full max-w-sm rounded-2xl border border-gray-200 dark:border-white/10
+                        bg-gray-50 dark:bg-slate-800/40 p-6 shadow-sm">
 
-            <p class="flex justify-between mb-2">
-                <span>IVA (15%):</span>
-                <span>$ {{ factura.iva_total }}</span>
-            </p>
+                <div class="flex items-center gap-2 mb-4">
+                    <i data-lucide="calculator" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+                    <h3 class="text-lg font-bold text-gray-900 dark:text-slate-100">Totales</h3>
+                </div>
 
-            <p class="flex justify-between text-xl font-bold border-t dark:border-slate-600 pt-3">
-                <span>Total:</span>
-                <span>$ {{ factura.total }}</span>
-            </p>
+                <div class="space-y-2 text-gray-800 dark:text-slate-200">
+                    <p class="flex justify-between">
+                        <span class="text-gray-600 dark:text-slate-400">Subtotal</span>
+                        <span class="font-semibold">$ {{ factura.subtotal }}</span>
+                    </p>
+
+                    <p class="flex justify-between">
+                        <span class="text-gray-600 dark:text-slate-400">IVA</span>
+                        <span class="font-semibold">$ {{ factura.iva_total }}</span>
+                    </p>
+
+                    <div class="pt-4 mt-3 border-t border-gray-200 dark:border-white/10">
+                        <p class="flex justify-between text-xl font-extrabold">
+                            <span>Total</span>
+                            <span>$ {{ factura.total }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                {% if factura.estado != "ACTIVA" %}
+                <div class="mt-4 rounded-xl border border-red-200 dark:border-red-400/20 bg-red-50 dark:bg-red-500/10 p-4">
+                    <p class="text-sm text-red-700 dark:text-red-300 flex items-start gap-2">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 mt-0.5"></i>
+                        <span>Esta factura está anulada. Los valores se muestran solo como referencia.</span>
+                    </p>
+                </div>
+                {% endif %}
+            </div>
         </div>
     </div>
 
 </div>
+
+<script>
+  if (window.lucide) lucide.createIcons();
+</script>
 
 {% endblock %}

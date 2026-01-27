@@ -4,254 +4,375 @@
 
 {% block content %}
 
-<div class="max-w-3xl mx-auto
-            bg-white dark:bg-slate-900
-            shadow-xl rounded-2xl p-10
-            border border-gray-100 dark:border-slate-700">
+<!-- ENCABEZADO -->
+<div class="max-w-5xl mx-auto mt-10">
 
-    <!-- Error global -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
+        <div class="flex items-start gap-3">
+            <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                         bg-indigo-50 dark:bg-indigo-500/10
+                         border border-indigo-100 dark:border-indigo-500/20">
+                <i data-lucide="contact" class="w-6 h-6 text-indigo-700 dark:text-indigo-300"></i>
+            </span>
+
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                    Registrar Proveedor
+                </h1>
+
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+            <a href="{% url 'lista_proveedores' %}"
+               class="inline-flex items-center gap-2
+                      border border-gray-200 dark:border-white/10
+                      bg-white dark:bg-slate-900
+                      text-gray-700 dark:text-slate-200
+                      px-4 py-2.5 rounded-xl
+                      text-sm font-semibold
+                      hover:bg-gray-50 dark:hover:bg-slate-800
+                      transition shadow-sm">
+                <i data-lucide="circle-arrow-left" class="w-4 h-4"></i>
+                Volver
+            </a>
+        </div>
+    </div>
+
+    <!-- ERROR GLOBAL -->
     {% if error %}
-    <div class="bg-red-100 dark:bg-red-900/30
-                text-red-700 dark:text-red-300
-                px-4 py-3 rounded-lg
-                border border-red-300 dark:border-red-700
-                mb-6 text-center">
-        {{ error }}
+    <div class="mb-6 rounded-2xl border border-red-200 dark:border-red-400/20
+                bg-red-50 dark:bg-red-500/10 p-4">
+        <p class="text-sm text-red-700 dark:text-red-300 flex items-start gap-2">
+            <i data-lucide="alert-triangle" class="w-5 h-5 mt-0.5"></i>
+            <span>{{ error }}</span>
+        </p>
     </div>
     {% endif %}
 
-    <!-- Volver -->
-    <div class="flex justify-end mb-8">
-        <a href="{% url 'lista_proveedores' %}"
-           class="inline-flex items-center gap-2
-                  text-gray-500 dark:text-slate-400
-                  px-3 py-1.5
-                  text-sm font-medium
-                  rounded-md
-                  hover:text-indigo-600 dark:hover:text-indigo-400
-                  hover:bg-indigo-50 dark:hover:bg-slate-800
-                  transition">
-            <i data-lucide="circle-arrow-left" class="w-4 h-4"></i>
-            Volver
-        </a>
-    </div>
+    <!-- CONTENEDOR FORM -->
+    <div class="bg-white dark:bg-slate-900
+                border border-gray-200 dark:border-slate-700
+                rounded-2xl shadow-xl overflow-hidden">
 
-    <!-- Título -->
-    <div class="text-center mb-10">
-        <h1 class="text-4xl font-bold text-gray-800 dark:text-slate-100">
-            Registrar Proveedor
-        </h1>
-        <p class="text-gray-500 dark:text-slate-400 mt-2">
-            Complete la información para registrar un nuevo proveedor
-        </p>
-        <div class="mt-4 h-[3px] w-24 bg-indigo-600 mx-auto rounded-full"></div>
-    </div>
-
-    <form method="POST" class="space-y-10">
-        {% csrf_token %}
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-            <!-- Tipo Identificación -->
-            <div class="floating-label-group">
-                <select name="tipo_identificacion" required class="floating-input peer">
-                    <option value="" disabled {% if not form_data %}selected{% endif %}>
-                        Seleccione una opción
-                    </option>
-                    <option value="CED" {% if form_data.tipo_identificacion == "CED" %}selected{% endif %}>Cédula</option>
-                    <option value="RUC" {% if form_data.tipo_identificacion == "RUC" %}selected{% endif %}>RUC</option>
-                    <option value="PAS" {% if form_data.tipo_identificacion == "PAS" %}selected{% endif %}>Pasaporte</option>
-                </select>
-                <label class="floating-label">Tipo de Identificación</label>
+        <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800
+                    border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-2">
+                <i data-lucide="file-text" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Información del proveedor
+                </h2>
             </div>
-
-            <!-- Identificación -->
-            <div class="floating-label-group">
-                <input type="text" name="identificacion"
-                       value="{{ form_data.identificacion|default:'' }}"
-                       required class="floating-input peer">
-                <label class="floating-label">Identificación</label>
-            </div>
-
-            <!-- Nombre -->
-            <div class="floating-label-group md:col-span-2">
-                <input type="text" name="nombre_razon_social"
-                       value="{{ form_data.nombre_razon_social|default:'' }}"
-                       required class="floating-input peer">
-                <label class="floating-label">Nombre / Razón Social</label>
-            </div>
-
-            <!-- Teléfono -->
-            <div class="floating-label-group">
-                <input type="text" name="telefono"
-                       value="{{ form_data.telefono|default:'' }}"
-                       class="floating-input peer">
-                <label class="floating-label">Teléfono</label>
-            </div>
-
-            <!-- Celular -->
-            <div class="floating-label-group">
-                <input type="text" name="celular"
-                       value="{{ form_data.celular|default:'' }}"
-                       class="floating-input peer">
-                <label class="floating-label">Celular</label>
-            </div>
-
-            <!-- Dirección -->
-            <div class="floating-label-group md:col-span-2">
-                <input type="text" name="direccion"
-                       value="{{ form_data.direccion|default:'' }}"
-                       required class="floating-input peer">
-                <label class="floating-label">Dirección</label>
-            </div>
-
-            <!-- Correo -->
-            <div class="floating-label-group md:col-span-2">
-                <input type="email" name="correo"
-                       value="{{ form_data.correo|default:'' }}"
-                       class="floating-input peer">
-                <label class="floating-label">Correo Electrónico</label>
-            </div>
-
-            <!-- Ciudad -->
-            <div class="floating-label-group">
-                <input type="text" name="ciudad"
-                       value="{{ form_data.ciudad|default:'' }}"
-                       class="floating-input peer">
-                <label class="floating-label">Ciudad</label>
-            </div>
-
-            <!-- Contacto -->
-            <div class="floating-label-group">
-                <input type="text" name="contacto_nombre"
-                       value="{{ form_data.contacto_nombre|default:'' }}"
-                       class="floating-input peer">
-                <label class="floating-label">Persona de Contacto</label>
-            </div>
-
-            <!-- Tel Contacto -->
-            <div class="floating-label-group">
-                <input type="text" name="contacto_telefono"
-                       value="{{ form_data.contacto_telefono|default:'' }}"
-                       class="floating-input peer">
-                <label class="floating-label">Teléfono de Contacto</label>
-            </div>
-
-            <!-- Observaciones -->
-            <div class="floating-label-group md:col-span-2">
-                <textarea name="observaciones" rows="3"
-                          class="floating-input peer resize-none">{{ form_data.observaciones|default:'' }}</textarea>
-                <label class="floating-label">Observaciones</label>
-            </div>
-
+            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                Completa los campos necesarios para registrar el proveedor.
+            </p>
         </div>
 
-        <!-- Botón -->
-        <div class="flex justify-end">
-            <button type="submit"
-                class="px-10 py-3
-                       bg-indigo-600 hover:bg-indigo-700
-                       text-white rounded-xl text-lg font-semibold
-                       shadow-md hover:shadow-lg
-                       transition transform hover:-translate-y-0.5">
-                Guardar Proveedor
-            </button>
-        </div>
+        <form method="POST" class="p-6 sm:p-7 space-y-6">
+            {% csrf_token %}
 
-    </form>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <!-- Tipo Identificación -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+                        Tipo de Identificación <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i data-lucide="id-card" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                        </span>
+
+                        <select id="tipo_identificacion" name="tipo_identificacion" required
+                                class="w-full pl-10 pr-3 py-2.5 rounded-xl
+                                       border border-gray-300 dark:border-slate-600
+                                       bg-white dark:bg-slate-800
+                                       text-gray-800 dark:text-slate-100
+                                       focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="" disabled {% if not form_data %}selected{% endif %}>
+                                Seleccione una opción
+                            </option>
+                            <option value="CED" {% if form_data.tipo_identificacion == "CED" %}selected{% endif %}>Cédula</option>
+                            <option value="RUC" {% if form_data.tipo_identificacion == "RUC" %}selected{% endif %}>RUC</option>
+                            <option value="PAS" {% if form_data.tipo_identificacion == "PAS" %}selected{% endif %}>Pasaporte</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Identificación -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+                        Identificación <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i data-lucide="hash" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                        </span>
+
+                        <input id="identificacion" type="text" name="identificacion"
+                               value="{{ form_data.identificacion|default:'' }}"
+                               required
+                               class="w-full pl-10 pr-3 py-2.5 rounded-xl
+                                      border border-gray-300 dark:border-slate-600
+                                      bg-white dark:bg-slate-800
+                                      text-gray-800 dark:text-slate-100
+                                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <p id="helpIdentificacion" class="mt-2 text-xs text-gray-500 dark:text-slate-400">
+                        Selecciona el tipo para aplicar validación.
+                    </p>
+                </div>
+
+                <!-- Nombre -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+                        Nombre / Razón Social <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i data-lucide="building-2" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                        </span>
+
+                        <input type="text" name="nombre_razon_social"
+                               value="{{ form_data.nombre_razon_social|default:'' }}"
+                               required
+                               class="w-full pl-10 pr-3 py-2.5 rounded-xl
+                                      border border-gray-300 dark:border-slate-600
+                                      bg-white dark:bg-slate-800
+                                      text-gray-800 dark:text-slate-100
+                                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Teléfono -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+                        Teléfono
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i data-lucide="phone" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                        </span>
+
+                        <input type="text" name="telefono"
+                               value="{{ form_data.telefono|default:'' }}"
+                               class="w-full pl-10 pr-3 py-2.5 rounded-xl
+                                      border border-gray-300 dark:border-slate-600
+                                      bg-white dark:bg-slate-800
+                                      text-gray-800 dark:text-slate-100
+                                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Celular -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+                        Celular
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i data-lucide="smartphone" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                        </span>
+
+                        <input type="text" name="celular"
+                               value="{{ form_data.celular|default:'' }}"
+                               class="w-full pl-10 pr-3 py-2.5 rounded-xl
+                                      border border-gray-300 dark:border-slate-600
+                                      bg-white dark:bg-slate-800
+                                      text-gray-800 dark:text-slate-100
+                                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Dirección -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+                        Dirección <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                        </span>
+
+                        <input type="text" name="direccion"
+                               value="{{ form_data.direccion|default:'' }}"
+                               required
+                               class="w-full pl-10 pr-3 py-2.5 rounded-xl
+                                      border border-gray-300 dark:border-slate-600
+                                      bg-white dark:bg-slate-800
+                                      text-gray-800 dark:text-slate-100
+                                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Correo -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+                        Correo Electrónico
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i data-lucide="mail" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                        </span>
+
+                        <input type="email" name="correo"
+                               value="{{ form_data.correo|default:'' }}"
+                               class="w-full pl-10 pr-3 py-2.5 rounded-xl
+                                      border border-gray-300 dark:border-slate-600
+                                      bg-white dark:bg-slate-800
+                                      text-gray-800 dark:text-slate-100
+                                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Ciudad -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+                        Ciudad
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i data-lucide="map" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                        </span>
+
+                        <input type="text" name="ciudad"
+                               value="{{ form_data.ciudad|default:'' }}"
+                               class="w-full pl-10 pr-3 py-2.5 rounded-xl
+                                      border border-gray-300 dark:border-slate-600
+                                      bg-white dark:bg-slate-800
+                                      text-gray-800 dark:text-slate-100
+                                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Contacto -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+                        Persona de Contacto
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i data-lucide="user" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                        </span>
+
+                        <input type="text" name="contacto_nombre"
+                               value="{{ form_data.contacto_nombre|default:'' }}"
+                               class="w-full pl-10 pr-3 py-2.5 rounded-xl
+                                      border border-gray-300 dark:border-slate-600
+                                      bg-white dark:bg-slate-800
+                                      text-gray-800 dark:text-slate-100
+                                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Tel Contacto -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+                        Teléfono de Contacto
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <i data-lucide="phone-call" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                        </span>
+
+                        <input type="text" name="contacto_telefono"
+                               value="{{ form_data.contacto_telefono|default:'' }}"
+                               class="w-full pl-10 pr-3 py-2.5 rounded-xl
+                                      border border-gray-300 dark:border-slate-600
+                                      bg-white dark:bg-slate-800
+                                      text-gray-800 dark:text-slate-100
+                                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Observaciones -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+                        Observaciones
+                    </label>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute top-3 left-3">
+                            <i data-lucide="sticky-note" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+                        </span>
+
+                        <textarea name="observaciones" rows="3"
+                                  class="w-full pl-10 pr-3 py-2.5 rounded-xl resize-none
+                                         border border-gray-300 dark:border-slate-600
+                                         bg-white dark:bg-slate-800
+                                         text-gray-800 dark:text-slate-100
+                                         focus:outline-none focus:ring-2 focus:ring-indigo-500">{{ form_data.observaciones|default:'' }}</textarea>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flex flex-col sm:flex-row sm:justify-end gap-3 pt-2">
+                <a href="{% url 'lista_proveedores' %}"
+                   class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl
+                          border border-gray-200 dark:border-white/10
+                          bg-white dark:bg-slate-900
+                          text-gray-700 dark:text-slate-200
+                          hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                    <i data-lucide="circle-arrow-left" class="w-4 h-4"></i>
+                    Cancelar
+                </a>
+
+                <button type="submit"
+                        class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+                               bg-indigo-600 hover:bg-indigo-700
+                               text-white font-semibold
+                               shadow-md transition">
+                    <i data-lucide="save" class="w-4 h-4"></i>
+                    Guardar Proveedor
+                </button>
+            </div>
+
+        </form>
+    </div>
+
 </div>
 
-<!-- Floating labels adaptados a dark -->
-<style>
-.floating-label-group { position: relative; }
-
-.floating-input {
-    width: 100%;
-    padding: 14px 12px;
-    border-radius: 12px;
-    border: 1px solid #d1d5db;
-    background: #f9fafb;
-    color: #111827;
-    outline: none;
-    transition: all .2s;
-}
-
-.dark .floating-input {
-    background: #0f172a;
-    border-color: #334155;
-    color: #e5e7eb;
-}
-
-.floating-input:focus {
-    border-color: #6366f1;
-    box-shadow: 0 0 0 3px #6366f130;
-    background: white;
-}
-
-.dark .floating-input:focus {
-    background: #020617;
-}
-
-.floating-label {
-    position: absolute;
-    left: 14px;
-    top: 14px;
-    padding: 0 6px;
-    font-size: .95rem;
-    color: #6b7280;
-    background: white;
-    pointer-events: none;
-    transition: all .2s;
-}
-
-.dark .floating-label {
-    background: #0f172a;
-    color: #94a3b8;
-}
-
-.peer:focus ~ .floating-label,
-.peer:not(:placeholder-shown) ~ .floating-label {
-    top: -8px;
-    left: 10px;
-    font-size: .75rem;
-    color: #4f46e5;
-}
-</style>
-<!-- Validación dinámica -->
+<!-- Validación dinámica (misma lógica, ahora con ids) -->
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const tipo = document.getElementById("tipo_identificacion");
-        const identificacion = document.getElementById("identificacion");
+document.addEventListener("DOMContentLoaded", () => {
+    const tipo = document.getElementById("tipo_identificacion");
+    const identificacion = document.getElementById("identificacion");
+    const help = document.getElementById("helpIdentificacion");
 
-        function aplicarValidacion() {
-            const t = tipo.value;
+    function aplicarValidacion() {
+        const t = tipo.value;
 
-            identificacion.value = "";
-            identificacion.removeAttribute("pattern");
-            identificacion.removeAttribute("maxlength");
-            identificacion.removeAttribute("title");
+        identificacion.value = "";
+        identificacion.removeAttribute("pattern");
+        identificacion.removeAttribute("maxlength");
+        identificacion.removeAttribute("title");
 
-            if (t === "CED") {
-                identificacion.setAttribute("pattern", "^[0-9]{10}$");
-                identificacion.setAttribute("maxlength", "10");
-                identificacion.setAttribute("title", "La cédula debe tener 10 números.");
-            }
-
-            if (t === "RUC") {
-                identificacion.setAttribute("pattern", "^[0-9]{13}$");
-                identificacion.setAttribute("maxlength", "13");
-                identificacion.setAttribute("title", "El RUC debe tener 13 números.");
-            }
-
-            if (t === "PAS") {
-                identificacion.setAttribute("pattern", "^[A-Za-z0-9]{6,20}$");
-                identificacion.setAttribute("maxlength", "20");
-                identificacion.setAttribute("title", "Pasaporte válido entre 6 y 20 caracteres.");
-            }
+        if (t === "CED") {
+            identificacion.setAttribute("pattern", "^[0-9]{10}$");
+            identificacion.setAttribute("maxlength", "10");
+            identificacion.setAttribute("title", "La cédula debe tener 10 números.");
+            if (help) help.textContent = "Cédula: 10 números.";
         }
 
-        tipo.addEventListener("change", aplicarValidacion);
-    });
+        if (t === "RUC") {
+            identificacion.setAttribute("pattern", "^[0-9]{13}$");
+            identificacion.setAttribute("maxlength", "13");
+            identificacion.setAttribute("title", "El RUC debe tener 13 números.");
+            if (help) help.textContent = "RUC: 13 números.";
+        }
+
+        if (t === "PAS") {
+            identificacion.setAttribute("pattern", "^[A-Za-z0-9]{6,20}$");
+            identificacion.setAttribute("maxlength", "20");
+            identificacion.setAttribute("title", "Pasaporte válido entre 6 y 20 caracteres.");
+            if (help) help.textContent = "Pasaporte: 6 a 20 caracteres alfanuméricos.";
+        }
+    }
+
+    tipo.addEventListener("change", aplicarValidacion);
+
+    if (window.lucide) lucide.createIcons();
+});
 </script>
 
 {% endblock %}

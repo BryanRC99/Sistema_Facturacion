@@ -1,7 +1,7 @@
 {% extends "base_auth.html" %}
 {% load static %}
 
-{% block title %}Verificación{% endblock %}
+{% block title %}Verificación 2FA{% endblock %}
 
 {% block content %}
 <div class="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -9,187 +9,278 @@
   <!-- FONDO -->
   <div class="absolute inset-0">
     <img src="{% static 'img/login-bg.jpg' %}" class="w-full h-full object-cover blur-md scale-110" alt="Fondo">
-    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="absolute inset-0 bg-black/50"></div>
   </div>
 
   <!-- CARD -->
-  <div class="relative z-10 w-full max-w-md
-                bg-gray-900/70 backdrop-blur-2xl
-                rounded-2xl shadow-2xl
-                border border-white/10
-                p-8 text-white">
+  <div class="relative z-10 w-full max-w-md mx-4">
+    <div class="bg-gray-900/70 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/10 p-8 text-white">
 
-    <!-- LOGO -->
-    <div class="flex justify-center mb-4">
-      <img src="{% static 'img/logo.png' %}" alt="Logo" class="h-20 object-contain">
-    </div>
+      <!-- “LOGO” LUCIDE -->
+      <div class="flex justify-center mb-4">
+        <div class="h-14 w-14 rounded-2xl bg-indigo-600/20 border border-indigo-400/20 flex items-center justify-center shadow-lg">
+          <i data-lucide="shield-check" class="w-8 h-8 text-indigo-300"></i>
+        </div>
+      </div>
 
-    <h2 class="text-3xl font-bold text-center mb-2">
-      Verificación de acceso
-    </h2>
+      <h2 class="text-3xl font-bold text-center">
+        Verificación 2FA
+      </h2>
 
-    <p class="text-center text-gray-300 mb-6">
-      Te enviamos un código a
-      <span class="font-semibold text-white">{{ email_masked }}</span>
-    </p>
+      {% if method == "totp" %}
+        <p class="text-center text-gray-300 mt-2">
+          Ingresa el código de tu <span class="font-semibold text-white">Google Authenticator</span>.
+        </p>
+      {% else %}
+        <p class="text-center text-gray-300 mt-2">
+          Ingresa el código enviado a:
+          <span class="font-semibold text-white">{{ email_masked }}</span>
+        </p>
+      {% endif %}
 
-    {% for message in messages %}
-    <div class="mb-4 text-center
-                    {% if message.tags == 'error' %}
-                        bg-red-500/20 text-red-300
-                    {% elif message.tags == 'success' %}
-                        bg-green-500/20 text-green-300
-                    {% else %}
-                        bg-white/10 text-gray-200
-                    {% endif %}
-                    p-3 rounded-lg">
-      {{ message }}
-    </div>
-    {% endfor %}
+      <!-- MENSAJES (SOLO ERRORES) -->
+      {% if messages %}
+        {% for message in messages %}
+          {% if message.level_tag == "error" %}
+            <div class="mt-6 bg-red-500/15 text-red-200 border border-red-500/30 p-3 rounded-xl text-center">
+              <div class="flex items-center justify-center gap-2">
+                <i data-lucide="triangle-alert" class="w-5 h-5"></i>
+                <span>{{ message }}</span>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
 
-    <!-- FORM VERIFICAR -->
-    <form method="post" class="space-y-6" onsubmit="document.getElementById('btnVerify').disabled=true;">
-      {% csrf_token %}
+      <!-- ACCIONES EXTRA -->
+      <div class="mt-6 space-y-3">
+        {% if method == "totp" %}
+          <form method="post" class="text-center">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="use_email">
+            <button type="submit"
+                    class="inline-flex items-center gap-2 text-indigo-300 hover:text-indigo-200 hover:underline transition">
+              <i data-lucide="mail" class="w-4 h-4"></i>
+              Usar correo en su lugar
+            </button>
+          </form>
+        {% else %}
+          <form method="post" class="text-center">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="resend">
 
-      <input type="hidden" name="action" value="verify">
-      <input type="hidden" name="code" id="codeHidden" value="">
+            {% if cooldown_seconds > 0 %}
+              <button type="submit" disabled
+                      class="inline-flex items-center gap-2 text-gray-400 cursor-not-allowed">
+                <i data-lucide="clock" class="w-4 h-4"></i>
+                Reenviar código (espera {{ cooldown_seconds }}s)
+              </button>
+            {% else %}
+              <button type="submit"
+                      class="inline-flex items-center gap-2 text-indigo-300 hover:text-indigo-200 hover:underline transition">
+                <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+                Reenviar código
+              </button>
+            {% endif %}
+          </form>
 
-      <div>
-        <label class="block text-gray-300 mb-2 text-center">Código (6 dígitos)</label>
+          {% if has_totp %}
+            <div class="text-center">
+              <a href="/2fa/verificar/?m=totp"
+                 class="inline-flex items-center gap-2 text-indigo-300 hover:text-indigo-200 hover:underline transition">
+                <i data-lucide="smartphone" class="w-4 h-4"></i>
+                Usar Google Authenticator
+              </a>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
 
-        <div class="flex justify-center gap-2">
-          {% for _ in "123456" %}
-          <input type="text" inputmode="numeric" maxlength="1" class="otp-box w-12 h-12 text-center text-xl font-bold rounded-xl
-                               bg-white/10 text-white
-                               border border-white/20
-                               placeholder-gray-400
-                               focus:ring-2 focus:ring-indigo-500
-                               focus:border-indigo-500 outline-none" aria-label="Dígito {{ forloop.counter }}"
-            autocomplete="one-time-code" />
-          {% endfor %}
+      <!-- FORM VERIFICAR -->
+      <form method="post" class="space-y-6 mt-7" id="otpForm" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="action" value="verify">
+
+        <!-- Hidden real input para enviar a Django -->
+        <input type="hidden" name="code" id="codeHidden" value="">
+
+        <div>
+          <label class="block text-gray-300 mb-2">Código (6 dígitos)</label>
+
+          <!-- OTP BOXES -->
+          <div class="flex items-center justify-between gap-2">
+            {% for i in "123456" %}
+              <input
+                type="text"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                aria-label="Dígito {{ forloop.counter }}"
+                class="otp w-full h-14 text-center text-xl font-semibold tracking-widest
+                       rounded-2xl bg-white/10 text-white border border-white/15
+                       focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none
+                       transition shadow-sm"
+                maxlength="1"
+              >
+            {% endfor %}
+          </div>
+
+          <p class="text-xs text-gray-400 mt-2">
+            Tip: puedes pegar el código completo en cualquier casilla.
+          </p>
         </div>
 
-        <p class="text-center text-gray-400 text-sm mt-3">
-          Puedes pegar el código completo y se llenará automático.
-        </p>
-      </div>
-
-      <div class="flex items-center gap-2 justify-center">
-        <input id="trust_device" name="trust_device" type="checkbox"
-          class="h-4 w-4 rounded border-white/20 bg-white/10">
-        <label for="trust_device" class="text-sm text-gray-300">
-          Confiar en este dispositivo por 30 días
+        <label class="flex items-center gap-2 text-sm text-gray-300 select-none">
+          <input type="checkbox" name="trust_device"
+                 class="rounded border-white/20 bg-white/10 text-indigo-600 focus:ring-indigo-500">
+          Confiar en este dispositivo
         </label>
+
+        <button type="submit"
+                class="w-full py-3 bg-indigo-600 text-white rounded-xl font-semibold
+                       hover:bg-indigo-700 transition transform hover:-translate-y-0.5
+                       shadow-lg shadow-indigo-600/20">
+          Verificar
+        </button>
+      </form>
+
+      <div class="mt-6 text-center text-sm text-gray-400">
+        Si no fuiste tú, cierra esta página y cambia tu contraseña.
       </div>
 
-
-      <button id="btnVerify" type="submit" class="w-full py-3 bg-indigo-600 text-white rounded-xl font-semibold
-                       hover:bg-indigo-700 transition transform hover:-translate-y-0.5">
-        Verificar
-      </button>
-    </form>
-
-    <!-- REENVIAR -->
-    <form method="post" class="mt-4">
-      {% csrf_token %}
-      <input type="hidden" name="action" value="resend">
-
-      <button id="btnResend" type="submit" class="w-full py-3 rounded-xl font-semibold
-                       border border-white/20 bg-white/10 text-white
-                       hover:bg-white/15 transition">
-        Reenviar código <span id="countdownText"></span>
-      </button>
-
-      <p class="text-center text-gray-400 text-sm mt-2">
-        Si no te llega, revisa “Spam/No deseado”.
-      </p>
-    </form>
-
-    <div class="text-center mt-6">
-      <a href="{% url 'login' %}" class="text-sm text-gray-300 hover:text-white underline">
-        Volver al inicio de sesión
-      </a>
     </div>
 
+    <!-- Mini nota debajo (opcional) -->
+    <div class="mt-4 text-center text-xs text-white/40">
+      <span class="inline-flex items-center gap-1">
+        <i data-lucide="lock" class="w-4 h-4"></i>
+        Tu código expira en pocos minutos
+      </span>
+    </div>
   </div>
 </div>
 
 <script>
-  (function () {
-    // ===== OTP BOXES =====
-    const boxes = Array.from(document.querySelectorAll('.otp-box'));
-    const hidden = document.getElementById('codeHidden');
+  // Lucide icons (si ya lo haces en base_auth.html, esto no estorba)
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.lucide && typeof window.lucide.createIcons === "function") {
+      window.lucide.createIcons();
+    }
 
-    function onlyDigit(v) { return (v || '').replace(/\D/g, ''); }
-    function syncHidden() { hidden.value = boxes.map(b => b.value || '').join(''); }
+    const inputs = Array.from(document.querySelectorAll(".otp"));
+    const hidden = document.getElementById("codeHidden");
+    const form = document.getElementById("otpForm");
 
-    boxes.forEach((box, idx) => {
-      box.addEventListener('input', () => {
-        const v = onlyDigit(box.value);
+    const updateHidden = () => {
+      const code = inputs.map(i => (i.value || "")).join("");
+      hidden.value = code;
+      return code;
+    };
 
-        // Si pegan más de 1 dígito en un solo input, repartir
-        if (v.length > 1) {
-          const chars = v.split('');
-          box.value = chars[0] || '';
-          let j = 1;
-          for (let k = idx + 1; k < boxes.length && j < chars.length; k++, j++) {
-            boxes[k].value = chars[j];
+    const focusIndex = (idx) => {
+      const el = inputs[idx];
+      if (!el) return;
+      el.focus();
+      el.select();
+    };
+
+    const setFromString = (str) => {
+      const clean = (str || "").replace(/\D/g, "").slice(0, 6);
+      inputs.forEach((inp, i) => inp.value = clean[i] || "");
+      updateHidden();
+      if (clean.length < 6) focusIndex(clean.length);
+      else focusIndex(5);
+
+      // Auto-submit opcional al completar:
+      // if (clean.length === 6) form.requestSubmit();
+    };
+
+    // Mejor UX: primer input enfocado
+    if (inputs[0]) focusIndex(0);
+
+    inputs.forEach((input, idx) => {
+      input.addEventListener("input", (e) => {
+        // solo 1 dígito
+        const v = (input.value || "").replace(/\D/g, "");
+        input.value = v.slice(-1);
+
+        updateHidden();
+
+        if (input.value && idx < inputs.length - 1) {
+          focusIndex(idx + 1);
+        }
+
+        // Auto-submit opcional al completar:
+        // if (updateHidden().length === 6) form.requestSubmit();
+      });
+
+      input.addEventListener("keydown", (e) => {
+        const key = e.key;
+
+        if (key === "Backspace") {
+          if (input.value) {
+            input.value = "";
+            updateHidden();
+            return;
           }
-          boxes[Math.min(idx + v.length, boxes.length - 1)].focus();
-          syncHidden();
+          if (idx > 0) {
+            e.preventDefault();
+            inputs[idx - 1].value = "";
+            updateHidden();
+            focusIndex(idx - 1);
+          }
           return;
         }
 
-        box.value = v;
-        if (v && idx < boxes.length - 1) boxes[idx + 1].focus();
-        syncHidden();
+        if (key === "ArrowLeft") {
+          e.preventDefault();
+          if (idx > 0) focusIndex(idx - 1);
+          return;
+        }
+
+        if (key === "ArrowRight") {
+          e.preventDefault();
+          if (idx < inputs.length - 1) focusIndex(idx + 1);
+          return;
+        }
+
+        // bloquear letras/espacios si no es control
+        if (key.length === 1 && /\D/.test(key)) {
+          e.preventDefault();
+        }
       });
 
-      box.addEventListener('keydown', (e) => {
-        if (e.key === 'Backspace' && !box.value && idx > 0) boxes[idx - 1].focus();
-        if (e.key === 'ArrowLeft' && idx > 0) boxes[idx - 1].focus();
-        if (e.key === 'ArrowRight' && idx < boxes.length - 1) boxes[idx + 1].focus();
-      });
-
-      box.addEventListener('paste', (e) => {
+      input.addEventListener("paste", (e) => {
         e.preventDefault();
-        const pasted = onlyDigit((e.clipboardData || window.clipboardData).getData('text'));
-        if (!pasted) return;
-        for (let i = 0; i < boxes.length; i++) boxes[i].value = pasted[i] || '';
-        boxes[Math.min(pasted.length, boxes.length) - 1].focus();
-        syncHidden();
+        const text = (e.clipboardData || window.clipboardData).getData("text");
+        setFromString(text);
       });
+
+      input.addEventListener("focus", () => input.select());
     });
 
-    if (boxes.length) boxes[0].focus();
-
-    // ===== RESEND COOLDOWN =====
-    const btnResend = document.getElementById('btnResend');
-    const countdownText = document.getElementById('countdownText');
-
-    let seconds = parseInt("{{ cooldown_seconds|default:0 }}", 10) || 0;
-
-    function renderCooldown() {
-      if (seconds > 0) {
-        btnResend.disabled = true;
-        btnResend.classList.add("opacity-60", "cursor-not-allowed");
-        countdownText.textContent = `( ${seconds}s )`;
-      } else {
-        btnResend.disabled = false;
-        btnResend.classList.remove("opacity-60", "cursor-not-allowed");
-        countdownText.textContent = "";
+    // Si el navegador llena one-time-code en el primer input (iOS/Android)
+    // o si el usuario pega en el form sin apuntar a un input.
+    form.addEventListener("paste", (e) => {
+      const targetIsOtp = e.target && e.target.classList && e.target.classList.contains("otp");
+      if (targetIsOtp) return; // ya lo maneja el input
+      const text = (e.clipboardData || window.clipboardData).getData("text");
+      if (text) {
+        e.preventDefault();
+        setFromString(text);
       }
-    }
+    });
 
-    renderCooldown();
-
-    if (seconds > 0) {
-      const timer = setInterval(() => {
-        seconds -= 1;
-        renderCooldown();
-        if (seconds <= 0) clearInterval(timer);
-      }, 1000);
-    }
-  })();
+    // Validación final antes de enviar
+    form.addEventListener("submit", (e) => {
+      const code = updateHidden();
+      if (code.length !== 6) {
+        e.preventDefault();
+        // mini feedback visual
+        inputs.forEach(inp => inp.classList.add("ring-2", "ring-red-500/60"));
+        setTimeout(() => inputs.forEach(inp => inp.classList.remove("ring-2", "ring-red-500/60")), 700);
+        focusIndex(Math.min(code.length, 5));
+      }
+    });
+  });
 </script>
 {% endblock %}

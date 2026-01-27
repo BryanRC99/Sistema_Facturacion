@@ -4,223 +4,272 @@
 
 {% block content %}
 
-<div class="max-w-3xl mx-auto
-            bg-white dark:bg-slate-900
-            shadow-xl rounded-2xl
-            p-10
-            border border-gray-100 dark:border-slate-700">
+<div class="max-w-5xl mx-auto mt-10">
 
+    <!-- ERROR GLOBAL -->
     {% if error %}
-    <div class="mb-6 px-4 py-3 rounded-lg text-center
-                bg-red-100 dark:bg-red-900/40
-                text-red-700 dark:text-red-300
-                border border-red-300 dark:border-red-700">
-        {{ error }}
+    <div class="mb-6 rounded-2xl border border-red-200 dark:border-red-400/20
+                bg-red-50 dark:bg-red-500/10 p-4">
+        <p class="text-sm text-red-700 dark:text-red-300 flex items-start gap-2">
+            <i data-lucide="alert-triangle" class="w-5 h-5 mt-0.5"></i>
+            <span>{{ error }}</span>
+        </p>
     </div>
     {% endif %}
 
-    <!-- Volver -->
-    <div class="flex justify-end mb-8">
-        <a href="{% url 'lista_productos' %}"
-           class="inline-flex items-center gap-2
-                  text-gray-500 dark:text-slate-400
-                  px-3 py-1.5 text-sm font-medium
-                  rounded-md
-                  hover:text-indigo-600 dark:hover:text-indigo-400
-                  hover:bg-indigo-50 dark:hover:bg-slate-800
-                  transition">
-            <i data-lucide="circle-arrow-left" class="w-4 h-4"></i>
-            Volver
-        </a>
+    <!-- HEADER -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
+        <div class="flex items-start gap-3">
+            <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                         bg-indigo-50 dark:bg-indigo-500/10
+                         border border-indigo-100 dark:border-indigo-500/20">
+                <i data-lucide="package" class="w-6 h-6 text-indigo-700 dark:text-indigo-300"></i>
+            </span>
+
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                    Editar Producto
+                </h1>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+            <a href="{% url 'lista_productos' %}"
+               class="inline-flex items-center gap-2
+                      border border-gray-200 dark:border-white/10
+                      bg-white dark:bg-slate-900
+                      text-gray-700 dark:text-slate-200
+                      px-4 py-2.5 rounded-xl
+                      text-sm font-semibold
+                      hover:bg-gray-50 dark:hover:bg-slate-800
+                      transition shadow-sm">
+                <i data-lucide="circle-arrow-left" class="w-4 h-4"></i>
+                Volver
+            </a>
+        </div>
     </div>
 
-    <!-- Título -->
-    <div class="text-center mb-10">
-        <h1 class="text-4xl font-bold text-gray-800 dark:text-slate-100">
-            Editar Producto
-        </h1>
-        <p class="text-gray-500 dark:text-slate-400 mt-2">
-            Actualice los datos necesarios
-        </p>
-        <div class="mt-4 h-[3px] w-24 bg-indigo-600 mx-auto rounded-full"></div>
-    </div>
+    <!-- CARD -->
+    <div class="bg-white dark:bg-slate-900
+                border border-gray-200 dark:border-slate-700
+                rounded-2xl shadow-xl overflow-hidden">
 
-    <!-- Formulario -->
-    <form method="POST" enctype="multipart/form-data"
-          class="space-y-10" id="formEditarProducto">
-        {% csrf_token %}
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-            <!-- Código -->
-            <div class="floating-label-group md:col-span-2">
-                <input type="text" name="codigo"
-                       value="{{ producto.codigo }}"
-                       required minlength="3"
-                       pattern="^[A-Za-z0-9-_.]+$"
-                       class="floating-input peer"
-                       placeholder=" ">
-                <label class="floating-label">Código del Producto</label>
+        <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800
+                    border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-2">
+                <i data-lucide="file-text" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Información del producto
+                </h2>
             </div>
+            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                Los campos marcados son obligatorios.
+            </p>
+        </div>
 
-            <!-- Nombre -->
-            <div class="floating-label-group md:col-span-2">
-                <input type="text" name="nombre"
-                       value="{{ producto.nombre }}"
-                       required minlength="3"
-                       pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 .,-]{3,100}$"
-                       class="floating-input peer"
-                       placeholder=" ">
-                <label class="floating-label">Nombre del Producto</label>
-            </div>
+        <!-- FORM -->
+        <form method="POST" enctype="multipart/form-data"
+              class="p-6 sm:p-7 space-y-8" id="formEditarProducto">
+            {% csrf_token %}
 
-            <!-- Categoría -->
-            <div class="floating-label-group md:col-span-2">
-                <select name="categoria" class="floating-input peer" required>
-                    <option value=""></option>
-                    {% for c in categorias %}
-                    <option value="{{ c.id }}" {% if producto.categoria.id == c.id %}selected{% endif %}>
-                        {{ c.nombre }}
-                    </option>
-                    {% endfor %}
-                </select>
-                <label class="floating-label">Categoría</label>
-            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            <!-- Proveedor -->
-            <div class="floating-label-group md:col-span-2">
-                <select name="proveedor" class="floating-input peer" required>
-                    <option value=""></option>
-                    {% for p in proveedores %}
-                    <option value="{{ p.id }}" {% if producto.proveedor.id == p.id %}selected{% endif %}>
-                        {{ p.nombre_razon_social }}
-                    </option>
-                    {% endfor %}
-                </select>
-                <label class="floating-label">Proveedor</label>
-            </div>
-
-            <!-- Precio -->
-            <div class="floating-label-group">
-                <input type="number" step="0.01" name="precio"
-                       value="{{ producto.precio }}"
-                       required class="floating-input peer"
-                       placeholder=" ">
-                <label class="floating-label">Precio de Venta</label>
-            </div>
-
-            <!-- Costo -->
-            <div class="floating-label-group">
-                <input type="number" step="0.01" name="costo"
-                       value="{{ producto.costo }}"
-                       required class="floating-input peer"
-                       placeholder=" ">
-                <label class="floating-label">Costo</label>
-            </div>
-
-            <!-- Stock -->
-            <div class="floating-label-group">
-                <input type="number" name="stock"
-                       value="{{ producto.stock }}"
-                       required class="floating-input peer"
-                       placeholder=" ">
-                <label class="floating-label">Stock</label>
-            </div>
-
-            <!-- IVA -->
-            <div class="flex items-center gap-3">
-                <input type="checkbox" name="iva"
-                       {% if producto.iva %}checked{% endif %}
-                       class="w-5 h-5 accent-indigo-600">
-                <label class="text-gray-700 dark:text-slate-300 font-medium">
-                    Aplicar IVA (12%)
-                </label>
-            </div>
-
-            <!-- Estado -->
-            <div class="flex items-center gap-3">
-                <input type="checkbox" name="estado"
-                       {% if producto.estado %}checked{% endif %}
-                       class="w-5 h-5 accent-indigo-600">
-                <label class="text-gray-700 dark:text-slate-300 font-medium">
-                    Producto Activo
-                </label>
-            </div>
-
-            <!-- Descripción -->
-            <div class="floating-label-group md:col-span-2">
-                <textarea name="descripcion" rows="4"
-                          class="floating-input peer"
-                          placeholder=" ">{{ producto.descripcion }}</textarea>
-                <label class="floating-label">Descripción</label>
-            </div>
-
-            <!-- Imagen -->
-            <div class="md:col-span-2">
-                <label class="block text-sm font-medium
-                              text-gray-700 dark:text-slate-300 mb-2">
-                    Imagen del producto (opcional)
-                </label>
-
-                {% if producto.imagen %}
-                <div class="flex justify-center mb-4">
-                    <img src="{{ producto.imagen.url }}"
-                         class="max-h-48 object-contain rounded-lg">
+                <!-- Código -->
+                <div class="floating-label-group md:col-span-2">
+                    <input type="text" id="codigo" name="codigo"
+                           value="{{ producto.codigo }}"
+                           required minlength="3"
+                           pattern="^[A-Za-z0-9-_.]+$"
+                           class="floating-input peer"
+                           placeholder=" ">
+                    <label class="floating-label">Código del Producto</label>
                 </div>
-                {% endif %}
 
-                <input type="file" name="imagen"
-                       accept="image/jpeg,image/png,image/webp"
-                       class="block w-full text-sm
-                              text-gray-600 dark:text-slate-300
-                              file:mr-4 file:py-2 file:px-4
-                              file:rounded-lg file:border-0
-                              file:text-sm file:font-semibold
-                              file:bg-indigo-50 dark:file:bg-slate-700
-                              file:text-indigo-700 dark:file:text-indigo-300
-                              hover:file:bg-indigo-100 dark:hover:file:bg-slate-600">
+                <!-- Nombre -->
+                <div class="floating-label-group md:col-span-2">
+                    <input type="text" name="nombre"
+                           value="{{ producto.nombre }}"
+                           required minlength="3"
+                           pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 .,-]{3,100}$"
+                           class="floating-input peer"
+                           placeholder=" ">
+                    <label class="floating-label">Nombre del Producto</label>
+                </div>
 
-                <p class="text-xs text-gray-500 dark:text-slate-400 mt-1">
-                    JPG, PNG o WEBP · Tamaño recomendado: máx. 2MB
-                </p>
+                <!-- Categoría -->
+                <div class="floating-label-group md:col-span-2">
+                    <select name="categoria" class="floating-input peer" required>
+                        <option value="" disabled></option>
+                        {% for c in categorias %}
+                        <option value="{{ c.id }}" {% if producto.categoria.id == c.id %}selected{% endif %}>
+                            {{ c.nombre }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <label class="floating-label">Categoría</label>
+                </div>
 
-                <img id="previewImagen"
-                     class="hidden max-h-48 mx-auto object-contain mt-4 rounded-lg">
+                <!-- Proveedor -->
+                <div class="floating-label-group md:col-span-2">
+                    <select name="proveedor" class="floating-input peer" required>
+                        <option value="" disabled></option>
+                        {% for p in proveedores %}
+                        <option value="{{ p.id }}" {% if producto.proveedor.id == p.id %}selected{% endif %}>
+                            {{ p.nombre_razon_social }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <label class="floating-label">Proveedor</label>
+                </div>
+
+                <!-- Precio -->
+                <div class="floating-label-group">
+                    <input type="number" step="0.01" name="precio"
+                           value="{{ producto.precio }}"
+                           required
+                           class="floating-input peer"
+                           placeholder=" ">
+                    <label class="floating-label">Precio de Venta</label>
+                </div>
+
+                <!-- Costo -->
+                <div class="floating-label-group">
+                    <input type="number" step="0.01" name="costo"
+                           value="{{ producto.costo }}"
+                           required
+                           class="floating-input peer"
+                           placeholder=" ">
+                    <label class="floating-label">Costo</label>
+                </div>
+
+                <!-- Stock -->
+                <div class="floating-label-group">
+                    <input type="number" name="stock"
+                           value="{{ producto.stock }}"
+                           required
+                           class="floating-input peer"
+                           placeholder=" ">
+                    <label class="floating-label">Stock</label>
+                </div>
+
+                <!-- IVA -->
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" name="iva"
+                           {% if producto.iva %}checked{% endif %}
+                           class="w-5 h-5 accent-indigo-600">
+                    <label class="text-gray-700 dark:text-slate-200 font-semibold">
+                        Aplicar IVA (12%)
+                    </label>
+                </div>
+
+                <!-- Estado -->
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" name="estado"
+                           {% if producto.estado %}checked{% endif %}
+                           class="w-5 h-5 accent-indigo-600">
+                    <label class="text-gray-700 dark:text-slate-200 font-semibold">
+                        Producto activo
+                    </label>
+                </div>
+
+                <!-- Descripción -->
+                <div class="floating-label-group md:col-span-2">
+                    <textarea name="descripcion" rows="4"
+                              class="floating-input peer resize-none"
+                              placeholder=" ">{{ producto.descripcion }}</textarea>
+                    <label class="floating-label">Descripción</label>
+                </div>
+
+                <!-- Imagen -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+                        Imagen del producto (opcional)
+                    </label>
+
+                    {% if producto.imagen %}
+                    <div class="mb-4 flex justify-center">
+                        <div class="w-full max-w-md rounded-2xl border border-gray-200 dark:border-slate-700
+                                    bg-gray-50 dark:bg-slate-800 p-4">
+                            <p class="text-xs font-semibold text-gray-600 dark:text-slate-400 mb-3">
+                                Imagen actual
+                            </p>
+                            <img src="{{ producto.imagen.url }}"
+                                 class="max-h-56 w-full object-contain rounded-xl">
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <input type="file"
+                           name="imagen"
+                           id="imagen"
+                           accept="image/jpeg,image/png,image/webp"
+                           class="block w-full text-sm
+                                  text-gray-600 dark:text-slate-300
+                                  file:mr-4 file:py-2 file:px-4
+                                  file:rounded-lg file:border-0
+                                  file:text-sm file:font-semibold
+                                  file:bg-indigo-50 dark:file:bg-slate-800
+                                  file:text-indigo-700 dark:file:text-indigo-300
+                                  hover:file:bg-indigo-100 dark:hover:file:bg-slate-700">
+
+                    <p class="text-xs text-gray-500 dark:text-slate-400 mt-1">
+                        JPG, PNG o WEBP · Tamaño recomendado: máx. 2MB
+                    </p>
+
+                    <div class="mt-4 flex justify-center">
+                        <img id="previewImagen"
+                             class="hidden max-h-56 w-full max-w-md object-contain rounded-2xl
+                                    border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 p-3">
+                    </div>
+                </div>
+
             </div>
 
-        </div>
+            <!-- ACTIONS -->
+            <div class="flex flex-col sm:flex-row sm:justify-end gap-3 pt-2">
+                <a href="{% url 'lista_productos' %}"
+                   class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl
+                          border border-gray-200 dark:border-white/10
+                          bg-white dark:bg-slate-900
+                          text-gray-700 dark:text-slate-200
+                          hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                    Cancelar
+                </a>
 
-        <!-- Botón -->
-        <div class="flex justify-end">
-            <button type="submit"
-                    class="px-10 py-3
-                           bg-indigo-600 hover:bg-indigo-700
-                           text-white rounded-xl text-lg font-semibold
-                           shadow-md hover:shadow-lg
-                           transition-all transform hover:-translate-y-0.5">
-                Guardar Cambios
-            </button>
-        </div>
+                <button type="submit"
+                        class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl
+                               bg-indigo-600 hover:bg-indigo-700
+                               text-white font-semibold
+                               shadow-md transition">
+                    <i data-lucide="save" class="w-4 h-4"></i>
+                    Guardar cambios
+                </button>
+            </div>
 
-    </form>
+        </form>
+    </div>
 </div>
 
-<!-- Validación de código -->
+<!-- Validación de código + preview imagen -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
+    // Lucide icons (inicial)
+    if (window.lucide) lucide.createIcons();
+
     const inputCodigo = document.getElementById("codigo");
-    const form = document.querySelector("form");
+    const form = document.getElementById("formEditarProducto");
     const originalCodigo = "{{ producto.codigo|escapejs }}".toLowerCase();
 
     form.addEventListener("submit", async (e) => {
-        const codigoIngresado = inputCodigo.value.trim().toLowerCase();
+        const codigoIngresado = (inputCodigo.value || "").trim().toLowerCase();
+        if (!codigoIngresado) return;
 
+        // si no cambió, no validar contra endpoint
         if (codigoIngresado === originalCodigo) return;
 
-        const respuesta = await fetch(
-            `/productos/verificar-codigo/?codigo=${encodeURIComponent(codigoIngresado)}`
-        );
+        const respuesta = await fetch(`/productos/verificar-codigo/?codigo=${encodeURIComponent(codigoIngresado)}`);
         const data = await respuesta.json();
 
         if (data.existe) {
@@ -231,89 +280,98 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Preview imagen nueva
-    const inputImagen = document.querySelector('input[name="imagen"]');
-    const preview = document.getElementById('previewImagen');
+    const inputImagen = document.getElementById("imagen");
+    const preview = document.getElementById("previewImagen");
 
-    inputImagen.addEventListener('change', () => {
-        const file = inputImagen.files[0];
-        if (file) {
-            preview.src = URL.createObjectURL(file);
-            preview.classList.remove('hidden');
+    inputImagen.addEventListener("change", () => {
+        const file = inputImagen.files && inputImagen.files[0];
+        if (!file) {
+            preview.classList.add("hidden");
+            preview.src = "";
+            return;
         }
-    });
 
+        if (!file.type.startsWith("image/")) {
+            alert("El archivo seleccionado no es una imagen válida.");
+            inputImagen.value = "";
+            preview.classList.add("hidden");
+            preview.src = "";
+            return;
+        }
+
+        preview.src = URL.createObjectURL(file);
+        preview.classList.remove("hidden");
+    });
 });
 </script>
 
 <!-- Floating Label Styles (Light / Dark Mode) -->
 <style>
-    .floating-label-group {
-        position: relative;
-    }
+.floating-label-group { position: relative; }
 
-    .floating-input {
-        width: 100%;
-        padding: 14px 12px;
-        border: 1px solid #d1d5db;          /* gray-300 */
-        border-radius: 12px;
-        background-color: #f9fafb;         /* gray-50 */
-        color: #111827;                    /* gray-900 */
-        outline: none;
-        transition: all 0.2s ease-in-out;
-    }
+.floating-input {
+    width: 100%;
+    padding: 14px 12px;
+    border: 1px solid #d1d5db;          /* gray-300 */
+    border-radius: 12px;
+    background-color: #f9fafb;         /* gray-50 */
+    color: #111827;                    /* gray-900 */
+    outline: none;
+    transition: all 0.2s ease-in-out;
+}
 
-    /* 🌙 Dark mode input */
-    .dark .floating-input {
-        background-color: #020617;         /* slate-950 */
-        border-color: #334155;             /* slate-700 */
-        color: #e5e7eb;                    /* gray-200 */
-    }
+/* 🌙 Dark mode input */
+.dark .floating-input {
+    background-color: #020617;         /* slate-950 */
+    border-color: #334155;             /* slate-700 */
+    color: #e5e7eb;                    /* gray-200 */
+}
 
-    .floating-input:focus {
-        border-color: #6366f1;             /* indigo-500 */
-        background-color: #ffffff;
-        box-shadow: 0 0 0 3px #6366f130;
-    }
+.floating-input:focus {
+    border-color: #6366f1;             /* indigo-500 */
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px #6366f130;
+}
 
-    /* 🌙 Dark mode focus */
-    .dark .floating-input:focus {
-        background-color: #020617;         /* slate-950 */
-        box-shadow: 0 0 0 3px #6366f140;
-    }
+/* 🌙 Dark mode focus */
+.dark .floating-input:focus {
+    background-color: #020617;         /* slate-950 */
+    box-shadow: 0 0 0 3px #6366f140;
+}
 
-    .floating-label {
-        position: absolute;
-        left: 14px;
-        top: 14px;
-        padding: 0 6px;
-        background-color: #ffffff;
-        color: #6b7280;                    /* gray-500 */
-        font-size: 0.95rem;
-        pointer-events: none;
-        transition: all 0.2s ease-in-out;
-    }
+.floating-label {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    padding: 0 6px;
+    background-color: #ffffff;
+    color: #6b7280;                    /* gray-500 */
+    font-size: 0.95rem;
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+}
 
-    /* 🌙 Dark mode label */
-    .dark .floating-label {
-        background-color: #020617;         /* slate-950 */
-        color: #9ca3af;                    /* gray-400 */
-    }
+/* 🌙 Dark mode label */
+.dark .floating-label {
+    background-color: #020617;         /* slate-950 */
+    color: #9ca3af;                    /* gray-400 */
+}
 
-    .peer:focus ~ .floating-label,
-    .peer:not(:placeholder-shown) ~ .floating-label {
-        top: -8px;
-        left: 10px;
-        font-size: 0.75rem;
-        color: #4f46e5;                    /* indigo-600 */
-        background-color: #ffffff;
-    }
+.peer:focus ~ .floating-label,
+.peer:not(:placeholder-shown) ~ .floating-label {
+    top: -8px;
+    left: 10px;
+    font-size: 0.75rem;
+    color: #4f46e5;                    /* indigo-600 */
+    background-color: #ffffff;
+}
 
-    /* 🌙 Dark mode label floating */
-    .dark .peer:focus ~ .floating-label,
-    .dark .peer:not(:placeholder-shown) ~ .floating-label {
-        background-color: #020617;
-        color: #818cf8;                    /* indigo-400 */
-    }
+/* 🌙 Dark mode label floating */
+.dark .peer:focus ~ .floating-label,
+.dark .peer:not(:placeholder-shown) ~ .floating-label {
+    background-color: #020617;
+    color: #818cf8;                    /* indigo-400 */
+}
 </style>
 
 {% endblock %}

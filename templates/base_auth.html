@@ -1,11 +1,32 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Login{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
+
 <body>
+
     {% block content %}{% endblock %}
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+    <style>
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-ms-clear {
+            display: none;
+        }
+
+        input[type="text"]::-ms-reveal,
+        input[type="text"]::-ms-clear {
+            display: none;
+        }
+    </style>
 </body>
+
 </html>

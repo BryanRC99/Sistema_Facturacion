@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}Facturas anuladas{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto mt-10 px-4 space-y-8">
+
+    <!-- HEADER -->
+    <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div class="flex items-start gap-3">
+            <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                         bg-rose-50 dark:bg-rose-500/10
+                         border border-rose-100 dark:border-rose-500/20">
+                <i data-lucide="ban" class="w-6 h-6 text-rose-700 dark:text-rose-300"></i>
+            </span>
+
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                    Facturas anuladas
+                </h1>
+                <p class="mt-2 text-sm text-gray-600 dark:text-slate-400">
+                    Control y resumen de anulaciones por rango de fechas.
+                </p>
+            </div>
+        </div>
+
+        <a href="{% url 'dashboard' %}"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
+                  bg-white dark:bg-slate-900
+                  border border-gray-200 dark:border-slate-700
+                  text-gray-800 dark:text-slate-100
+                  hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            Volver
+        </a>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+        <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-2">
+                <i data-lucide="calendar-range" class="w-5 h-5 text-rose-700 dark:text-rose-300"></i>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Filtros
+                </h2>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                Selecciona un rango para ver anulaciones.
+            </p>
+        </div>
+
+        <div class="p-6 sm:p-7">
+            <form method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-1">Inicio</label>
+                    <input type="date" name="fecha_inicio" value="{{ fecha_inicio|date:'Y-m-d' }}"
+                           class="w-full rounded-xl border-gray-200 dark:border-slate-700
+                                  bg-white dark:bg-slate-950
+                                  text-gray-900 dark:text-slate-100
+                                  focus:ring-rose-500 focus:border-rose-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-1">Fin</label>
+                    <input type="date" name="fecha_fin" value="{{ fecha_fin|date:'Y-m-d' }}"
+                           class="w-full rounded-xl border-gray-200 dark:border-slate-700
+                                  bg-white dark:bg-slate-950
+                                  text-gray-900 dark:text-slate-100
+                                  focus:ring-rose-500 focus:border-rose-500">
+                </div>
+
+                <div class="flex items-end gap-2">
+                    <button class="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
+                                   bg-rose-600 hover:bg-rose-700 text-white shadow transition">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                        Filtrar
+                    </button>
+
+                    <a href="{% url 'reporte_anuladas' %}"
+                       class="inline-flex items-center justify-center px-4 py-2 rounded-xl text-sm font-semibold
+                              bg-white dark:bg-slate-900
+                              border border-gray-200 dark:border-slate-700
+                              text-gray-800 dark:text-slate-100
+                              hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 flex items-center gap-4">
+            <div class="bg-rose-100 dark:bg-rose-500/10 text-rose-700 dark:text-rose-300 p-3 rounded-xl border border-rose-200/50 dark:border-rose-500/20">
+                <i data-lucide="ban" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 dark:text-slate-400">Anuladas</p>
+                <p class="text-2xl font-bold text-gray-800 dark:text-slate-100">
+                    {{ data.cantidad_anuladas|default:0 }}
+                </p>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 flex items-center gap-4">
+            <div class="bg-amber-100 dark:bg-amber-500/10 text-amber-700 dark:text-amber-300 p-3 rounded-xl border border-amber-200/50 dark:border-amber-500/20">
+                <i data-lucide="dollar-sign" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 dark:text-slate-400">Total anulado</p>
+                <p class="text-2xl font-bold text-gray-800 dark:text-slate-100">
+                    $ {{ data.total_anulado|default:0|floatformat:2 }}
+                </p>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 flex items-center gap-4">
+            <div class="bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 p-3 rounded-xl border border-gray-200 dark:border-slate-700">
+                <i data-lucide="calendar" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 dark:text-slate-400">Rango</p>
+                <p class="text-sm font-semibold text-gray-800 dark:text-slate-100">
+                    {% if fecha_inicio %}{{ fecha_inicio|date:"d/m/Y" }}{% else %}—{% endif %}
+                    →
+                    {% if fecha_fin %}{{ fecha_fin|date:"d/m/Y" }}{% else %}—{% endif %}
+                </p>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-slate-700 flex items-center gap-4">
+            <div class="bg-blue-100 dark:bg-blue-500/10 text-blue-700 dark:text-blue-300 p-3 rounded-xl border border-blue-200/50 dark:border-blue-500/20">
+                <i data-lucide="file-text" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500 dark:text-slate-400">Última anulada</p>
+                <p class="text-sm font-semibold text-gray-800 dark:text-slate-100">
+                    {% with f=data.facturas.0 %}
+                        {% if f %}{{ f.numero }}{% else %}—{% endif %}
+                    {% endwith %}
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TABLA -->
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 overflow-hidden">
+        <div class="px-6 sm:px-7 py-5 bg-gray-50 dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
+            <div class="flex items-center gap-2">
+                <i data-lucide="list" class="w-5 h-5 text-rose-700 dark:text-rose-300"></i>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Detalle de anulaciones
+                </h2>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-slate-400 mt-1">
+                Listado de facturas anuladas en el rango seleccionado.
+            </p>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm">
+                <thead class="bg-white dark:bg-slate-900">
+                    <tr class="border-b border-gray-200 dark:border-slate-700 text-gray-500 dark:text-slate-400">
+                        <th class="py-3 px-4 text-left font-semibold">#</th>
+                        <th class="py-3 px-4 text-left font-semibold">Cliente</th>
+                        <th class="py-3 px-4 text-left font-semibold">Fecha</th>
+                        <th class="py-3 px-4 text-right font-semibold">Total</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for f in data.facturas %}
+                        <tr class="border-b border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 transition">
+                            <td class="py-3 px-4 text-gray-900 dark:text-slate-100 font-medium whitespace-nowrap">
+                                {{ f.numero }}
+                            </td>
+                            <td class="py-3 px-4 text-gray-700 dark:text-slate-200">
+                                {{ f.cliente }}
+                            </td>
+                            <td class="py-3 px-4 text-gray-500 dark:text-slate-400 whitespace-nowrap">
+                                {{ f.fecha|date:"d/m/Y H:i" }}
+                            </td>
+                            <td class="py-3 px-4 text-right font-semibold text-gray-900 dark:text-slate-100 whitespace-nowrap">
+                                $ {{ f.total|floatformat:2 }}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center py-10 text-gray-500 dark:text-slate-400">
+                                No hay facturas anuladas en este rango.
+                            </td>
+                        </tr>
+                    {% endfor %}    
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    if (window.lucide) lucide.createIcons();
+});
+</script>
+{% endblock %}

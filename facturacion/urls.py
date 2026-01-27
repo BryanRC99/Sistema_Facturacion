@@ -25,6 +25,7 @@ urlpatterns = [
     path('auditoria/', include('auditoria.urls', namespace='auditoria')),
     path('', include('facturacion_app.urls')),
     path("2fa/", include("twofa.urls")),
+    path("totp/", include("totp.urls")),
 ]
 
 
