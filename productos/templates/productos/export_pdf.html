@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Reporte de Productos</title>
+
+<style>
+@page { size: A4 landscape; margin: 10mm; }
+* { box-sizing: border-box; }
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 8.5px;
+    color: #111;
+}
+
+.header { margin-bottom: 6px; }
+.title { font-size: 13px; font-weight: 700; margin: 0; }
+.meta { font-size: 8.5px; color: #444; margin-top: 2px; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+th, td {
+    border: 0.6px solid #333;
+    padding: 3px;
+    vertical-align: top;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+th {
+    background: #f2f2f2;
+    font-weight: 700;
+    font-size: 8px;
+}
+
+.center { text-align: center; }
+.right { text-align: right; }
+</style>
+</head>
+
+<body>
+<div class="header">
+    <p class="title">Reporte de Productos</p>
+    <p class="meta">Generado: {{ fecha }}</p>
+    <p class="meta">Total registros: {{ productos|length }}</p>
+</div>
+
+<table>
+<colgroup>
+    <col style="width:8%">   <!-- Código -->
+    <col style="width:18%">  <!-- Nombre -->
+    <col style="width:12%">  <!-- Categoría -->
+    <col style="width:14%">  <!-- Proveedor -->
+    <col style="width:8%">   <!-- Precio -->
+    <col style="width:8%">   <!-- Costo -->
+    <col style="width:6%">   <!-- Stock -->
+    <col style="width:6%">   <!-- IVA -->
+    <col style="width:6%">   <!-- Estado -->
+    <col style="width:14%">  <!-- Descripción -->
+</colgroup>
+
+<thead>
+<tr>
+    <th>Código</th>
+    <th>Nombre</th>
+    <th>Categoría</th>
+    <th>Proveedor</th>
+    <th class="right">Precio</th>
+    <th class="right">Costo</th>
+    <th class="center">Stock</th>
+    <th class="center">IVA</th>
+    <th class="center">Estado</th>
+    <th>Descripción</th>
+</tr>
+</thead>
+
+<tbody>
+{% for p in productos %}
+<tr>
+    <td>{{ p.codigo }}</td>
+    <td>{{ p.nombre }}</td>
+    <td>{{ p.categoria.nombre }}</td>
+    <td>{{ p.proveedor.nombre_razon_social|default:"—" }}</td>
+    <td class="right">{{ p.precio|floatformat:2 }}</td>
+    <td class="right">{{ p.costo|floatformat:2 }}</td>
+    <td class="center">{{ p.stock }}</td>
+    <td class="center">{{ p.iva|yesno:"Sí,No" }}</td>
+    <td class="center">{{ p.estado|yesno:"Activo,Inactivo" }}</td>
+    <td>{{ p.descripcion|default:"" }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</body>
+</html>

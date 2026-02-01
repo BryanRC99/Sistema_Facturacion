@@ -1,5 +1,12 @@
+from django.http import HttpResponse
+from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment, PatternFill
+from openpyxl.utils import get_column_letter    
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Proveedor
+from django.template.loader import render_to_string
+from weasyprint import HTML
+from django.utils import timezone
 from django.contrib import messages
 
 
@@ -179,3 +186,97 @@ def eliminar_proveedor(request, id):
     proveedor.delete()
     messages.success(request, "Proveedor eliminado correctamente.")
     return redirect('lista_proveedores')
+
+
+
+def export_proveedores_pdf(request):
+    proveedores = Proveedor.objects.all().order_by("id")
+
+    html_string = render_to_string(
+        "proveedores/export_pdf.html",
+        {
+            "proveedores": proveedores,
+            "fecha": timezone.localtime().strftime("%d/%m/%Y %H:%M"),
+        }
+    )
+
+    pdf_bytes = HTML(
+        string=html_string,
+        base_url=request.build_absolute_uri("/")
+    ).write_pdf()
+
+    response = HttpResponse(pdf_bytes, content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="proveedores.pdf"'
+    return response
+
+
+
+def export_proveedores_excel(request):
+    proveedores = Proveedor.objects.all().order_by("id")
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Proveedores"
+
+    headers = [
+        "#",
+        "Tipo Identificación",
+        "Identificación",
+        "Nombre / Razón Social",
+        "Teléfono",
+        "Celular",
+        "Ciudad",
+        "Contacto Nombre",
+        "Contacto Teléfono",
+        "Dirección",
+        "Correo",
+        "Observaciones",
+    ]
+    ws.append(headers)
+
+    # Header style
+    header_fill = PatternFill("solid", fgColor="1F2937")
+    header_font = Font(bold=True, color="FFFFFF")
+
+    for col_idx in range(1, len(headers) + 1):
+        cell = ws.cell(row=1, column=col_idx)
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+
+    ws.freeze_panes = "A2"
+    ws.auto_filter.ref = f"A1:{get_column_letter(len(headers))}1"
+
+    for i, p in enumerate(proveedores, start=1):
+        ws.append([
+            i,
+            p.tipo_identificacion,
+            p.identificacion,
+            p.nombre_razon_social,
+            p.telefono,
+            p.celular,
+            p.ciudad or "",
+            p.contacto_nombre or "",
+            p.contacto_telefono or "",
+            p.direccion,
+            p.correo,
+            p.observaciones or "",
+        ])
+
+    # Auto width
+    for col_idx in range(1, len(headers) + 1):
+        col_letter = get_column_letter(col_idx)
+        max_len = 0
+        for cell in ws[col_letter]:
+            val = "" if cell.value is None else str(cell.value)
+            max_len = max(max_len, len(val))
+        ws.column_dimensions[col_letter].width = min(max_len + 2, 55)
+
+    filename = f"proveedores_{timezone.localtime().strftime('%Y-%m-%d_%H-%M')}.xlsx"
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    response["Content-Disposition"] = f'attachment; filename="{filename}"'
+    wb.save(response)
+    return response

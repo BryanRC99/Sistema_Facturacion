@@ -9,7 +9,8 @@ urlpatterns = [
     path('facturas/<int:id>/', views.ver_factura, name='factura_detalle'),
     path('facturas/<int:id>/anular/', views.anular_factura, name='factura_anular'),
     path('facturas/<int:id>/imprimir/', views.imprimir_factura, name='imprimir_factura'),
-
+    path("export/pdf/", views.export_facturas_pdf, name="facturas_export_pdf"),
+    path("export/excel/", views.export_facturas_excel, name="facturas_export_excel"),
 
     # AJAX
     path('buscar_producto/', views.buscar_producto, name='buscar_producto'),

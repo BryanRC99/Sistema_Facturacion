@@ -6,6 +6,8 @@
 
 <!-- ENCABEZADO -->
 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
+
+    <!-- IZQUIERDA -->
     <div class="flex items-start gap-3">
         <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
                      bg-indigo-50 dark:bg-indigo-500/10
@@ -23,13 +25,16 @@
                     <i data-lucide="database" class="w-4 h-4"></i>
                     {{ clientes|length }} registrado(s)
                 </span>
-
             </div>
         </div>
     </div>
 
-    <div class="flex flex-wrap gap-2">
-        <a href="{% url 'crear_cliente' %}" class="inline-flex items-center gap-2
+    <!-- DERECHA (ACCIONES) -->
+    <div class="flex flex-wrap items-center gap-2">
+
+        <!-- NUEVO CLIENTE -->
+        <a href="{% url 'crear_cliente' %}"
+           class="inline-flex items-center gap-2
                   bg-indigo-600 hover:bg-indigo-700
                   text-white
                   px-4 py-2.5 rounded-xl
@@ -39,8 +44,62 @@
             <i data-lucide="circle-user" class="w-4 h-4"></i>
             Nuevo Cliente
         </a>
+
+        <!-- DROPDOWN EXPORTAR -->
+        <details class="relative">
+            <summary
+                class="inline-flex items-center gap-2
+                       px-4 py-2.5 rounded-xl
+                       text-sm font-semibold
+                       bg-slate-100 dark:bg-slate-800
+                       text-slate-700 dark:text-slate-200
+                       border border-slate-200 dark:border-slate-700
+                       cursor-pointer
+                       hover:bg-slate-200 dark:hover:bg-slate-700
+                       transition
+                       list-none">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                Exportar
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+            </summary>
+
+            <!-- MENU -->
+            <div
+                class="absolute right-0 mt-2 w-44
+                       bg-white dark:bg-slate-900
+                       border border-slate-200 dark:border-slate-700
+                       rounded-xl shadow-xl
+                       z-20
+                       overflow-hidden">
+
+                <!-- PDF -->
+                <a href="{% url 'clientes_export_pdf' %}"
+                   class="flex items-center gap-2 px-4 py-2.5
+                          text-sm
+                          text-rose-700 dark:text-rose-300
+                          hover:bg-rose-50 dark:hover:bg-rose-500/10
+                          transition">
+                    <i data-lucide="file-text" class="w-4 h-4"></i>
+                    Exportar PDF
+                </a>
+
+                <!-- EXCEL -->
+                <a href="{% url 'clientes_export_excel' %}"
+                   class="flex items-center gap-2 px-4 py-2.5
+                          text-sm
+                          text-emerald-700 dark:text-emerald-300
+                          hover:bg-emerald-50 dark:hover:bg-emerald-500/10
+                          transition">
+                    <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+                    Exportar Excel
+                </a>
+            </div>
+        </details>
+
     </div>
 </div>
+
+
 
 <!-- CONTENIDO PRINCIPAL -->
 <div class="bg-white dark:bg-slate-900
@@ -428,6 +487,14 @@
         modal.classList.add('hidden');
         modal.classList.remove('flex');
     }
+
+    document.addEventListener("click", function (event) {
+    document.querySelectorAll("details[open]").forEach((dropdown) => {
+        if (!dropdown.contains(event.target)) {
+            dropdown.removeAttribute("open");
+        }
+    });
+    });
 
     // Lucide icons
     if (window.lucide) lucide.createIcons();

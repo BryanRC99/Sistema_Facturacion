@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Reporte de Facturas</title>
+
+  <style>
+    @page { size: A4 landscape; margin: 10mm; }
+    * { box-sizing: border-box; }
+
+    body { font-family: Arial, sans-serif; font-size: 8.5px; color:#111; }
+    .header { margin-bottom: 6px; }
+    .title { font-size: 13px; font-weight: 700; margin: 0; }
+    .meta { margin-top: 2px; font-size: 8.5px; color:#444; }
+
+    table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    th, td {
+      border: 0.6px solid #333;
+      padding: 3px;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    th { background: #f2f2f2; font-weight: 700; font-size: 8px; text-align: left; }
+
+    .right { text-align: right; }
+    .center { text-align: center; }
+    .mono { font-family: "Courier New", monospace; font-size: 8px; }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <p class="title">Reporte de Facturas</p>
+    <p class="meta">Generado: {{ fecha }}</p>
+    <p class="meta">Total registros: {{ facturas|length }}</p>
+  </div>
+
+  <table>
+    <!-- suma ~97% para evitar desbordes -->
+    <colgroup>
+      <col style="width:3%">
+      <col style="width:11%">
+      <col style="width:10%">
+      <col style="width:17%">
+      <col style="width:9%">
+      <col style="width:7%">
+      <col style="width:7%">
+      <col style="width:7%">
+      <col style="width:7%">
+      <col style="width:6%">
+      <col style="width:7%">
+      <col style="width:4%">
+    </colgroup>
+
+    <thead>
+      <tr>
+        <th class="center">#</th>
+        <th>Número</th>
+        <th>Fecha</th>
+        <th>Cliente</th>
+        <th>Forma pago</th>
+        <th class="right">Subtotal</th>
+        <th class="right">Desc.</th>
+        <th class="right">Sub IVA</th>
+        <th class="right">IVA</th>
+        <th class="right">Total</th>
+        <th class="center">Est.</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for f in facturas %}
+      <tr>
+        <td class="center">{{ forloop.counter }}</td>
+        <td class="mono">{{ f.numero }}</td>
+        <td class="mono">{% if f.fecha %}{{ f.fecha|date:"d/m/Y H:i" }}{% endif %}</td>
+        <td>{{ f.cliente.nombre_razon_social }}</td>
+        <td>{{ f.forma_pago }}</td>
+        <td class="right">{{ f.subtotal|floatformat:2 }}</td>
+        <td class="right">{{ f.descuento_total|floatformat:2 }}</td>
+        <td class="right">{{ f.subtotal_iva|floatformat:2 }}</td>
+        <td class="right">{{ f.iva_total|floatformat:2 }}</td>
+        <td class="right">{{ f.total|floatformat:2 }}</td>
+        <td class="center">{{ f.estado }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

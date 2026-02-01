@@ -1,7 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.http import HttpResponse
+from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment, PatternFill
+from openpyxl.utils import get_column_letter
 from django.contrib.auth.decorators import login_required
 from .models import Cliente
+from django.template.loader import render_to_string
+from weasyprint import HTML
+from django.utils import timezone
+
 
 
 def lista_clientes(request):
@@ -146,3 +154,94 @@ def eliminar_cliente(request, id):
     cliente.delete()
     messages.success(request, "Cliente eliminado correctamente.")
     return redirect('lista_clientes')
+
+
+def export_clientes_pdf(request):
+    clientes = Cliente.objects.all().order_by("id")
+
+    html_string = render_to_string(
+        "clientes/export_pdf.html",  # ✅ coincide con tu estructura
+        {
+            "clientes": clientes,
+            "fecha": timezone.localtime().strftime("%d/%m/%Y %H:%M"),
+        }
+    )
+
+    pdf_bytes = HTML(
+        string=html_string,
+        base_url=request.build_absolute_uri("/") 
+    ).write_pdf()
+
+    response = HttpResponse(pdf_bytes, content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="clientes.pdf"'
+    return response
+
+
+
+def export_clientes_excel(request):
+    clientes = Cliente.objects.all().order_by("id")
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Clientes"
+
+    # Encabezados (según tus campos reales)
+    headers = [
+        "#",
+        "Tipo Identificación",
+        "Identificación",
+        "Nombre / Razón Social",
+        "Teléfono",
+        "Celular",
+        "Dirección",
+        "Correo",
+    ]
+    ws.append(headers)
+
+    # Estilo header
+    header_fill = PatternFill("solid", fgColor="1F2937")  # gris oscuro
+    header_font = Font(bold=True, color="FFFFFF")
+    for col_idx, _ in enumerate(headers, start=1):
+        cell = ws.cell(row=1, column=col_idx)
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+
+    # Congelar encabezado y filtro
+    ws.freeze_panes = "A2"
+    ws.auto_filter.ref = f"A1:{get_column_letter(len(headers))}1"
+
+    # Filas
+    for i, c in enumerate(clientes, start=1):
+        ws.append([
+            i,
+            c.tipo_identificacion,
+            c.identificacion,
+            c.nombre_razon_social,
+            c.telefono,
+            c.celular,
+            c.direccion,
+            c.correo,
+        ])
+
+    # Ajustar ancho de columnas
+    for col_idx in range(1, len(headers) + 1):
+        col_letter = get_column_letter(col_idx)
+        max_len = 0
+        for cell in ws[col_letter]:
+            val = "" if cell.value is None else str(cell.value)
+            max_len = max(max_len, len(val))
+        ws.column_dimensions[col_letter].width = min(max_len + 2, 50)
+
+    # Nombre archivo con fecha
+    filename = f"clientes_{timezone.localtime().strftime('%Y-%m-%d_%H-%M')}.xlsx"
+
+    # Respuesta
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    response["Content-Disposition"] = f'attachment; filename="{filename}"'
+    wb.save(response)
+    return response
+
+

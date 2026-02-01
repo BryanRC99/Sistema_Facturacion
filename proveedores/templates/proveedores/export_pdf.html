@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Reporte de Proveedores</title>
+
+  <style>
+    @page { size: A4 landscape; margin: 10mm; }
+
+    /* CLAVE para que padding/border no sumen ancho extra */
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 8.5px;
+      color: #111;
+    }
+
+    .header { margin-bottom: 6px; }
+    .title { font-size: 13px; font-weight: 700; margin: 0; }
+    .meta { margin-top: 2px; font-size: 8.5px; color: #444; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      max-width: 100%;
+    }
+
+    th, td {
+      border: 0.6px solid #333;  /* un poquito más fino */
+      padding: 3px;              /* menos padding = menos ancho */
+      vertical-align: top;
+
+      /* que NUNCA se salga */
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      hyphens: auto;
+    }
+
+    th {
+      background: #f2f2f2;
+      font-weight: 700;
+      text-align: left;
+      font-size: 8px;
+    }
+
+    /* Correo: compacto para que no empuje el ancho */
+    .mono {
+      font-family: "Courier New", monospace;
+      font-size: 7.8px;
+      line-height: 1.1;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <p class="title">Reporte de Proveedores</p>
+    <p class="meta">Generado: {{ fecha }}</p>
+    <p class="meta">Total registros: {{ proveedores|length }}</p>
+  </div>
+
+  <table>
+    <!-- COLGROUP: suma ~97% para dejar margen a bordes/padding -->
+    <colgroup>
+      <col style="width:3%">
+      <col style="width:5%">
+      <col style="width:10%">
+      <col style="width:12%">
+      <col style="width:8%">
+      <col style="width:8%">
+      <col style="width:6%">
+      <col style="width:9%">
+      <col style="width:8%">
+      <col style="width:16%">
+      <col style="width:12%">
+    </colgroup>
+
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Tipo</th>
+        <th>Identificación</th>
+        <th>Nombre / Razón social</th>
+        <th>Teléfono</th>
+        <th>Celular</th>
+        <th>Ciudad</th>
+        <th>Contacto</th>
+        <th>Tel. contacto</th>
+        <th>Dirección</th>
+        <th>Correo</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for p in proveedores %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ p.tipo_identificacion }}</td>
+        <td>{{ p.identificacion }}</td>
+        <td>{{ p.nombre_razon_social }}</td>
+        <td>{{ p.telefono }}</td>
+        <td>{{ p.celular }}</td>
+        <td>{{ p.ciudad|default:"" }}</td>
+        <td>{{ p.contacto_nombre|default:"" }}</td>
+        <td>{{ p.contacto_telefono|default:"" }}</td>
+        <td>{{ p.direccion }}</td>
+        <td class="mono">{{ p.correo }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>
+

@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import transaction
 from django.utils.timezone import now
+from django.utils import timezone
 from django.http import JsonResponse
 from django.db.models import Q
 from django.core.serializers import serialize
 from django.template.loader import render_to_string
 from django.http import HttpResponse
 from weasyprint import HTML
+from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment, PatternFill
+from openpyxl.utils import get_column_letter
 from django.conf import settings
 from django.templatetags.static import static
 import os
@@ -365,4 +369,101 @@ def cliente_info(request, id):
 
     except Cliente.DoesNotExist:
         return JsonResponse({'error': 'Cliente no encontrado'}, status=404)
+    
 
+def export_facturas_pdf(request):
+    facturas = (
+        Factura.objects
+        .select_related("cliente")
+        .all()
+        .order_by("-fecha", "-id")
+    )
+
+    html_string = render_to_string(
+        "facturacion/export_facturas_pdf.html",
+        {
+            "facturas": facturas,
+            "fecha": timezone.localtime().strftime("%d/%m/%Y %H:%M"),
+        }
+    )
+
+    pdf = HTML(
+        string=html_string,
+        base_url=request.build_absolute_uri("/")
+    ).write_pdf()
+
+    response = HttpResponse(pdf, content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="facturas.pdf"'
+    return response
+
+
+def export_facturas_excel(request):
+    facturas = (
+        Factura.objects
+        .select_related("cliente")
+        .all()
+        .order_by("-fecha", "-id")
+    )
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Facturas"
+
+    # ❌ Quitamos "Subtotal 0"
+    headers = [
+        "#", "Número", "Fecha", "Cliente", "Forma de pago",
+        "Subtotal", "Desc. total", "Subtotal IVA",
+        "IVA 12%", "Total", "Estado"
+    ]
+    ws.append(headers)
+
+    header_fill = PatternFill("solid", fgColor="1F2937")
+    header_font = Font(bold=True, color="FFFFFF")
+
+    for col in range(1, len(headers) + 1):
+        cell = ws.cell(row=1, column=col)
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = Alignment(horizontal="center")
+
+    ws.freeze_panes = "A2"
+    ws.auto_filter.ref = f"A1:{get_column_letter(len(headers))}1"
+
+    for i, f in enumerate(facturas, start=1):
+        ws.append([
+            i,
+            f.numero,
+            timezone.localtime(f.fecha).strftime("%d/%m/%Y %H:%M") if f.fecha else "",
+            f.cliente.nombre_razon_social,
+            f.forma_pago,
+            float(f.subtotal or 0),
+            float(f.descuento_total or 0),
+            float(f.subtotal_iva or 0),
+            float(f.iva_total or 0),
+            float(f.total or 0),
+            f.estado,
+        ])
+
+    # 💰 formato moneda
+    # Subtotal → Total (columnas 6 a 10)
+    for row in range(2, ws.max_row + 1):
+        for col in range(6, 11):
+            ws.cell(row=row, column=col).number_format = '#,##0.00'
+
+    # 📏 ancho columnas
+    for col in range(1, len(headers) + 1):
+        col_letter = get_column_letter(col)
+        max_len = max(
+            len(str(cell.value)) if cell.value else 0
+            for cell in ws[col_letter]
+        )
+        ws.column_dimensions[col_letter].width = min(max_len + 2, 45)
+
+    filename = f"facturas_{timezone.localtime().strftime('%Y-%m-%d_%H-%M')}.xlsx"
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    response["Content-Disposition"] = f'attachment; filename="{filename}"'
+    wb.save(response)
+    return response

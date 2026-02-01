@@ -1,4 +1,11 @@
 import os
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from openpyxl import Workbook
+from openpyxl.styles import Font, Alignment, PatternFill
+from openpyxl.utils import get_column_letter
+from weasyprint import HTML
+from django.utils import timezone    
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
@@ -145,3 +152,90 @@ def eliminar_producto(request, id):
     producto.delete()
     messages.success(request, "Producto eliminado correctamente.")
     return redirect('lista_productos')
+
+
+
+def export_productos_pdf(request):
+    productos = (
+        Producto.objects
+        .select_related("categoria", "proveedor")
+        .all()
+        .order_by("id")
+    )
+
+    html_string = render_to_string(
+        "productos/export_pdf.html",
+        {
+            "productos": productos,
+            "fecha": timezone.localtime().strftime("%d/%m/%Y %H:%M"),
+        }
+    )
+
+    pdf = HTML(
+        string=html_string,
+        base_url=request.build_absolute_uri("/")
+    ).write_pdf()
+
+    response = HttpResponse(pdf, content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="productos.pdf"'
+    return response
+
+
+
+def export_productos_excel(request):
+    productos = (
+        Producto.objects
+        .select_related("categoria", "proveedor")
+        .all()
+        .order_by("id")
+    )
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Productos"
+
+    headers = [
+        "Código", "Nombre", "Categoría", "Proveedor",
+        "Precio", "Costo", "Stock", "IVA", "Estado", "Descripción"
+    ]
+    ws.append(headers)
+
+    header_fill = PatternFill("solid", fgColor="1F2937")
+    header_font = Font(bold=True, color="FFFFFF")
+
+    for col in range(1, len(headers) + 1):
+        cell = ws.cell(row=1, column=col)
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = Alignment(horizontal="center")
+
+    ws.freeze_panes = "A2"
+    ws.auto_filter.ref = f"A1:{get_column_letter(len(headers))}1"
+
+    for p in productos:
+        ws.append([
+            p.codigo,
+            p.nombre,
+            p.categoria.nombre,
+            p.proveedor.nombre_razon_social if p.proveedor else "",
+            float(p.precio),
+            float(p.costo),
+            p.stock,
+            "Sí" if p.iva else "No",
+            "Activo" if p.estado else "Inactivo",
+            p.descripcion or "",
+        ])
+
+    for col in range(1, len(headers) + 1):
+        col_letter = get_column_letter(col)
+        max_len = max(len(str(c.value)) if c.value else 0 for c in ws[col_letter])
+        ws.column_dimensions[col_letter].width = min(max_len + 2, 45)
+
+    filename = f"productos_{timezone.localtime().strftime('%Y-%m-%d_%H-%M')}.xlsx"
+
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    response["Content-Disposition"] = f'attachment; filename="{filename}"'
+    wb.save(response)
+    return response

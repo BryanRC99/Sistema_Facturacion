@@ -27,7 +27,8 @@
         </div>
     </div>
 
-    <div class="flex flex-wrap gap-2">
+    <!-- ACCIONES -->
+    <div class="flex flex-wrap items-center gap-2">
         <a href="{% url 'factura_crear' %}"
            class="inline-flex items-center gap-2
                   bg-indigo-600 hover:bg-indigo-700
@@ -39,8 +40,49 @@
             <i data-lucide="receipt-text" class="w-4 h-4"></i>
             Nueva Factura
         </a>
+
+        <details class="relative">
+            <summary class="inline-flex items-center gap-2
+                            px-4 py-2.5 rounded-xl
+                            text-sm font-semibold
+                            bg-slate-100 dark:bg-slate-800
+                            text-slate-700 dark:text-slate-200
+                            border border-slate-200 dark:border-slate-700
+                            cursor-pointer
+                            hover:bg-slate-200 dark:hover:bg-slate-700
+                            transition
+                            list-none">
+                <i data-lucide="download" class="w-4 h-4"></i>
+                Exportar
+                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+            </summary>
+
+            <div class="absolute right-0 mt-2 w-44
+                        bg-white dark:bg-slate-900
+                        border border-slate-200 dark:border-slate-700
+                        rounded-xl shadow-xl
+                        z-20 overflow-hidden">
+                <a href="{% url 'facturas_export_pdf' %}"
+                   class="flex items-center gap-2 px-4 py-2.5 text-sm
+                          text-rose-700 dark:text-rose-300
+                          hover:bg-rose-50 dark:hover:bg-rose-500/10 transition">
+                    <i data-lucide="file-text" class="w-4 h-4"></i>
+                    Exportar PDF
+                </a>
+
+                <a href="{% url 'facturas_export_excel' %}"
+                   class="flex items-center gap-2 px-4 py-2.5 text-sm
+                          text-emerald-700 dark:text-emerald-300
+                          hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition">
+                    <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+                    Exportar Excel
+                </a>
+            </div>
+        </details>
     </div>
 </div>
+
+
 
 <!-- CONTENIDO PRINCIPAL -->
 <div class="bg-white dark:bg-slate-900

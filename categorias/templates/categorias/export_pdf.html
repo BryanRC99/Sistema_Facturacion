@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Reporte de Categorías</title>
+
+  <style>
+    @page { size: A4; margin: 14mm; }
+    * { box-sizing: border-box; }
+
+    body { font-family: Arial, sans-serif; font-size: 11px; color:#111; }
+    .header { margin-bottom: 10px; }
+    .title { font-size: 16px; font-weight: 700; margin: 0; }
+    .meta { margin-top: 4px; font-size: 10px; color:#444; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #333; padding: 6px; }
+    th { background: #f2f2f2; text-align: left; font-weight: 700; }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <p class="title">Reporte de Categorías</p>
+    <p class="meta">Generado: {{ fecha }}</p>
+    <p class="meta">Total registros: {{ categorias|length }}</p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 10%;">#</th>
+        <th>Nombre</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in categorias %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ c.nombre }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>
