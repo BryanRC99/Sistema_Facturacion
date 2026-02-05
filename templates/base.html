@@ -1,4 +1,4 @@
-{% load static %}
+{% load static roles %}
 
 <!doctype html>
 <html lang="es" class="transition-colors duration-300">
@@ -46,10 +46,7 @@
     </style>
   </head>
 
-
-  <body
-    class="bg-gray-50 text-gray-800 dark:bg-darkbg dark:text-gray-200 overflow-hidden transition-colors duration-300"
-  >
+  <body class="bg-gray-50 text-gray-800 dark:bg-darkbg dark:text-gray-200 overflow-hidden transition-colors duration-300">
     {% include "includes/messages.html" %}
     <div class="flex min-h-screen">
       <!-- ================== SIDEBAR ================== -->
@@ -60,89 +57,65 @@
         <!-- LOGO -->
         <div class="flex items-center gap-3 px-4 h-16 border-b border-white/10">
           <img src="{% static 'img/logo.png' %}" class="h-8 w-8" />
-          <span
-            class="sidebar-text text-white font-semibold text-sm transition-all duration-200"
-          >
+          <span class="sidebar-text text-white font-semibold text-sm transition-all duration-200">
             NovaBilling
           </span>
         </div>
 
         <!-- MENU -->
-        <nav
-          class="flex-1 px-3 py-4 space-y-1 text-sm overflow-y-auto sidebar-scroll"
-        >
-          <a
-            href="/clientes/"
-            class="sidebar-item {% if '/clientes/' in request.path %}active{% endif %}"
-          >
-            <i data-lucide="user-round"></i>
-            <span class="sidebar-text">Clientes</span>
-          </a>
+        <nav class="flex-1 px-3 py-4 space-y-1 text-sm overflow-y-auto sidebar-scroll">
+  <!-- VENDEDOR + SUPERADMIN -->
+  <a href="/clientes/" class="sidebar-item {% if '/clientes/' in request.path %}active{% endif %}">
+    <i data-lucide="user-round"></i>
+    <span class="sidebar-text">Clientes</span>
+  </a>
 
-          <a
-            href="/proveedores/"
-            class="sidebar-item {% if '/proveedores/' in request.path %}active{% endif %}"
-          >
-            <i data-lucide="square-user"></i>
-            <span class="sidebar-text">Proveedores</span>
-          </a>
+  <a href="/proveedores/" class="sidebar-item {% if '/proveedores/' in request.path %}active{% endif %}">
+    <i data-lucide="square-user"></i>
+    <span class="sidebar-text">Proveedores</span>
+  </a>
 
-          <a
-            href="/productos/"
-            class="sidebar-item {% if '/productos/' in request.path %}active{% endif %}"
-          >
-            <i data-lucide="shopping-basket"></i>
-            <span class="sidebar-text">Productos</span>
-          </a>
+  <a href="/productos/" class="sidebar-item {% if '/productos/' in request.path %}active{% endif %}">
+    <i data-lucide="shopping-basket"></i>
+    <span class="sidebar-text">Productos</span>
+  </a>
 
-          <a
-            href="/categorias/"
-            class="sidebar-item {% if '/categorias/' in request.path %}active{% endif %}"
-          >
-            <i data-lucide="layers-3"></i>
-            <span class="sidebar-text">Categorías</span>
-          </a>
+  <!-- ✅ Categorías ahora también para Vendedor -->
+  <a href="/categorias/" class="sidebar-item {% if '/categorias/' in request.path %}active{% endif %}">
+    <i data-lucide="layers-3"></i>
+    <span class="sidebar-text">Categorías</span>
+  </a>
 
-          <a
-            href="/facturas/"
-            class="sidebar-item {% if '/facturas/' in request.path %}active{% endif %}"
-          >
-            <i data-lucide="receipt"></i>
-            <span class="sidebar-text">Facturas</span>
-          </a>
+  <a href="/facturas/" class="sidebar-item {% if '/facturas/' in request.path %}active{% endif %}">
+    <i data-lucide="receipt"></i>
+    <span class="sidebar-text">Facturas</span>
+  </a>
 
-          <a
-            href="{% url 'dashboard' %}"
-            class="sidebar-item {% if '/reportes/' in request.path %}active{% endif %}"
-          >
-            <i data-lucide="bar-chart-3"></i>
-            <span class="sidebar-text">Reportes</span>
-          </a>
+  <!-- SOLO SUPERADMIN -->
+  {% if request.user|has_group:"SuperAdmin" %}
+    <a href="{% url 'dashboard' %}" class="sidebar-item {% if '/reportes/' in request.path %}active{% endif %}">
+      <i data-lucide="bar-chart-3"></i>
+      <span class="sidebar-text">Reportes</span>
+    </a>
 
-          <a
-            href="{% url 'auditoria:dashboard' %}"
-            class="sidebar-item {% if '/auditoria/' in request.path %}active{% endif %}"
-          >
-            <i data-lucide="clipboard-list"></i>
-            <span class="sidebar-text">Auditoría</span>
-          </a>
+    <a href="{% url 'auditoria:dashboard' %}" class="sidebar-item {% if '/auditoria/' in request.path %}active{% endif %}">
+      <i data-lucide="clipboard-list"></i>
+      <span class="sidebar-text">Auditoría</span>
+    </a>
 
-          <a
-            href="{% url 'usuarios:lista' %}"
-            class="sidebar-item {% if '/usuarios/' in request.path %}active{% endif %}"
-          >
-            <i data-lucide="users"></i>
-            <span class="sidebar-text">Usuarios</span>
-          </a>
-        </nav>
+    <a href="{% url 'usuarios:lista' %}" class="sidebar-item {% if '/usuarios/' in request.path %}active{% endif %}">
+      <i data-lucide="users"></i>
+      <span class="sidebar-text">Usuarios</span>
+    </a>
+  {% endif %}
+</nav>
+
       </aside>
 
       <!-- ================== CONTENIDO ================== -->
       <div id="main" class="flex-1 flex flex-col h-screen">
         <!-- TOPBAR -->
-        <header
-          class="h-16 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-white/10 flex items-center px-6 sticky top-0 z-40 transition-colors"
-        >
+        <header class="h-16 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-white/10 flex items-center px-6 sticky top-0 z-40 transition-colors">
           <button onclick="toggleSidebar()" class="hidden md:block mr-4">
             <i data-lucide="panel-left"></i>
           </button>
@@ -156,86 +129,67 @@
           </span>
 
           <!-- DARK MODE TOGGLE -->
-          <button
-            onclick="toggleTheme()"
-            id="themeBtn"
-            class="ml-auto mr-4 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition"
-          >
+          <button onclick="toggleTheme()" id="themeBtn" class="ml-auto mr-4 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition">
             <i data-lucide="moon" id="themeIcon"></i>
           </button>
 
           <!-- USER MENU -->
           <div class="relative">
-            <button
-              onclick="toggleUserMenu()"
-              class="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold hover:ring-2 hover:ring-blue-400 transition"
-            >
+            <button onclick="toggleUserMenu()" class="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center text-sm font-semibold hover:ring-2 hover:ring-blue-400 transition">
               {{ request.user.username|first|upper }}
             </button>
 
-            <div
-              id="userMenu"
-              class="hidden absolute right-0 mt-3 w-56 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl shadow-xl overflow-hidden z-50"
-            >
+            <div id="userMenu" class="hidden absolute right-0 mt-3 w-56 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-xl shadow-xl overflow-hidden z-50">
               <!-- USER INFO -->
-              <div
-                class="px-4 py-3 border-b border-gray-200 dark:border-slate-700"
-              >
-                <p
-                  class="text-sm font-semibold text-gray-800 dark:text-slate-200"
-                >
+              <div class="px-4 py-3 border-b border-gray-200 dark:border-slate-700">
+                <p class="text-sm font-semibold text-gray-800 dark:text-slate-200">
                   {{ request.user.first_name }} {{ request.user.last_name }}
                 </p>
                 <p class="text-xs text-gray-500 dark:text-slate-400">
                   @{{ request.user.username }}
                 </p>
 
-                <!-- prettier-ignore -->
-                <span class="inline-block mt-2 text-xs px-2 py-0.5 rounded-full {% if request.user.is_superuser %}bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400{% elif request.user.is_staff %}bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400{% else %}bg-gray-100 text-gray-700 dark:bg-slate-700 dark:text-slate-300{% endif %}">
-                {% if request.user.is_superuser %}Administrador{% elif request.user.is_staff %}Staff{% else %}Usuario{% endif %}
+                <span class="inline-block mt-2 text-xs px-2 py-0.5 rounded-full
+                  {% if request.user|has_group:'SuperAdmin' %}
+                    bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400
+                  {% elif request.user|has_group:'Vendedor' %}
+                    bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400
+                  {% else %}
+                    bg-gray-100 text-gray-700 dark:bg-slate-700 dark:text-slate-300
+                  {% endif %}
+                ">
+                  {% if request.user|has_group:'SuperAdmin' %}
+                    SuperAdmin
+                  {% elif request.user|has_group:'Vendedor' %}
+                    Vendedor
+                  {% else %}
+                    Usuario
+                  {% endif %}
                 </span>
               </div>
 
               <!-- ACTIONS -->
               <div class="py-2">
-                <a
-                  href="{% url 'usuarios:editar' request.user.id %}"
-                  class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-white/10 transition"
-                >
+                <a href="{% url 'usuarios:editar' request.user.id %}" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-white/10 transition">
                   <i data-lucide="user-round-pen" class="w-4 h-4"></i>
                   <span>Mi perfil</span>
                 </a>
 
-                <a
-                  href="{% url 'password_change' %}"
-                  class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-white/10 transition"
-                >
+                <a href="{% url 'password_change' %}" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-white/10 transition">
                   <i data-lucide="key-round" class="w-4 h-4"></i>
                   <span>Cambiar contraseña</span>
                 </a>
 
-                <!-- 🔐 OLVIDAR DISPOSITIVO (ABRE MODAL) -->
-                <button
-                  type="button"
-                  onclick="openForgetDeviceModal()"
-                  class="w-full flex items-center gap-2 px-4 py-2 text-sm text-left text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition"
-                >
+                <button type="button" onclick="openForgetDeviceModal()" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-left text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition">
                   <i data-lucide="monitor-off" class="w-4 h-4"></i>
                   <span>Olvidar este dispositivo</span>
                 </button>
               </div>
 
               <!-- LOGOUT -->
-              <form
-                method="post"
-                action="{% url 'logout' %}"
-                class="border-t border-gray-200 dark:border-slate-700"
-              >
+              <form method="post" action="{% url 'logout' %}" class="border-t border-gray-200 dark:border-slate-700">
                 {% csrf_token %}
-                <button
-                  type="submit"
-                  class="w-full flex items-center gap-2 px-4 py-2 text-sm text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition"
-                >
+                <button type="submit" class="w-full flex items-center gap-2 px-4 py-2 text-sm text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition">
                   <i data-lucide="log-out" class="w-4 h-4"></i>
                   <span>Cerrar sesión</span>
                 </button>
@@ -244,71 +198,39 @@
           </div>
 
           <!-- ✅ MODAL CONFIRMACIÓN: OLVIDAR DISPOSITIVO -->
-          <div
-            id="forgetDeviceModal"
-            class="hidden fixed inset-0 z-[999] flex items-center justify-center p-4"
-          >
-            <!-- overlay -->
-            <div
-              class="absolute inset-0 bg-black/60"
-              onclick="closeForgetDeviceModal()"
-            ></div>
+          <div id="forgetDeviceModal" class="hidden fixed inset-0 z-[999] flex items-center justify-center p-4">
+            <div class="absolute inset-0 bg-black/60" onclick="closeForgetDeviceModal()"></div>
 
-            <!-- card -->
-            <div
-              class="relative w-full max-w-md rounded-2xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-2xl overflow-hidden"
-            >
+            <div class="relative w-full max-w-md rounded-2xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 shadow-2xl overflow-hidden">
               <div class="p-5">
                 <div class="flex items-start gap-3">
-                  <div
-                    class="mt-0.5 flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300"
-                  >
+                  <div class="mt-0.5 flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">
                     <i data-lucide="shield-alert" class="w-5 h-5"></i>
                   </div>
 
                   <div class="flex-1">
-                    <h3
-                      class="text-base font-semibold text-gray-900 dark:text-slate-100"
-                    >
+                    <h3 class="text-base font-semibold text-gray-900 dark:text-slate-100">
                       ¿Olvidar este dispositivo?
                     </h3>
                     <p class="mt-1 text-sm text-gray-600 dark:text-slate-300">
-                      Al confirmar, este navegador dejará de ser confiable y en
-                      el próximo inicio de sesión se te pedirá el código 2FA
-                      nuevamente.
+                      Al confirmar, este navegador dejará de ser confiable y en el próximo inicio de sesión se te pedirá el código 2FA nuevamente.
                     </p>
                   </div>
 
-                  <button
-                    type="button"
-                    onclick="closeForgetDeviceModal()"
-                    class="text-gray-500 hover:text-gray-800 dark:text-slate-400 dark:hover:text-white"
-                  >
+                  <button type="button" onclick="closeForgetDeviceModal()" class="text-gray-500 hover:text-gray-800 dark:text-slate-400 dark:hover:text-white">
                     <i data-lucide="x" class="w-5 h-5"></i>
                   </button>
                 </div>
               </div>
 
               <div class="px-5 pb-5 flex gap-3">
-                <button
-                  type="button"
-                  onclick="closeForgetDeviceModal()"
-                  class="flex-1 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-white/10 transition"
-                >
+                <button type="button" onclick="closeForgetDeviceModal()" class="flex-1 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-gray-800 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-white/10 transition">
                   Cancelar
                 </button>
 
-                <!-- ✅ POST con CSRF (recomendado) -->
-                <form
-                  method="post"
-                  action="{% url 'twofa:forget_device' %}"
-                  class="flex-1"
-                >
+                <form method="post" action="{% url 'twofa:forget_device' %}" class="flex-1">
                   {% csrf_token %}
-                  <button
-                    type="submit"
-                    class="w-full py-2.5 rounded-xl font-semibold bg-orange-600 text-white hover:bg-orange-700 transition"
-                  >
+                  <button type="submit" class="w-full py-2.5 rounded-xl font-semibold bg-orange-600 text-white hover:bg-orange-700 transition">
                     Sí, olvidar
                   </button>
                 </form>
@@ -319,21 +241,15 @@
 
         <!-- MAIN -->
         <main class="flex-1 p-6 overflow-y-auto">
-          <div
-            class="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-6 transition-colors"
-          >
+          <div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm p-6 transition-colors">
             {% block content %}{% endblock %}
           </div>
         </main>
       </div>
     </div>
 
-    <!-- OVERLAY MOBILE -->
-    <div
-      id="overlay"
-      onclick="toggleMobile()"
-      class="fixed inset-0 bg-black/50 z-40 hidden md:hidden"
-    ></div>
+    <div id="overlay" onclick="toggleMobile()" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden"></div>
+
 
     <!-- ================== ESTILOS ================== -->
     <style>

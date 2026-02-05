@@ -19,6 +19,8 @@ from django.shortcuts import get_object_or_404
 from datetime import datetime
 import json
 from django.contrib import messages
+from usuarios.decorators import group_required
+
 
 
 from clientes.models import Cliente
@@ -29,6 +31,7 @@ from .models import Factura, DetalleFactura
 # GENERAR CLAVE ACCESO SRI
 # ============================
 
+@group_required(["Vendedor", "SuperAdmin"])
 def generar_clave_acceso_sri(
     fecha_emision,
     ruc,
@@ -79,6 +82,7 @@ def generar_clave_acceso_sri(
 # IMPRIMIR FACTURA
 # ============================
 
+@group_required(["Vendedor", "SuperAdmin"])
 def imprimir_factura(request, id):
     factura = get_object_or_404(Factura, id=id)
 
@@ -137,6 +141,7 @@ def imprimir_factura(request, id):
 # ============================
 # LISTAR FACTURAS
 # ============================
+@group_required(["Vendedor", "SuperAdmin"])
 def lista_facturas(request):
     facturas = Factura.objects.all().order_by('-fecha')
     return render(request, 'facturacion/lista.html', {'facturas': facturas})
@@ -145,6 +150,7 @@ def lista_facturas(request):
 # ============================
 # CREAR FACTURA
 # ============================
+@group_required(["Vendedor", "SuperAdmin"])
 @transaction.atomic
 def crear_factura(request):
     clientes = Cliente.objects.all()
@@ -290,6 +296,7 @@ def crear_factura(request):
 # ============================
 # VER FACTURA
 # ============================
+@group_required(["Vendedor", "SuperAdmin"])
 def ver_factura(request, id):
     factura = get_object_or_404(Factura, id=id)
     detalles = DetalleFactura.objects.filter(factura=factura)
@@ -302,6 +309,7 @@ def ver_factura(request, id):
 # ============================
 # ANULAR FACTURA
 # ============================
+@group_required(["Vendedor", "SuperAdmin"])
 @transaction.atomic
 def anular_factura(request, id):
     factura = get_object_or_404(Factura, id=id)
@@ -328,6 +336,7 @@ def anular_factura(request, id):
 # ============================
 # AJAX: Buscar Producto
 # ============================
+@group_required(["Vendedor", "SuperAdmin"])
 def buscar_producto(request):
     query = request.GET.get('q', '').strip()
 
@@ -354,6 +363,7 @@ def buscar_producto(request):
 # ============================
 # AJAX: Información del Cliente
 # ============================
+@group_required(["Vendedor", "SuperAdmin"])
 def cliente_info(request, id):
     try:
         c = Cliente.objects.get(id=id)
@@ -371,6 +381,7 @@ def cliente_info(request, id):
         return JsonResponse({'error': 'Cliente no encontrado'}, status=404)
     
 
+@group_required(["Vendedor", "SuperAdmin"])
 def export_facturas_pdf(request):
     facturas = (
         Factura.objects
@@ -397,6 +408,7 @@ def export_facturas_pdf(request):
     return response
 
 
+@group_required(["Vendedor", "SuperAdmin"])
 def export_facturas_excel(request):
     facturas = (
         Factura.objects

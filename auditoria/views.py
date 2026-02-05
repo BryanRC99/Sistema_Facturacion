@@ -3,8 +3,10 @@ from django.shortcuts import render
 from django.db.models import Q
 from django.core.paginator import Paginator
 from .models import AuditoriaLog
+from usuarios.decorators import group_required
 
 
+@group_required("SuperAdmin")
 def dashboard(request):
     logs = AuditoriaLog.objects.select_related("usuario").all().order_by("-fecha")
 

@@ -8,8 +8,11 @@ from django.template.loader import render_to_string
 from weasyprint import HTML
 from django.utils import timezone
 from django.contrib import messages
+from usuarios.decorators import group_required
 
 
+
+@group_required(["Vendedor", "SuperAdmin"])
 def lista_proveedores(request):
     proveedores = Proveedor.objects.all()
 
@@ -21,7 +24,7 @@ def lista_proveedores(request):
         'proveedores': proveedores
     })
 
-
+@group_required(["Vendedor", "SuperAdmin"])
 def crear_proveedor(request):
     if request.method == 'POST':
         form_data = request.POST
@@ -90,7 +93,7 @@ def crear_proveedor(request):
 
     return render(request, 'proveedores/crear.html')
 
-
+@group_required(["Vendedor", "SuperAdmin"])
 def editar_proveedor(request, id):
     proveedor = get_object_or_404(Proveedor, id=id)
 
@@ -180,7 +183,7 @@ def editar_proveedor(request, id):
         'proveedor': proveedor
     })
 
-
+@group_required(["Vendedor", "SuperAdmin"])
 def eliminar_proveedor(request, id):
     proveedor = get_object_or_404(Proveedor, id=id)
     proveedor.delete()
@@ -188,7 +191,7 @@ def eliminar_proveedor(request, id):
     return redirect('lista_proveedores')
 
 
-
+@group_required(["Vendedor", "SuperAdmin"])
 def export_proveedores_pdf(request):
     proveedores = Proveedor.objects.all().order_by("id")
 
@@ -210,7 +213,7 @@ def export_proveedores_pdf(request):
     return response
 
 
-
+@group_required(["Vendedor", "SuperAdmin"])
 def export_proveedores_excel(request):
     proveedores = Proveedor.objects.all().order_by("id")
 

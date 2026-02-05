@@ -9,16 +9,18 @@ from .models import Cliente
 from django.template.loader import render_to_string
 from weasyprint import HTML
 from django.utils import timezone
+from usuarios.decorators import group_required
 
 
 
+@group_required(["Vendedor", "SuperAdmin"])
 def lista_clientes(request):
     clientes = Cliente.objects.all()
     for c in clientes:
         c.tipo_identificacion_display = c.get_tipo_identificacion_display()
     return render(request, 'clientes/lista.html', {'clientes': clientes})
 
-
+@group_required(["Vendedor", "SuperAdmin"])
 def crear_cliente(request):
     if request.method == 'POST':
         form_data = request.POST
@@ -75,6 +77,8 @@ def crear_cliente(request):
     return render(request, 'clientes/crear.html')
 
 
+
+@group_required(["Vendedor", "SuperAdmin"])
 def editar_cliente(request, id):
     cliente = get_object_or_404(Cliente, id=id)
 
@@ -149,6 +153,8 @@ def editar_cliente(request, id):
     return render(request, 'clientes/editar.html', {'cliente': cliente})
 
 
+
+@group_required(["Vendedor", "SuperAdmin"])
 def eliminar_cliente(request, id):
     cliente = get_object_or_404(Cliente, id=id)
     cliente.delete()
@@ -156,6 +162,8 @@ def eliminar_cliente(request, id):
     return redirect('lista_clientes')
 
 
+
+@group_required(["Vendedor", "SuperAdmin"])
 def export_clientes_pdf(request):
     clientes = Cliente.objects.all().order_by("id")
 
@@ -177,7 +185,7 @@ def export_clientes_pdf(request):
     return response
 
 
-
+@group_required(["Vendedor", "SuperAdmin"])
 def export_clientes_excel(request):
     clientes = Cliente.objects.all().order_by("id")
 

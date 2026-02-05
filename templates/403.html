@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Acceso no autorizado{% endblock %}
+
+{% block content %}
+
+<div class="min-h-[70vh] flex items-center justify-center px-4">
+
+    <div class="bg-white dark:bg-slate-900
+                p-8 rounded-3xl shadow-xl
+                max-w-md w-full
+                text-center space-y-4
+                border border-gray-100 dark:border-slate-700">
+
+        <!-- Ícono -->
+        <div class="flex justify-center">
+            <div class="h-14 w-14 rounded-2xl flex items-center justify-center
+                        bg-red-100 text-red-700
+                        dark:bg-red-900/30 dark:text-red-400">
+                <i data-lucide="shield-x" class="w-7 h-7"></i>
+            </div>
+        </div>
+
+        <!-- Título -->
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-slate-100">
+            Acceso no autorizado
+        </h1>
+
+        <!-- Mensaje -->
+        <p class="text-gray-600 dark:text-slate-300 leading-relaxed">
+            Tu cuenta no tiene permisos para realizar esta acción o acceder a esta sección.
+        </p>
+
+        <!-- Botón -->
+        <div class="pt-4 flex justify-center">
+            <a href="{{ request.META.HTTP_REFERER|default:'/' }}"
+               class="inline-flex items-center gap-2 px-5 py-2 rounded-lg
+                      bg-gray-200 dark:bg-slate-800
+                      text-gray-800 dark:text-slate-200
+                      hover:bg-gray-300 dark:hover:bg-slate-700
+                      transition font-medium">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                Volver
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

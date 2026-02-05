@@ -14,18 +14,22 @@ from django.core.exceptions import ValidationError
 from .models import Producto, Categoria
 from proveedores.models import Proveedor
 from django.contrib import messages
+from usuarios.decorators import group_required
 
 
+
+@group_required(["Vendedor", "SuperAdmin"])
 def verificar_codigo(request):
     codigo = request.GET.get("codigo", "").strip().lower()
     existe = Producto.objects.filter(codigo__iexact=codigo).exists()
     return JsonResponse({"existe": existe})
 
-
+@group_required(["Vendedor", "SuperAdmin"])
 def lista_productos(request):
     productos = Producto.objects.all().select_related('categoria')
     return render(request, 'productos/lista.html', {'productos': productos})
 
+@group_required(["Vendedor", "SuperAdmin"])
 def crear_producto(request):
     categorias = Categoria.objects.all()
     proveedores = Proveedor.objects.filter(estado=True)
@@ -91,6 +95,7 @@ def crear_producto(request):
     })
 
 
+@group_required(["Vendedor", "SuperAdmin"])
 def editar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
     categorias = Categoria.objects.all()
@@ -139,6 +144,7 @@ def editar_producto(request, id):
     })
 
 
+@group_required(["Vendedor", "SuperAdmin"])
 def eliminar_producto(request, id):
     producto = get_object_or_404(Producto, id=id)
 
@@ -155,6 +161,7 @@ def eliminar_producto(request, id):
 
 
 
+@group_required(["Vendedor", "SuperAdmin"])
 def export_productos_pdf(request):
     productos = (
         Producto.objects
@@ -181,7 +188,7 @@ def export_productos_pdf(request):
     return response
 
 
-
+@group_required(["Vendedor", "SuperAdmin"])
 def export_productos_excel(request):
     productos = (
         Producto.objects

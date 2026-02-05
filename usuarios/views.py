@@ -1,16 +1,19 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import CrearUsuarioForm
-from .forms import EditarUsuarioForm
-from django.contrib import messages
-from django.contrib.auth.models import User
+
+from .forms import CrearUsuarioForm, EditarUsuarioForm
+from usuarios.decorators import group_required, profile_edit_required
 
 
+@group_required("SuperAdmin")
 def lista_usuarios(request):
     usuarios = User.objects.all()
     return render(request, "usuarios/lista.html", {"usuarios": usuarios})
 
 
+@group_required("SuperAdmin")
 def crear_usuario(request):
     if request.method == "POST":
         form = CrearUsuarioForm(request.POST)
@@ -21,14 +24,13 @@ def crear_usuario(request):
             user.save()
 
             if grupo:
-                user.groups.set([grupo])  # deja solo ese grupo (si prefieres add(), dime)
+                user.groups.set([grupo])
             else:
                 user.groups.clear()
 
             messages.success(request, "Usuario creado correctamente.")
             return redirect("usuarios:lista")
 
-        # Form inválido
         messages.error(request, "Revisa los datos del formulario.")
         return render(request, "usuarios/crear_usuario.html", {"form": form})
 
@@ -36,39 +38,64 @@ def crear_usuario(request):
     return render(request, "usuarios/crear_usuario.html", {"form": form})
 
 
+@group_required("SuperAdmin")
 def ver_usuario(request, user_id):
     usuario = get_object_or_404(User, id=user_id)
     return render(request, "usuarios/ver_usuario.html", {"usuario": usuario})
 
 
+@profile_edit_required()
 def editar_usuario(request, user_id):
     usuario = get_object_or_404(User, id=user_id)
 
+    is_superadmin = request.user.groups.filter(name="SuperAdmin").exists()
+
     if request.method == "POST":
         form = EditarUsuarioForm(request.POST, instance=usuario)
+
         if form.is_valid():
-            user = form.save()
-            grupo = form.cleaned_data.get("grupo")
+            user = form.save(commit=False)
 
-            if grupo:
-                user.groups.set([grupo])
+            # 🔒 Si NO es superadmin, NO se permite cambiar grupo
+            if is_superadmin:
+                user.save()
+                grupo = form.cleaned_data.get("grupo")
+                if grupo:
+                    user.groups.set([grupo])
+                else:
+                    user.groups.clear()
             else:
-                user.groups.clear()
+                # Guarda el usuario ignorando cualquier intento de manipular el grupo
+                user.save()
 
-            messages.success(request, "Usuario actualizado correctamente.")
-            return redirect("usuarios:lista")
+            messages.success(request, "Perfil actualizado correctamente.")
+
+            # ✅ Redirección según rol
+            if is_superadmin:
+                return redirect("usuarios:lista")
+            return redirect("usuarios:editar", request.user.id)
 
         messages.error(request, "Revisa los datos del formulario.")
+
     else:
         form = EditarUsuarioForm(instance=usuario)
 
-    return render(request, "usuarios/editar_usuario.html", {"form": form, "usuario": usuario})
+        # Opcional: ocultar el campo grupo al no-superadmin
+        if not is_superadmin and "grupo" in form.fields:
+            form.fields.pop("grupo")
 
+    return render(
+        request,
+        "usuarios/editar_usuario.html",
+        {"form": form, "usuario": usuario},
+    )
+
+
+@group_required("SuperAdmin")
 def eliminar_usuario(request, user_id):
     usuario = get_object_or_404(User, id=user_id)
 
-    # Evitar que se elimine a sí mismo
-    if request.user.is_authenticated and request.user.id == usuario.id:
+    if request.user.id == usuario.id:
         messages.error(request, "No puedes eliminar tu propio usuario mientras estás autenticado.")
         return redirect("usuarios:lista")
 
@@ -77,3 +104,12 @@ def eliminar_usuario(request, user_id):
     messages.success(request, f"Usuario '{username}' eliminado correctamente.")
     return redirect("usuarios:lista")
 
+
+@login_required
+def admin_guard(request):
+    # SuperAdmin -> admin real
+    if request.user.is_superuser or request.user.groups.filter(name="SuperAdmin").exists():
+        return redirect("/django-admin/")
+
+    # No autorizado -> tu 403 bonito
+    return render(request, "403.html", status=403)

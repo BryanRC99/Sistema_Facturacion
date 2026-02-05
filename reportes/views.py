@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.utils.dateparse import parse_date
+from usuarios.decorators import group_required
+
 
 from reportes.services import (
     ventas_por_dia,
@@ -19,7 +21,7 @@ from reportes.services import (
     utilidad_por_rango,
 )
 
-
+@group_required("SuperAdmin")
 def _get_dates(request):
     fecha_inicio = parse_date(request.GET.get("fecha_inicio") or "")
     fecha_fin = parse_date(request.GET.get("fecha_fin") or "")
@@ -29,6 +31,7 @@ def _get_dates(request):
 # =========================
 # DASHBOARD (tu vista actual)
 # =========================
+@group_required("SuperAdmin")
 def dashboard(request):
     contexto = {
         "resumen": resumen_ventas_hoy(),
@@ -42,6 +45,7 @@ def dashboard(request):
 # =========================
 # 1) Ventas por rango
 # =========================
+@group_required("SuperAdmin")
 def reporte_ventas_rango(request):
     fecha_inicio, fecha_fin = _get_dates(request)
     group_by = request.GET.get("group_by", "dia")
@@ -59,6 +63,7 @@ def reporte_ventas_rango(request):
 # =========================
 # 2) Métodos de pago
 # =========================
+@group_required("SuperAdmin")
 def reporte_metodos_pago(request):
     fecha_inicio, fecha_fin = _get_dates(request)
 
@@ -74,6 +79,7 @@ def reporte_metodos_pago(request):
 # =========================
 # 3) Clientes
 # =========================
+@group_required("SuperAdmin")
 def reporte_clientes(request):
     fecha_inicio, fecha_fin = _get_dates(request)
     q = request.GET.get("q", "").strip()
@@ -90,6 +96,7 @@ def reporte_clientes(request):
 # =========================
 # 4) Productos
 # =========================
+@group_required("SuperAdmin")
 def reporte_productos(request):
     fecha_inicio, fecha_fin = _get_dates(request)
     q = request.GET.get("q", "").strip()
@@ -110,6 +117,7 @@ def reporte_productos(request):
 # =========================
 # 5) Categorías
 # =========================
+@group_required("SuperAdmin")
 def reporte_categorias(request):
     fecha_inicio, fecha_fin = _get_dates(request)
 
@@ -124,6 +132,7 @@ def reporte_categorias(request):
 # =========================
 # 6) Anuladas
 # =========================
+@group_required("SuperAdmin")
 def reporte_anuladas(request):
     fecha_inicio, fecha_fin = _get_dates(request)
     data = anuladas_rango(fecha_inicio, fecha_fin)
@@ -141,6 +150,7 @@ def reporte_anuladas(request):
 # =========================
 # 7) Vendedores
 # =========================
+@group_required("SuperAdmin")
 def reporte_vendedores(request):
     fecha_inicio, fecha_fin = _get_dates(request)
 
@@ -155,6 +165,7 @@ def reporte_vendedores(request):
 # =========================
 # 8) Utilidad
 # =========================
+@group_required("SuperAdmin")
 def reporte_utilidad(request):
     fecha_inicio, fecha_fin = _get_dates(request)
     categoria_id = request.GET.get("categoria_id") or None

@@ -1,0 +1,119 @@
+[33mcommit 344a4f69e2a8c3248f87a7118df71ddfef538f27[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Mon Feb 2 17:59:16 2026 -0500
+
+    Corregido: Tipo de letra y modo oscuro
+
+[33mcommit a4529a87355ed4f411ea833517a46774b23cc57d[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Sun Feb 1 18:37:48 2026 -0500
+
+    Requirements actualizado
+
+[33mcommit 8f19812a038072d0debd27b60cb01b66fbbfd771[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Sun Feb 1 18:27:04 2026 -0500
+
+    Implementacion descargar reportes en modulos PDF Y Excel
+
+[33mcommit 300cc30df0678693a65852db6efa1e0a1a35db69[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Sun Feb 1 10:52:25 2026 -0500
+
+    Mejoras en templates y assets
+
+[33mcommit dc53dca9fb754564115c59ee4a12e407c992c4f7[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Tue Jan 27 13:48:07 2026 -0500
+
+    Sistema funcional al 100%
+
+[33mcommit dda504b84d53c2f51a7cf895c7787506bb3caed8[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Wed Jan 21 11:38:10 2026 -0500
+
+    Auto create superuser on Render
+
+[33mcommit 48c3a7bceb1a27b28d3996f103b41216742385df[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Wed Jan 21 11:27:37 2026 -0500
+
+    Fix 2FA login session creation (set session.modified)
+
+[33mcommit 97ef77344d5f32c7e1079ee84dcd23b801876374[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Wed Jan 21 11:08:07 2026 -0500
+
+    Render
+
+[33mcommit ed6147d91e2ee14eef812c1db836223deb8c43e6[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Wed Jan 21 11:01:04 2026 -0500
+
+    Render
+
+[33mcommit fe75142337b9d250fd3cf3ac95b6e5426c8b6a66[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Wed Jan 21 10:51:24 2026 -0500
+
+    Render
+
+[33mcommit 7f021373e3eff142dbf61fa495d96bb7c3031ded[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Wed Jan 21 10:30:28 2026 -0500
+
+    Ready for Render deploy
+
+[33mcommit 31b9f5ae470f9af83fc45f289ca9257df42a80c1[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Tue Jan 20 18:50:17 2026 -0500
+
+    Implementacion de 2FA
+
+[33mcommit 3b80a86908cddee93944c7451e6f0215bef99bfc[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Sun Jan 18 12:34:04 2026 -0500
+
+    Modo oscuro implementado y estetica mejorada
+
+[33mcommit 12ae85fb510f2b8c60defef3e2394ead80edf22f[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Fri Jan 16 12:05:36 2026 -0500
+
+    Imagenes implementado en Productos con Cloudinary
+
+[33mcommit 14b4335ac08f7a0410b8bf4be61b30e02c91a492[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Thu Jan 1 19:04:27 2026 -0500
+
+    Iconos mejorados, busqueda de Auditoria corregida
+
+[33mcommit 9cdc6f63215b8c934ad1edff052291651659b4ef[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Thu Jan 1 18:22:16 2026 -0500
+
+    Modulo de auditoria, usuarios y reportes implementado pero falta pulir y mejorar mas los modulos
+
+[33mcommit 167f97baae81aa8048b23d32cd3a378ae74bdc06[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Tue Dec 23 11:07:43 2025 -0500
+
+    Factura mejorada, clave de acceso generada
+
+[33mcommit 05e74f7e2d601ac80a9b6c56abf10431c5bd3670[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Sun Dec 14 16:49:22 2025 -0500
+
+    Mejora en iconos de las vistas
+
+[33mcommit fa52e0ec295e55dfcce59cd61e1df1b27c44e50f[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Sun Dec 14 12:25:58 2025 -0500
+
+    Implementacion de GIt
+
+[33mcommit 2a9aa01b012d6ffe7f2d4cf05c45a862d505ed3c[m[33m ([m[1;32mmaster[m[33m)[m
+Author: Bryan Pineda <bryancr2004@gmail.com>
+Date:   Sun Dec 14 11:01:14 2025 -0500
+
+    Proyecto con Login seguro y tablas funcionales
