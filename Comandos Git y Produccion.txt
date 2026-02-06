@@ -1,0 +1,29 @@
+git status (Ver archivos tageados y no tageados)
+
+git add . (Agregar todos los archivos para commit)
+
+git add . ':!facturacion/settings.py' (Excluye un archivo)
+
+git update-index --assume-unchanged facturacion/settings.py (Un archivo nunca se vuelve a subir)
+git update-index --no-assume-unchanged facturacion/settings.py (Revertir la accion)
+
+git push (Subir los cambios)
+
+
+//Producción
+
+git pull (Para bajar los cambios)
+git pull origin main
+
+
+sudo systemctl restart gunicorn_facturacion (Reinicia los servicios para que hagan efecto)
+sudo systemctl reload nginx
+
+
+curl -I https://app.facturacion-br.me (Verificar si la app esta funcionando)
+
+
+
+
+
+

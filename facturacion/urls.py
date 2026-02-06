@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('facturacion_app.urls')),
     path("2fa/", include("twofa.urls")),
     path("totp/", include("totp.urls")),
+
 ]
 
 if settings.DEBUG:

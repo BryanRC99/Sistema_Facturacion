@@ -1,0 +1,60 @@
+{% extends "base_auth.html" %}
+{% load static %}
+
+{% block title %}Recurso no encontrado{% endblock %}
+
+{% block content %}
+<div class="relative h-dvh overflow-hidden">
+
+  <!-- FONDO -->
+  <div class="fixed inset-0 -z-10">
+    <img src="{% static 'img/login-bg.jpg' %}"
+         class="w-full h-full object-cover blur-md scale-110"
+         alt="Fondo">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-black/80"></div>
+    <div class="absolute -top-40 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-indigo-500/20 blur-3xl"></div>
+  </div>
+
+  <!-- CONTENIDO (sin scroll) -->
+  <div class="mx-auto max-w-5xl h-full px-4 sm:px-6
+              flex flex-col items-center justify-center
+              gap-6 sm:gap-8">
+
+    <!-- Ilustración (controlada para que no genere scroll) -->
+    <img
+      src="{% static 'img/404-illustration.svg' %}"
+      alt="Recurso no encontrado"
+      class="w-[260px] sm:w-[380px] md:w-[520px]
+             max-h-[42vh] sm:max-h-[48vh]
+             object-contain
+             drop-shadow-[0_20px_40px_rgba(0,0,0,0.55)]
+             select-none"
+      draggable="false"
+    />
+
+    <!-- Texto -->
+    <div class="text-center">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white">
+        Recurso no encontrado
+      </h1>
+
+      <p class="mt-3 text-sm sm:text-base text-white/75 max-w-xl mx-auto leading-relaxed">
+        La página que buscas no existe, fue movida o el enlace está mal escrito.
+      </p>
+    </div>
+
+    <!-- Botón -->
+    <a href="{% url 'inicio' %}"
+       class="inline-flex items-center justify-center gap-2
+              px-6 py-3 rounded-2xl
+              bg-indigo-600 text-white font-semibold
+              hover:bg-indigo-700
+              transition transform hover:-translate-y-0.5
+              focus:outline-none focus:ring-2 focus:ring-indigo-500/70">
+      <i data-lucide="home" class="w-5 h-5"></i>
+      Ir al inicio
+    </a>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,71 +1,71 @@
-{% extends "base_auth.html" %}
-{% load static %}
+    {% extends "base_auth.html" %}
+    {% load static %}
 
-{% block title %}Acceso no autorizado{% endblock %}
+    {% block title %}Acceso no autorizado{% endblock %}
 
-{% block content %}
-<div class="relative h-dvh overflow-hidden flex items-center justify-center px-4 sm:px-6">
+    {% block content %}
+    <div class="relative h-dvh overflow-hidden flex items-center justify-center px-4 sm:px-6">
 
-    <!-- FONDO -->
-    <div class="fixed inset-0 -z-10">
-        <img src="{% static 'img/login-bg.jpg' %}"
-             class="w-full h-full object-cover blur-md scale-110"
-             alt="Fondo">
-        <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-black/75"></div>
-    </div>
-
-    <!-- CARD -->
-    <div class="w-full max-w-sm sm:max-w-md
-                bg-gray-900/70 backdrop-blur-2xl
-                rounded-3xl shadow-2xl
-                border border-white/10
-                p-6 sm:p-8 text-center text-white
-                animate-fade-in">
-
-        <!-- ICONO (lucide) -->
-        <div class="mx-auto mb-5 sm:mb-6
-                    w-16 h-16 sm:w-20 sm:h-20 rounded-2xl
-                    bg-red-500/15 border border-red-500/20
-                    flex items-center justify-center">
-            <i data-lucide="shield-alert" class="w-8 h-8 sm:w-10 sm:h-10 text-red-300"></i>
+        <!-- FONDO -->
+        <div class="fixed inset-0 -z-10">
+            <img src="{% static 'img/login-bg.jpg' %}"
+                class="w-full h-full object-cover blur-md scale-110"
+                alt="Fondo">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-black/75"></div>
         </div>
 
-        <!-- TÍTULO -->
-        <h1 class="font-extrabold tracking-tight
-                   text-2xl sm:text-3xl">
-            Acceso restringido
-        </h1>
+        <!-- CARD -->
+        <div class="w-full max-w-sm sm:max-w-md
+                    bg-gray-900/70 backdrop-blur-2xl
+                    rounded-3xl shadow-2xl
+                    border border-white/10
+                    p-6 sm:p-8 text-center text-white
+                    animate-fade-in">
 
-        <p class="text-gray-300 mt-2 mb-6 sm:mb-7 leading-relaxed text-sm sm:text-base">
-            Por favor, inicia sesión para continuar.
-        </p>
+            <!-- ICONO (lucide) -->
+            <div class="mx-auto mb-5 sm:mb-6
+                        w-16 h-16 sm:w-20 sm:h-20 rounded-2xl
+                        bg-red-500/15 border border-red-500/20
+                        flex items-center justify-center">
+                <i data-lucide="shield-alert" class="w-8 h-8 sm:w-10 sm:h-10 text-red-300"></i>
+            </div>
 
-        <!-- BOTÓN -->
-        <a href="{% url 'login' %}"
-           class="w-full inline-flex items-center justify-center gap-2
-                  px-6 py-3 rounded-2xl
-                  bg-indigo-600 text-white font-semibold
-                  hover:bg-indigo-700
-                  transition transform hover:-translate-y-0.5
-                  focus:outline-none focus:ring-2 focus:ring-indigo-500/70">
-            <i data-lucide="log-in" class="w-5 h-5"></i>
-            Iniciar sesión
-        </a>
+            <!-- TÍTULO -->
+            <h1 class="font-extrabold tracking-tight
+                    text-2xl sm:text-3xl">
+                Acceso restringido
+            </h1>
 
-        <!-- NOTA -->
-        <p class="mt-5 sm:mt-6 text-xs sm:text-sm text-gray-400">
-            Sistema protegido · Acceso solo para usuarios autorizados
-        </p>
+            <p class="text-gray-300 mt-2 mb-6 sm:mb-7 leading-relaxed text-sm sm:text-base">
+                Por favor, inicia sesión para continuar.
+            </p>
+
+            <!-- BOTÓN -->
+            <a href="{% url 'login' %}"
+            class="w-full inline-flex items-center justify-center gap-2
+                    px-6 py-3 rounded-2xl
+                    bg-indigo-600 text-white font-semibold
+                    hover:bg-indigo-700
+                    transition transform hover:-translate-y-0.5
+                    focus:outline-none focus:ring-2 focus:ring-indigo-500/70">
+                <i data-lucide="log-in" class="w-5 h-5"></i>
+                Iniciar sesión
+            </a>
+
+            <!-- NOTA -->
+            <p class="mt-5 sm:mt-6 text-xs sm:text-sm text-gray-400">
+                Sistema protegido · Acceso solo para usuarios autorizados
+            </p>
+        </div>
+
     </div>
 
-</div>
-
-<!-- Animación -->
-<style>
-@keyframes fade-in {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-in { animation: fade-in 0.55s ease-out; }
-</style>
-{% endblock %}
+    <!-- Animación -->
+    <style>
+    @keyframes fade-in {
+        from { opacity: 0; transform: translateY(14px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in { animation: fade-in 0.55s ease-out; }
+    </style>
+    {% endblock %}
