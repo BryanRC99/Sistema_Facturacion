@@ -75,15 +75,16 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                 <!-- Código -->
-                <div class="floating-label-group md:col-span-2">
-                    <input type="text" id="codigo" name="codigo"
-                           value="{{ producto.codigo }}"
-                           required minlength="3"
-                           pattern="^[A-Za-z0-9-_.]+$"
-                           class="floating-input peer"
-                           placeholder=" ">
-                    <label class="floating-label">Código del Producto</label>
-                </div>
+<div class="floating-label-group md:col-span-2">
+    <!-- 🔒 SIN name="codigo" y disabled -->
+    <input type="text"
+           value="{{ producto.codigo }}"
+           disabled
+           class="floating-input peer bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-slate-400 cursor-not-allowed"
+           placeholder=" ">
+    <label class="floating-label">Código del Producto</label>
+</div>
+
 
                 <!-- Nombre -->
                 <div class="floating-label-group md:col-span-2">

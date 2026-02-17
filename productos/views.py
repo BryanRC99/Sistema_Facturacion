@@ -38,9 +38,13 @@ def crear_producto(request):
     error = None
     form_data = {}
 
+    # (Opcional) para mostrar el próximo código en el input disabled del template
+    # Si no lo usas, igual lo mando por si quieres mostrarlo
+    next_codigo = Producto._next_codigo()
+
     if request.method == 'POST':
         form_data = {
-            'codigo': request.POST.get('codigo', '').strip(),
+            # ❌ codigo ya NO se recibe
             'nombre': request.POST.get('nombre', '').strip(),
             'categoria': request.POST.get('categoria'),
             'proveedor': request.POST.get('proveedor'),
@@ -54,9 +58,15 @@ def crear_producto(request):
 
         imagen = request.FILES.get('imagen')
 
-        if Producto.objects.filter(codigo=form_data['codigo']).exists():
-            error = "El código ingresado ya existe. Por favor ingrese uno diferente."
-
+        # Validaciones básicas (sin tocar tu lógica)
+        if not form_data['nombre']:
+            error = "El nombre es obligatorio."
+        elif not form_data['categoria']:
+            error = "La categoría es obligatoria."
+        elif form_data['precio'] in (None, ""):
+            error = "El precio es obligatorio."
+        elif form_data['stock'] in (None, ""):
+            error = "El stock es obligatorio."
         elif imagen:
             formatos_permitidos = ('image/jpeg', 'image/png', 'image/webp')
             max_size = 2 * 1024 * 1024
@@ -67,31 +77,34 @@ def crear_producto(request):
                 error = "La imagen no debe superar los 2MB."
 
         if not error:
-            Producto.objects.create(
-                codigo=form_data['codigo'],
-                nombre=form_data['nombre'],
-                categoria_id=form_data['categoria'],
-                proveedor_id=form_data['proveedor'] or None,
-                precio=float(form_data['precio']),
-                costo=float(form_data['costo']),
-                stock=int(form_data['stock']),
-                iva=form_data['iva'],
-                descripcion=form_data['descripcion'],
-                estado=form_data['estado'],
-                imagen=imagen if imagen else None
-            )
-            messages.success(request, "Producto guardado correctamente.")
-            return redirect('lista_productos')
+            try:
+                Producto.objects.create(
+                    # ✅ codigo lo genera el modelo automáticamente
+                    nombre=form_data['nombre'],
+                    categoria_id=form_data['categoria'],
+                    proveedor_id=form_data['proveedor'] or None,
+                    precio=float(form_data['precio']),
+                    costo=float(form_data['costo'] or 0),
+                    stock=int(form_data['stock'] or 0),
+                    iva=form_data['iva'],
+                    descripcion=form_data['descripcion'],
+                    estado=form_data['estado'],
+                    imagen=imagen if imagen else None
+                )
+                messages.success(request, "Producto guardado correctamente.")
+                return redirect('lista_productos')
+            except ValueError:
+                error = "Verifica precio, costo y stock (deben ser números)."
 
-        # Si hubo error (validación), lo mostramos como toast también
         messages.error(request, f"❌ {error}")
 
     return render(request, 'productos/crear.html', {
         'categorias': categorias,
         'proveedores': proveedores,
         'productos': productos,
-        'error': error,          # (puedes dejarlo por si lo usas en el template)
+        'error': error,
         'form_data': form_data,
+        'next_codigo': next_codigo,  # opcional en template
     })
 
 
@@ -102,7 +115,9 @@ def editar_producto(request, id):
     proveedores = Proveedor.objects.all()
 
     if request.method == 'POST':
-        producto.codigo = request.POST.get('codigo', '').strip()
+        # ❌ NO permitir cambiar codigo
+        # producto.codigo = request.POST.get('codigo', '').strip()
+
         producto.nombre = request.POST.get('nombre', '').strip()
         producto.categoria_id = request.POST.get('categoria')
         producto.proveedor_id = request.POST.get('proveedor') or None
@@ -130,7 +145,6 @@ def editar_producto(request, id):
                         "⚠️ Se actualizó el producto, pero no se pudo borrar la imagen anterior."
                     )
 
-            # Asignar nueva imagen
             producto.imagen = imagen_nueva
 
         producto.save()

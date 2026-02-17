@@ -23,6 +23,18 @@ sudo systemctl reload nginx
 curl -I https://app.facturacion-br.me (Verificar si la app esta funcionando)
 
 
+//En caso de subir nuevas imágenes o statics ejecutar estos comandos
+python manage.py collectstatic --noinput
+sudo systemctl reload nginx
+sudo systemctl restart gunicorn_facturacion
+
+
+//Comprobar si un static esta funcional (Debe dar respuesta 200 OK)
+curl -I https://app.facturacion-br.me/static/img/404-illustration.svg
+
+
+
+
 
 
 

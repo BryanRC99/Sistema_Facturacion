@@ -3,8 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .forms import CrearUsuarioForm, EditarUsuarioForm
+from .forms import CrearUsuarioForm, EditarUsuarioForm, CustomPasswordChangeForm
 from usuarios.decorators import group_required, profile_edit_required
+from django.contrib.auth import logout
+from django.urls import reverse
+
 
 
 @group_required("SuperAdmin")
@@ -113,3 +116,40 @@ def admin_guard(request):
 
     # No autorizado -> tu 403 bonito
     return render(request, "403.html", status=403)
+
+from django.contrib import messages
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+
+from .forms import CustomPasswordChangeForm
+
+
+@login_required
+def cambiar_password(request):
+    if request.method == "POST":
+        form = CustomPasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+
+            # ✅ bandera en sesión para cerrar luego
+            request.session["force_logout_after_password_change"] = True
+
+            return render(request, "usuarios/password_cambiada.html", {
+                "redirect_url": reverse("usuarios:password_logout"),
+                "seconds": 5,
+            })
+
+        messages.error(request, "Revisa los campos del formulario.")
+    else:
+        form = CustomPasswordChangeForm(user=request.user)
+
+    return render(request, "usuarios/cambiar_password.html", {"form": form})
+
+@login_required
+def cerrar_sesion_post_password(request):
+    if request.session.get("force_logout_after_password_change"):
+        request.session.pop("force_logout_after_password_change", None)
+        logout(request)
+    return redirect(reverse("login"))
+

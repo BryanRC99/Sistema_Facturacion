@@ -74,29 +74,32 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
                 <!-- Código -->
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
-                        Código del Producto <span class="text-red-500">*</span>
-                    </label>
-                    <div class="relative">
-                        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                            <i data-lucide="hash" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
-                        </span>
+<div class="md:col-span-2">
+    <label class="block text-sm font-semibold text-gray-700 dark:text-slate-200 mb-2">
+        Código del Producto
+    </label>
 
-                        <input type="text" id="codigo" name="codigo" required minlength="3"
-                               value="{{ form_data.codigo|default:'' }}"
-                               pattern="^[A-Za-z0-9-_.]+$"
-                               class="w-full pl-10 pr-3 py-2.5 rounded-xl
-                                      border border-gray-300 dark:border-slate-600
-                                      bg-white dark:bg-slate-800
-                                      text-gray-800 dark:text-slate-100
-                                      placeholder-gray-400 dark:placeholder-slate-500
-                                      focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                    </div>
-                    <p class="mt-2 text-xs text-gray-500 dark:text-slate-400">
-                        Solo letras, números y - _ .
-                    </p>
-                </div>
+    <div class="relative">
+        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+            <i data-lucide="hash" class="w-4 h-4 text-gray-400 dark:text-slate-500"></i>
+        </span>
+
+        <!-- 🔒 SIN name="codigo" y disabled -->
+        <input type="text"
+               value="{{ next_codigo }}"
+               disabled
+               class="w-full pl-10 pr-3 py-2.5 rounded-xl
+                      border border-gray-200 dark:border-slate-700
+                      bg-gray-100 dark:bg-slate-700
+                      text-gray-500 dark:text-slate-400
+                      cursor-not-allowed">
+    </div>
+
+    <p class="mt-2 text-xs text-gray-500 dark:text-slate-400">
+        Se genera automáticamente.
+    </p>
+</div>
+
 
                 <!-- Nombre -->
                 <div class="md:col-span-2">

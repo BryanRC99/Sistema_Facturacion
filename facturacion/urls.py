@@ -21,7 +21,7 @@ urlpatterns = [
     path('categorias/', include('categorias.urls')),
     path('proveedores/', include('proveedores.urls')),
     path('reportes/', include('reportes.urls')),
-    path('usuarios/', include('usuarios.urls')),
+    path('usuarios/', include(('usuarios.urls', 'usuarios'), namespace='usuarios')),
     path('auditoria/', include('auditoria.urls', namespace='auditoria')),
     path('', include('facturacion_app.urls')),
     path("2fa/", include("twofa.urls")),
