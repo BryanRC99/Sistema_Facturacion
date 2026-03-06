@@ -1,7 +1,7 @@
 {% extends "base_auth.html" %}
 {% load static %}
 
-{% block title %}Iniciar Sesión{% endblock %}
+{% block title %}Portal de Clientes{% endblock %}
 
 {% block content %}
 <div class="relative min-h-dvh overflow-hidden flex items-center justify-center px-4 py-4 sm:py-6">
@@ -11,14 +11,14 @@
         <img src="{% static 'img/login-bg.jpg' %}" class="w-full h-full object-cover blur-md scale-110" alt="Fondo">
         <div class="absolute inset-0 bg-gradient-to-b from-black/65 via-black/45 to-black/75"></div>
     </div>
-    
+
     <!-- CARD LOGIN -->
     <div class="w-full max-w-[320px] sm:max-w-[340px] md:max-w-[360px]
                 bg-gray-900/70 backdrop-blur-2xl
                 rounded-3xl shadow-2xl
                 border border-white/10
-                px-4 py-5 sm:px-5 sm:py-5
-                text-white flex flex-col">
+                px-4 py-5 sm:px-5 sm:py-5 text-white
+                flex flex-col">
 
         <!-- LOGO -->
         <div class="flex justify-center mb-3">
@@ -32,24 +32,12 @@
 
         <!-- TITULO -->
         <h2 class="text-center font-bold tracking-tight text-lg sm:text-xl">
-            Sistema de Facturación
+            Portal de Clientes
         </h2>
 
         <p class="text-center text-gray-300 mt-1 mb-3 text-xs sm:text-sm">
-            Ingrese sus credenciales
+            Ingrese con su identificación y contraseña
         </p>
-
-        {# ERRORES DEL FORMULARIO #}
-        {% if form and form.non_field_errors %}
-        <div class="flex items-start gap-3 bg-red-500/15 text-red-200
-            p-2.5 rounded-2xl mb-3 border border-red-500/20">
-            <i data-lucide="triangle-alert" class="w-5 h-5 mt-0.5 shrink-0"></i>
-            <div class="text-sm leading-5">
-                <p class="font-semibold">No se pudo iniciar sesión</p>
-                <p class="text-red-200/80">Usuario o contraseña incorrectos.</p>
-            </div>
-        </div>
-        {% endif %}
 
         {# MENSAJES DJANGO #}
         {% if messages %}
@@ -68,23 +56,34 @@
             {% endfor %}
         {% endif %}
 
+        {# ERROR DE CREDENCIALES #}
+        {% if form and form.non_field_errors %}
+        <div class="flex items-start gap-3 bg-red-500/15 text-red-200
+            p-2.5 rounded-2xl mb-3 border border-red-500/20">
+            <i data-lucide="triangle-alert" class="w-5 h-5 mt-0.5 shrink-0"></i>
+            <div class="text-sm leading-5">
+                <p class="font-semibold">No se pudo iniciar sesión</p>
+                <p class="text-red-200/80">Usuario o contraseña incorrectos.</p>
+            </div>
+        </div>
+        {% endif %}
+
         <!-- FORM -->
         <form method="post" class="space-y-2.5"
               onsubmit="document.getElementById('btnLogin').disabled=true;">
             {% csrf_token %}
-            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
 
             <!-- USERNAME -->
             <div>
-                <label class="block text-gray-300 mb-1.5 text-sm">Usuario</label>
+                <label class="block text-gray-300 mb-1.5 text-sm">Identificación</label>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-300/70">
                         <i data-lucide="user" class="w-5 h-5"></i>
                     </span>
-                    <input id="email" type="text" name="username" autofocus required
+                    <input id="username" type="text" name="username" autofocus required
                            autocomplete="username"
                            value="{{ request.POST.username|default_if_none:'' }}"
-                           placeholder="Ingrese su usuario"
+                           placeholder="Ej: 1101234567"
                            class="w-full pl-11 pr-3 py-2.5 text-sm
                                   rounded-2xl bg-white/10 text-white
                                   border border-white/15 placeholder-gray-400
@@ -129,32 +128,19 @@
                 Ingresar
             </button>
 
-            <!-- SEPARADOR -->
-            <div class="relative flex items-center my-3">
-                <div class="flex-grow border-t border-white/15"></div>
-                <span class="px-2 text-xs text-gray-400 uppercase tracking-wider">
-                    o
-                </span>
-                <div class="flex-grow border-t border-white/15"></div>
-            </div>
-
-            <!-- BOTÓN CLIENTES -->
-            <a href="/portal-clientes/login/"
-               class="w-full py-2.5 rounded-2xl font-semibold text-sm
-                      bg-white/10 hover:bg-white/20
-                      border border-white/15
-                      transition transform hover:-translate-y-0.5
-                      flex items-center justify-center gap-2">
-                <i data-lucide="user-check" class="w-5 h-5"></i>
-                Ingresar como Cliente
-            </a>
-
             <!-- FOOTER -->
-            <div class="text-center text-xs text-gray-400/80 pt-2">
+            <div class="text-center text-xs text-gray-400/80 pt-2 space-y-2">
                 <span class="inline-flex items-center gap-2">
                     <i data-lucide="info" class="w-4 h-4"></i>
-                    Acceso solo para personal autorizado
+                    Acceso exclusivo para clientes
                 </span>
+
+                <div>
+                    <a href="/accounts/login/"
+                       class="text-indigo-300 hover:text-indigo-200 underline underline-offset-4">
+                        ¿Eres personal? Inicia sesión aquí
+                    </a>
+                </div>
             </div>
 
         </form>

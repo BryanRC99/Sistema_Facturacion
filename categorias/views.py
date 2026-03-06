@@ -16,6 +16,7 @@ def inicio(request):
 
 @login_required(login_url='/accounts/login/')
 def lista_categorias(request):
+    print("ENTRÓ A LISTA CLIENTES")
     categorias = Categoria.objects.all()
     return render(request, 'categorias/lista.html', {'categorias': categorias})
 

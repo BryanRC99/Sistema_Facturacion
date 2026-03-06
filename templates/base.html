@@ -65,10 +65,10 @@
         <!-- MENU -->
         <nav class="flex-1 px-3 py-4 space-y-1 text-sm overflow-y-auto sidebar-scroll">
   <!-- VENDEDOR + SUPERADMIN -->
-  <a href="/clientes/" class="sidebar-item {% if '/clientes/' in request.path %}active{% endif %}">
+  <a href="{% url 'lista_clientes' %}" class="sidebar-item {% if '/clientes/' in request.path %}active{% endif %}">
     <i data-lucide="user-round"></i>
     <span class="sidebar-text">Clientes</span>
-  </a>
+</a>
 
   <a href="/proveedores/" class="sidebar-item {% if '/proveedores/' in request.path %}active{% endif %}">
     <i data-lucide="square-user"></i>
@@ -86,10 +86,10 @@
     <span class="sidebar-text">Categorías</span>
   </a>
 
-  <a href="/facturas/" class="sidebar-item {% if '/facturas/' in request.path %}active{% endif %}">
+  <a href="{% url 'factura_lista' %}" class="sidebar-item {% if '/facturas/' in request.path %}active{% endif %}">
     <i data-lucide="receipt"></i>
     <span class="sidebar-text">Facturas</span>
-  </a>
+</a>
 
   <!-- SOLO SUPERADMIN -->
   {% if request.user|has_group:"SuperAdmin" %}

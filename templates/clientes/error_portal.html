@@ -1,0 +1,78 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{{ titulo|default:"Error" }}</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-50 dark:bg-slate-950">
+
+<div class="min-h-screen flex items-center justify-center px-4">
+
+    <div class="bg-white dark:bg-slate-900
+                p-8 rounded-3xl shadow-xl
+                max-w-md w-full
+                text-center space-y-4
+                border border-gray-100 dark:border-slate-700">
+
+        <!-- Ícono -->
+        <div class="flex justify-center">
+            <svg class="w-14 h-14 text-red-500 dark:text-red-400"
+                 fill="none"
+                 stroke="currentColor"
+                 viewBox="0 0 24 24">
+
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 9v3m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667
+                         1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464
+                         0L4.34 17c-.77 1.333.192 3 1.732 3z"/>
+
+            </svg>
+        </div>
+
+        <!-- Título -->
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-slate-100">
+            {{ titulo|default:"Ocurrió un problema" }}
+        </h1>
+
+        <!-- Mensaje -->
+        <p class="text-gray-600 dark:text-slate-300 leading-relaxed">
+            {{ mensaje|default:"No fue posible completar la acción solicitada." }}
+        </p>
+
+        {% if factura %}
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+            Factura: <strong>{{ factura.numero }}</strong>
+        </p>
+        {% endif %}
+
+        <!-- Botón -->
+        <div class="pt-4 flex justify-center">
+            <a href="/portal-clientes/portal/facturas/"
+               class="px-5 py-2 rounded-lg
+                      bg-gray-200 dark:bg-slate-800
+                      text-gray-800 dark:text-slate-200
+                      hover:bg-gray-300 dark:hover:bg-slate-700
+                      transition font-medium">
+
+                Volver a mis facturas
+
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

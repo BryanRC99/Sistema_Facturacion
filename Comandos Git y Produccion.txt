@@ -7,6 +7,8 @@ git add . ':!facturacion/settings.py' (Excluye un archivo)
 git update-index --assume-unchanged facturacion/settings.py (Un archivo nunca se vuelve a subir)
 git update-index --no-assume-unchanged facturacion/settings.py (Revertir la accion)
 
+git commit -m "Commit"
+
 git push (Subir los cambios)
 
 

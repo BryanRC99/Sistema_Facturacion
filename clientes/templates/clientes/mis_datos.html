@@ -1,0 +1,158 @@
+{% extends "base_cliente.html" %}
+{% block title %}Mis datos{% endblock %}
+
+{% block content %}
+
+<!-- ENCABEZADO -->
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
+
+    <div class="flex items-start gap-3">
+        <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                     bg-indigo-50 dark:bg-indigo-500/10
+                     border border-indigo-100 dark:border-indigo-500/20">
+            <i data-lucide="user" class="w-6 h-6 text-indigo-700 dark:text-indigo-300"></i>
+        </span>
+
+        <div>
+            <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                Mis datos
+            </h1>
+            <p class="text-sm text-gray-500 dark:text-slate-400 mt-1">
+                Consulta y actualiza tu información de contacto
+            </p>
+        </div>
+    </div>
+
+    <!-- BOTÓN VOLVER -->
+    <a href="{% url 'portal_cliente' %}"
+       class="inline-flex items-center gap-2
+              border border-gray-200 dark:border-white/10
+              bg-white dark:bg-slate-900
+              text-gray-700 dark:text-slate-200
+              px-4 py-2.5 rounded-xl
+              text-sm font-semibold
+              hover:bg-gray-50 dark:hover:bg-slate-800
+              transition shadow-sm">
+        <i data-lucide="circle-arrow-left" class="w-4 h-4"></i>
+        Volver
+    </a>
+
+</div>
+
+<!-- TARJETA PRINCIPAL -->
+<div class="bg-white dark:bg-slate-900
+            p-6 rounded-2xl shadow-lg
+            border border-gray-100 dark:border-slate-700">
+
+    <form method="post" class="space-y-8">
+        {% csrf_token %}
+
+        <!-- ============================= -->
+        <!-- DATOS NO MODIFICABLES -->
+        <!-- ============================= -->
+        <div>
+            <h2 class="text-lg font-bold text-gray-800 dark:text-slate-200 mb-4">
+                Información principal
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <div>
+                    <label class="text-sm font-semibold text-gray-600 dark:text-slate-300">
+                        Tipo de identificación
+                    </label>
+                    <input type="text"
+                           value="{{ cliente.tipo_identificacion }}"
+                           disabled
+                           class="mt-1 w-full rounded-xl border border-gray-200 dark:border-white/10
+                                  bg-gray-100 dark:bg-slate-800
+                                  px-4 py-2 text-sm text-gray-600 dark:text-slate-300 cursor-not-allowed">
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold text-gray-600 dark:text-slate-300">
+                        Identificación
+                    </label>
+                    <input type="text"
+                           value="{{ cliente.identificacion }}"
+                           disabled
+                           class="mt-1 w-full rounded-xl border border-gray-200 dark:border-white/10
+                                  bg-gray-100 dark:bg-slate-800
+                                  px-4 py-2 text-sm text-gray-600 dark:text-slate-300 cursor-not-allowed">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="text-sm font-semibold text-gray-600 dark:text-slate-300">
+                        Nombre / Razón social
+                    </label>
+                    <input type="text"
+                           value="{{ cliente.nombre_razon_social }}"
+                           disabled
+                           class="mt-1 w-full rounded-xl border border-gray-200 dark:border-white/10
+                                  bg-gray-100 dark:bg-slate-800
+                                  px-4 py-2 text-sm text-gray-600 dark:text-slate-300 cursor-not-allowed">
+                </div>
+
+            </div>
+
+            <!-- AVISO -->
+            <div class="mt-4 p-4 rounded-xl
+                        bg-amber-50 dark:bg-amber-500/10
+                        border border-amber-100 dark:border-amber-500/20
+                        text-sm text-amber-700 dark:text-amber-300">
+                ⚠ Estos datos no son modificables desde el portal.
+                Si necesitas actualizarlos, por favor comunícate con el negocio.
+            </div>
+        </div>
+
+        <!-- ============================= -->
+        <!-- DATOS EDITABLES -->
+        <!-- ============================= -->
+        <div>
+            <h2 class="text-lg font-bold text-gray-800 dark:text-slate-200 mb-4">
+                Información de contacto
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                {% for field in form %}
+                <div class="{% if field.name == 'direccion' %}md:col-span-2{% endif %}">
+                    <label class="text-sm font-semibold text-gray-600 dark:text-slate-300">
+                        {{ field.label }}
+                    </label>
+
+                    {{ field }}
+
+                    {% if field.errors %}
+                        <p class="text-red-500 text-xs mt-1">
+                            {{ field.errors|striptags }}
+                        </p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+            </div>
+        </div>
+
+        <!-- BOTÓN -->
+        <div class="flex justify-end">
+            <button type="submit"
+                    class="inline-flex items-center gap-2
+                           bg-indigo-600 hover:bg-indigo-700
+                           text-white
+                           px-6 py-2.5 rounded-xl
+                           text-sm font-semibold
+                           shadow-md transition">
+                <i data-lucide="save" class="w-4 h-4"></i>
+                Guardar cambios
+            </button>
+        </div>
+
+    </form>
+</div>
+
+<script>
+  if (window.lucide) lucide.createIcons();
+</script>
+
+{% endblock %}

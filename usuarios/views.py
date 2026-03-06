@@ -2,6 +2,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.views import LoginView
+
 
 from .forms import CrearUsuarioForm, EditarUsuarioForm, CustomPasswordChangeForm
 from usuarios.decorators import group_required, profile_edit_required
@@ -153,3 +155,21 @@ def cerrar_sesion_post_password(request):
         logout(request)
     return redirect(reverse("login"))
 
+
+class AdminLoginView(LoginView):
+    template_name = "usuarios/login_admin.html"
+
+    def form_valid(self, form):
+        user = form.get_user()
+
+        if not user.groups.filter(name__in=["Vendedor", "SuperAdmin"]).exists():
+            from django.contrib import messages
+            from django.shortcuts import redirect
+
+            messages.error(
+                self.request,
+                "Estas credenciales corresponden a un cliente."
+            )
+            return redirect("usuarios:login_admin")
+
+        return super().form_valid(form)

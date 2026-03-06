@@ -30,8 +30,6 @@ from .models import Factura, DetalleFactura
 # ============================
 # GENERAR CLAVE ACCESO SRI
 # ============================
-
-@group_required(["Vendedor", "SuperAdmin"])
 def generar_clave_acceso_sri(
     fecha_emision,
     ruc,
@@ -102,11 +100,11 @@ def imprimir_factura(request, id):
 
     # Empresa
     empresa = {
-        "nombre": "Super",
-        "ruc": "99999999999999",
+        "nombre": "NovaBilling",
+        "ruc": "8907826539023",
         "direccion": "Quito, Av Reinoso Rueda y Calle 8",
         "telefono": "0993395049",
-        "correo": "contacto@empresa.com",
+        "correo": "contacto@novabilling.com",
     }
 
     # Detalles
@@ -181,11 +179,26 @@ def crear_factura(request):
             messages.error(request, " Los detalles de la factura están incompletos.")
             return render(request, 'facturacion/crear.html', {'clientes': clientes, 'productos': productos, 'form_data': request.POST})
 
-        # Número de factura simple
-        ultimo = Factura.objects.count() + 1
-        numero_factura = f"001-001-{ultimo:09d}"
+        # ============================
+        # GENERACIÓN CORRECTA DE SECUENCIAL (ANTI-DUPLICADOS)
+        # ============================
 
-        # Creamos factura “temporal” (si algo falla, la eliminamos)
+        ultima_factura = (
+            Factura.objects
+            .select_for_update()
+            .order_by('-numero')
+            .first()
+        )
+
+        if ultima_factura:
+            ultimo_secuencial = int(ultima_factura.numero.split('-')[-1])
+            nuevo_secuencial = ultimo_secuencial + 1
+        else:
+            nuevo_secuencial = 1
+
+        numero_factura = f"001-001-{nuevo_secuencial:09d}"
+
+        # Creamos factura
         factura = Factura.objects.create(
             cliente_id=cliente_id,
             forma_pago=forma_pago,
@@ -194,7 +207,6 @@ def crear_factura(request):
         )
 
         def fail(msg: str):
-            # elimina lo creado en esta transacción y vuelve al form
             factura.delete()
             messages.error(request, msg)
             return render(request, 'facturacion/crear.html', {
@@ -209,7 +221,6 @@ def crear_factura(request):
         descuento_total = 0
 
         for i in range(len(productos_ids)):
-            # Parse seguro
             try:
                 prod_id = int(productos_ids[i])
                 cantidad = int((cantidades[i] or "0").strip())
@@ -218,7 +229,6 @@ def crear_factura(request):
             except (ValueError, TypeError):
                 return fail(" Hay valores inválidos en los detalles de la factura.")
 
-            # Validaciones por línea
             if cantidad <= 0:
                 return fail(" La cantidad debe ser mayor a 0.")
             if precio < 0:
@@ -226,7 +236,6 @@ def crear_factura(request):
             if desc < 0:
                 return fail(" El descuento no puede ser negativo.")
 
-            # Producto + stock (bloquea fila para evitar carreras)
             prod = Producto.objects.select_for_update().get(id=prod_id)
 
             if not prod.estado:
@@ -238,7 +247,6 @@ def crear_factura(request):
             if sub < 0:
                 return fail(f" El subtotal de '{prod.nombre}' no puede ser negativo.")
 
-            # Guardar detalle
             DetalleFactura.objects.create(
                 factura=factura,
                 producto=prod,
@@ -248,7 +256,6 @@ def crear_factura(request):
                 subtotal=sub
             )
 
-            # Actualizar stock (audit)
             prod.stock -= cantidad
             prod._current_user = request.user
             prod._ip_address = request.META.get('REMOTE_ADDR')
@@ -276,7 +283,7 @@ def crear_factura(request):
             ruc="99999999999999",
             establecimiento="001",
             punto_emision="001",
-            secuencial=ultimo,
+            secuencial=nuevo_secuencial,
             ambiente="1"
         )
 
@@ -291,7 +298,6 @@ def crear_factura(request):
         'clientes': clientes,
         'productos': productos
     })
-
 
 # ============================
 # VER FACTURA

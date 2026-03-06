@@ -9,24 +9,47 @@ from twofa.auth_views import login_with_2fa
 from usuarios.views import admin_guard
 
 urlpatterns = [
+
+    # =========================
+    # SISTEMA
+    # =========================
     path('no-autorizado/', acceso_no_autorizado, name='acceso_no_autorizado'),
     path('accounts/login/', login_with_2fa, name='login'),
+    path('accounts/', include('django.contrib.auth.urls')),
+
+    # =========================
+    # ADMIN PERSONALIZADO
+    # =========================
     path("admin/", admin_guard),
     path("django-admin/", admin.site.urls),
+    
+    # =========================
+    # PORTAL CLIENTES
+    # =========================
+    path("portal-clientes/", include("clientes.urls_portal")),
 
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('', lista_productos, name='inicio'),
-    path('clientes/', include('clientes.urls')),
+    # =========================
+    # MÓDULOS INTERNOS
+    # =========================
+    path('clientes/', include('clientes.urls_admin')),
     path('productos/', include('productos.urls')),
     path('categorias/', include('categorias.urls')),
     path('proveedores/', include('proveedores.urls')),
+    path('facturas/', include('facturacion_app.urls')),
     path('reportes/', include('reportes.urls')),
     path('usuarios/', include(('usuarios.urls', 'usuarios'), namespace='usuarios')),
     path('auditoria/', include('auditoria.urls', namespace='auditoria')),
-    path('', include('facturacion_app.urls')),
     path("2fa/", include("twofa.urls")),
     path("totp/", include("totp.urls")),
 
+    # =========================
+    # FACTURACIÓN (CON PREFIJO)
+    # =========================
+
+    # =========================
+    # INICIO GENERAL
+    # =========================
+    path('', lista_productos, name='inicio'),
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,169 @@
+{% extends "base_cliente.html" %}
+
+{% block title %}Factura {{ factura.numero }}{% endblock %}
+
+{% block content %}
+
+<!-- ENCABEZADO -->
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-8">
+    <div class="flex items-start gap-3">
+        <span class="inline-flex items-center justify-center w-11 h-11 rounded-2xl
+                     bg-indigo-50 dark:bg-indigo-500/10
+                     border border-indigo-100 dark:border-indigo-500/20">
+            <i data-lucide="receipt" class="w-6 h-6 text-indigo-700 dark:text-indigo-300"></i>
+        </span>
+
+        <div>
+            <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-slate-100">
+                Factura {{ factura.numero }}
+            </h1>
+
+            <div class="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-600 dark:text-slate-400">
+                <span class="inline-flex items-center gap-2">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                    {{ factura.fecha|date:"d/m/Y H:i" }}
+                </span>
+
+                <span class="mx-1 hidden sm:inline text-gray-300 dark:text-slate-600">•</span>
+
+                <span class="inline-flex items-center gap-2">
+                    <i data-lucide="wallet" class="w-4 h-4"></i>
+                    {{ factura.forma_pago }}
+                </span>
+
+                <span class="mx-1 hidden sm:inline text-gray-300 dark:text-slate-600">•</span>
+
+                {% if factura.estado == "ACTIVA" %}
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold
+                                 bg-emerald-50 dark:bg-emerald-500/10
+                                 text-emerald-700 dark:text-emerald-300
+                                 border border-emerald-100 dark:border-emerald-500/20">
+                        <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                        Activa
+                    </span>
+                {% else %}
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-semibold
+                                 bg-red-50 dark:bg-red-500/10
+                                 text-red-700 dark:text-red-300
+                                 border border-red-100 dark:border-red-500/20">
+                        <i data-lucide="x-circle" class="w-4 h-4"></i>
+                        Anulada
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+        <a href="{% url 'mis_facturas' %}"
+           class="inline-flex items-center gap-2
+                  border border-gray-200 dark:border-white/10
+                  bg-white dark:bg-slate-900
+                  text-gray-700 dark:text-slate-200
+                  px-4 py-2.5 rounded-xl
+                  text-sm font-semibold
+                  hover:bg-gray-50 dark:hover:bg-slate-800
+                  transition shadow-sm">
+            <i data-lucide="circle-arrow-left" class="w-4 h-4"></i>
+            Volver
+        </a>
+    </div>
+</div>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="bg-white dark:bg-slate-900
+            p-6 sm:p-7 rounded-2xl shadow-xl
+            border border-gray-100 dark:border-slate-700">
+
+    <!-- Información general -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+
+        <!-- Cliente -->
+        <div class="rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-800/40 p-6">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl
+                             bg-white dark:bg-slate-900
+                             border border-gray-200 dark:border-white/10">
+                    <i data-lucide="user" class="w-5 h-5 text-indigo-700 dark:text-indigo-300"></i>
+                </span>
+                <h2 class="text-lg font-bold text-gray-900 dark:text-slate-100">
+                    Mis datos
+                </h2>
+            </div>
+
+            <div class="space-y-2 text-gray-700 dark:text-slate-300">
+                <p><strong>Nombre / Razón Social:</strong> {{ factura.cliente.nombre_razon_social }}</p>
+                <p><strong>Cédula / RUC:</strong> {{ factura.cliente.identificacion }}</p>
+                <p><strong>Dirección:</strong> {{ factura.cliente.direccion }}</p>
+            </div>
+        </div>
+
+        <!-- Factura -->
+        <div class="rounded-2xl border border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-slate-800/40 p-6">
+            <h2 class="text-lg font-bold mb-4">Detalles de factura</h2>
+
+            <div class="space-y-2 text-gray-700 dark:text-slate-300">
+                <p><strong>Número:</strong> {{ factura.numero }}</p>
+                <p><strong>Fecha:</strong> {{ factura.fecha|date:"d/m/Y H:i" }}</p>
+                <p><strong>Forma de pago:</strong> {{ factura.forma_pago }}</p>
+                <p><strong>Estado:</strong> {{ factura.estado }}</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Tabla de productos -->
+    <div class="overflow-x-auto rounded-2xl border border-gray-200 dark:border-white/10">
+        <table class="w-full table-auto border-collapse">
+            <thead>
+                <tr class="bg-gray-50 dark:bg-slate-800
+                           text-left
+                           text-gray-600 dark:text-slate-300
+                           uppercase text-xs tracking-wide">
+                    <th class="py-3 px-6">Producto</th>
+                    <th class="py-3 px-6">Cantidad</th>
+                    <th class="py-3 px-6">Precio</th>
+                    <th class="py-3 px-6">Subtotal</th>
+                </tr>
+            </thead>
+
+            <tbody class="text-gray-700 dark:text-slate-200 text-sm bg-white dark:bg-slate-900">
+                {% for d in detalles %}
+                <tr class="border-b dark:border-slate-800 hover:bg-gray-50 dark:hover:bg-slate-800/60 transition">
+                    <td class="py-3 px-6 font-semibold">{{ d.producto.nombre }}</td>
+                    <td class="py-3 px-6">{{ d.cantidad }}</td>
+                    <td class="py-3 px-6">$ {{ d.precio_unitario }}</td>
+                    <td class="py-3 px-6 font-bold">$ {{ d.subtotal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Totales -->
+    <div class="flex justify-end mt-8">
+        <div class="w-full max-w-sm rounded-2xl border border-gray-200 dark:border-white/10
+                    bg-gray-50 dark:bg-slate-800/40 p-6 shadow-sm">
+            <p class="flex justify-between">
+                <span>Subtotal</span>
+                <span>$ {{ factura.subtotal }}</span>
+            </p>
+            <p class="flex justify-between">
+                <span>IVA</span>
+                <span>$ {{ factura.iva_total }}</span>
+            </p>
+            <div class="pt-4 mt-3 border-t border-gray-200 dark:border-white/10">
+                <p class="flex justify-between text-xl font-extrabold">
+                    <span>Total</span>
+                    <span>$ {{ factura.total }}</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+  if (window.lucide) lucide.createIcons();
+</script>
+
+{% endblock %}

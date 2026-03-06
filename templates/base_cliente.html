@@ -1,0 +1,214 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es" class="transition-colors duration-300 h-full scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Portal Cliente{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#2563eb",
+              darkbg: "#020617",
+              hoverBg: "rgba(96,165,250,0.1)"
+            }
+          }
+        }
+      };
+    </script>
+
+    <!-- Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        html, body { font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+        body { opacity: 0; transition: opacity 0.3s ease; }
+        body.loaded { opacity: 1; }
+
+        .toast {
+            animation: slideIn .3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity:0; transform:translateX(20px); }
+            to { opacity:1; transform:translateX(0); }
+        }
+    </style>
+</head>
+
+<body class="h-full bg-gray-100 dark:bg-darkbg text-gray-800 dark:text-gray-200 antialiased">
+
+    <!-- NAVBAR -->
+    <header class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg
+                   border-b border-gray-200 dark:border-slate-800
+                   sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between h-16">
+
+                <!-- LOGO -->
+                <div class="flex items-center gap-3">
+                    <img src="{% static 'img/logo.png' %}" alt="Logo" class="h-9 w-auto">
+                    <span class="font-bold text-gray-900 dark:text-white hidden sm:block">
+                        Portal Cliente
+                    </span>
+                </div>
+
+                <!-- MENÚ DESKTOP -->
+                <nav class="hidden md:flex items-center gap-6 text-sm font-semibold">
+                    <a href="{% url 'portal_cliente' %}" class="flex items-center gap-2 text-gray-600 hover:text-indigo-600 dark:text-slate-300 transition">
+                        <i data-lucide="home" class="w-4 h-4"></i> Inicio
+                    </a>
+                    <a href="{% url 'mis_facturas' %}" class="flex items-center gap-2 text-gray-600 hover:text-indigo-600 dark:text-slate-300 transition">
+                        <i data-lucide="receipt" class="w-4 h-4"></i> Facturas
+                    </a>
+                    <a href="{% url 'mis_datos' %}" class="flex items-center gap-2 text-gray-600 hover:text-indigo-600 dark:text-slate-300 transition">
+                        <i data-lucide="user" class="w-4 h-4"></i> Mis Datos
+                    </a>
+                    <a href="{% url 'cambiar_password_cliente' %}" class="flex items-center gap-2 text-gray-600 hover:text-indigo-600 dark:text-slate-300 transition">
+                        <i data-lucide="lock" class="w-4 h-4"></i> Seguridad
+                    </a>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="flex items-center gap-2 text-red-600 hover:text-red-700 transition">
+                            <i data-lucide="log-out" class="w-4 h-4"></i> Salir
+                        </button>
+                    </form>
+                </nav>
+
+                <!-- BOTONES -->
+                <div class="flex items-center gap-3">
+                    <div class="hidden md:block">
+                        <button onclick="toggleTheme()" id="themeBtnDesktop" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition">
+                            <i data-lucide="moon" id="themeIconDesktop"></i>
+                        </button>
+                    </div>
+
+                    <button id="menu-btn" class="md:hidden text-gray-700 dark:text-slate-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-white/10 transition">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- MENÚ MOBILE -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+            <div class="px-6 py-4 space-y-4 text-sm font-semibold">
+                <a href="{% url 'portal_cliente' %}" class="flex items-center gap-3 text-gray-700 dark:text-slate-300">
+                    <i data-lucide="home" class="w-5 h-5"></i> Inicio
+                </a>
+                <a href="{% url 'mis_facturas' %}" class="flex items-center gap-3 text-gray-700 dark:text-slate-300">
+                    <i data-lucide="receipt" class="w-5 h-5"></i> Facturas
+                </a>
+                <a href="{% url 'mis_datos' %}" class="flex items-center gap-3 text-gray-700 dark:text-slate-300">
+                    <i data-lucide="user" class="w-5 h-5"></i> Mis Datos
+                </a>
+                <a href="{% url 'cambiar_password_cliente' %}" class="flex items-center gap-3 text-gray-700 dark:text-slate-300">
+                    <i data-lucide="lock" class="w-5 h-5"></i> Seguridad
+                </a>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="flex items-center gap-3 text-red-600">
+                        <i data-lucide="log-out" class="w-5 h-5"></i> Salir
+                    </button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- MENSAJES DJANGO (TOAST ARRIBA DERECHA) -->
+    {% if messages %}
+    <div id="toast-container" class="fixed top-6 right-6 z-[9999] space-y-3 w-[320px]">
+
+        {% for message in messages %}
+        <div class="toast p-4 rounded-xl shadow-lg border text-sm font-semibold flex justify-between items-center
+
+        {% if message.tags == 'success' %}
+            bg-emerald-50 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-500/20
+        {% elif message.tags == 'error' %}
+            bg-red-50 dark:bg-red-500/10 text-red-700 dark:text-red-300 border-red-200 dark:border-red-500/20
+        {% else %}
+            bg-gray-50 dark:bg-slate-800 text-gray-700 dark:text-slate-200 border-gray-200 dark:border-slate-700
+        {% endif %}
+        ">
+
+            <span>{{ message }}</span>
+
+            <button onclick="this.parentElement.remove()" class="ml-4">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+
+        </div>
+        {% endfor %}
+
+    </div>
+    {% endif %}
+
+
+    <!-- CONTENIDO -->
+    <main class="max-w-7xl mx-auto px-6 py-10">
+        {% block content %}{% endblock %}
+    </main>
+
+
+    <!-- SCRIPTS -->
+    <script>
+        if (window.lucide) lucide.createIcons();
+
+        const btn = document.getElementById("menu-btn");
+        const menu = document.getElementById("mobile-menu");
+        btn?.addEventListener("click", () => menu.classList.toggle("hidden"));
+
+        const html = document.documentElement;
+
+        function refreshThemeIcon(iconName, id="themeIconDesktop") {
+            const oldIcon = document.getElementById(id);
+            if (!oldIcon) return;
+            const newIcon = document.createElement("i");
+            newIcon.id = id;
+            newIcon.setAttribute("data-lucide", iconName);
+            oldIcon.replaceWith(newIcon);
+            lucide.createIcons();
+        }
+
+        function setTheme(dark) {
+            html.classList.toggle("dark", dark);
+            localStorage.setItem("theme", dark ? "dark" : "light");
+            refreshThemeIcon(dark ? "sun" : "moon", "themeIconDesktop");
+        }
+
+        function toggleTheme() {
+            setTheme(!html.classList.contains("dark"));
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+
+            document.body.classList.add("loaded");
+
+            const savedTheme = localStorage.getItem("theme");
+            if (savedTheme) {
+                setTheme(savedTheme === "dark");
+            } else {
+                setTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
+            }
+
+            // Auto cerrar mensajes
+            setTimeout(() => {
+                document.querySelectorAll(".toast").forEach(msg => {
+                    msg.style.opacity = "0";
+                    setTimeout(()=>msg.remove(),300);
+                });
+            },4000);
+
+        });
+    </script>
+
+</body>
+</html>

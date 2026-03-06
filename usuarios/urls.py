@@ -1,9 +1,10 @@
 from django.urls import path
 from . import views
-
+from .views import AdminLoginView
 app_name = "usuarios"
 
 urlpatterns = [
+    path("login/", AdminLoginView.as_view(), name="login_admin"),
     path("", views.lista_usuarios, name="lista"),
     path("crear/", views.crear_usuario, name="crear"),
     path("password/cambiar/", views.cambiar_password, name="cambiar_password"),
